@@ -14,9 +14,11 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:zenglishapp/core/theme/app_theme.dart';
-import '../../features/home/home_screen.dart';
+import '../../presentation/screens/home/home_screen.dart';
 import '../providers/user_profile_provider.dart';
-import '../../models/user_profile.dart';
+import '../../data/models/user_profile.dart';
+import '../../core/enums/cefr_level.dart';
+import '../../core/enums/meditation_stage.dart';
 
 // ── Tên route (constants để tránh typo) ──
 abstract class AppRoutes {
@@ -323,16 +325,17 @@ class PlacementTestScreen extends StatelessWidget {
                     // Tạo mock profile để test luồng
                     await ref.read(userProfileProvider.notifier).saveProfile(
                           UserProfile(
-                            id: 'user001',
+                            userId: 'user001',
                             displayName: 'Sư Minh Tuệ',
-                            englishLevel: EnglishLevel.b1,
-                            meditationExperience:
-                                MeditationExperience.intermediate,
-                            paliLevel: PaliLevel.basic,
+                            languageLevel: CEFRLevel.b1,
+                            meditationStage: MeditationStage.samathaPreiliminary,
+                            paliKnowledgeLevel: 2,
+                            completedLessonIds: const [],
+                            inProgressLessonIds: const [],
                             placementScore: 72,
-                            completedLessons: 0,
                             streakDays: 1,
                             createdAt: DateTime.now(),
+                            lastStudiedAt: DateTime.now(),
                           ),
                         );
                     if (context.mounted) context.go(AppRoutes.home);

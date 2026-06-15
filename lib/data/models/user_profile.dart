@@ -19,6 +19,9 @@ class UserProfile {
     this.ordinationDetails,
     this.createdAt,
     this.lastActiveAt,
+    this.placementScore = 0,
+    this.streakDays = 0,
+    this.lastStudiedAt,
   });
 
   final String userId;
@@ -53,6 +56,16 @@ class UserProfile {
 
   final DateTime? createdAt;
   final DateTime? lastActiveAt;
+
+  // ── MERGED từ nhánh A ──
+  /// Điểm placement test (0-100)
+  final int placementScore;
+  
+  /// Số ngày học liên tiếp
+  final int streakDays;
+  
+  /// Lần học gần nhất
+  final DateTime? lastStudiedAt;
 
   // ─── Computed ───────────────────────────────
 
@@ -111,6 +124,11 @@ class UserProfile {
       lastActiveAt: json['last_active_at'] != null
           ? DateTime.parse(json['last_active_at'] as String)
           : null,
+      placementScore: json['placement_score'] as int? ?? 0,
+      streakDays: json['streak_days'] as int? ?? 0,
+      lastStudiedAt: json['last_studied_at'] != null
+          ? DateTime.parse(json['last_studied_at'] as String)
+          : null,
     );
   }
 
@@ -129,6 +147,10 @@ class UserProfile {
     if (createdAt != null) 'created_at': createdAt!.toIso8601String(),
     if (lastActiveAt != null)
       'last_active_at': lastActiveAt!.toIso8601String(),
+    'placement_score': placementScore,
+    'streak_days': streakDays,
+    if (lastStudiedAt != null)
+      'last_studied_at': lastStudiedAt!.toIso8601String(),
   };
 
   UserProfile copyWith({
@@ -144,6 +166,9 @@ class UserProfile {
     OrdinationDetails? ordinationDetails,
     DateTime? createdAt,
     DateTime? lastActiveAt,
+    int? placementScore,
+    int? streakDays,
+    DateTime? lastStudiedAt,
   }) {
     return UserProfile(
       userId: userId ?? this.userId,
@@ -158,6 +183,9 @@ class UserProfile {
       ordinationDetails: ordinationDetails ?? this.ordinationDetails,
       createdAt: createdAt ?? this.createdAt,
       lastActiveAt: lastActiveAt ?? this.lastActiveAt,
+      placementScore: placementScore ?? this.placementScore,
+      streakDays: streakDays ?? this.streakDays,
+      lastStudiedAt: lastStudiedAt ?? this.lastStudiedAt,
     );
   }
 }
