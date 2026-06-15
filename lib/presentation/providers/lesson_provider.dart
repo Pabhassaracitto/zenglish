@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/lesson.dart';
-import '../../data/models/lesson_flow.dart';
 import '../../data/models/vocab_item.dart';
 import '../../data/di/repository_provider.dart';
 

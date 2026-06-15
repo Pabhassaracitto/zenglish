@@ -1,6 +1,5 @@
 import '../../core/enums/cefr_level.dart';
 import '../../core/enums/meditation_stage.dart';
-
 /// UserProfile — đánh giá 3 trục độc lập
 /// Trục 1: Ngôn ngữ (CEFR)
 /// Trục 2: Giai đoạn thiền (Pa-Auk progression)
@@ -56,10 +55,10 @@ class UserProfile {
 
   // ─── Computed ───────────────────────────────
 
-  bool get isLessonCompleted(String lessonId) =>
+  bool isLessonCompleted(String lessonId) =>
       completedLessonIds.contains(lessonId);
 
-  bool get isLessonInProgress(String lessonId) =>
+  bool isLessonInProgress(String lessonId) =>
       inProgressLessonIds.contains(lessonId);
 
   int get totalCompletedLessons => completedLessonIds.length;

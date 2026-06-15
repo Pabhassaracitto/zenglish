@@ -4,7 +4,6 @@ import '../../data/models/lesson.dart';
 import '../../data/services/user_session_service.dart';
 import '../../data/di/repository_provider.dart';
 import '../../logic/content_router.dart';
-import '../../logic/placement_logic.dart';
 import '../../data/models/placement_result.dart';
 import '../../core/enums/cefr_level.dart';
 import '../../core/enums/meditation_stage.dart';

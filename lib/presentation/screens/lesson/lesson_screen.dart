@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-'package:ewmapp/core/theme/app_theme.dart';
+
+import 'package:zenglishapp/core/theme/app_theme.dart';
 import '../../providers/lesson_provider.dart';
 import 'components/lesson_progress_bar.dart';
 import 'components/lesson_stage_header.dart';
 import 'components/silent_mode_button.dart';
-import 'stages/input_stage.dart';
-import 'stages/pattern_stage.dart';
 import 'stages/guided_stage.dart';
+import 'stages/input_stage.dart';
 import 'stages/output_stage.dart';
+import 'stages/pattern_stage.dart';
 
 class LessonScreen extends ConsumerStatefulWidget {
   const LessonScreen({super.key, required this.lessonId});

@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'core/theme/app_theme.dart';
+import 'package:zenglishapp/core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/providers/user_profile_provider.dart';
 
@@ -47,7 +47,7 @@ Future<void> main() async {
         if (const bool.fromEnvironment('dart.vm.product') == false)
           const _AppProviderObserver(),
       ],
-      child: const EWMApp(),
+      child: const ZENGLISHApp(),
     ),
   );
 }
@@ -56,8 +56,8 @@ Future<void> main() async {
 // ROOT APP WIDGET
 // ─────────────────────────────────────────────────────────────
 
-class EWMApp extends ConsumerWidget {
-  const EWMApp({super.key});
+class ZENGLISHApp extends ConsumerWidget {
+  const ZENGLISHApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,7 +66,7 @@ class EWMApp extends ConsumerWidget {
 
     return MaterialApp.router(
       // ── App Info ──
-      title: 'EWM - English for Wisdom & Meditation',
+      title: 'ZENGLISH - English for Wisdom & Meditation',
       debugShowCheckedModeBanner: false,
 
       // ── Router ──

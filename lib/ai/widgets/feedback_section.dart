@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-'package:ewmapp/core/theme/app_theme.dart';
+import 'package:zenglishapp/core/theme/app_theme.dart';
 
 class FeedbackSection extends StatelessWidget {
   const FeedbackSection({

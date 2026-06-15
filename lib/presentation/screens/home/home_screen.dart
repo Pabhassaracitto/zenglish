@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-'package:ewmapp/core/theme/app_theme.dart';
+import 'package:zenglishapp/core/theme/app_theme.dart';
 import '../../providers/home_provider.dart';
 import 'components/home_header.dart';
 import 'components/user_profile_card.dart';

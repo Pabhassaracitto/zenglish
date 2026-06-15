@@ -8,13 +8,12 @@
 //   /lesson/:id → LessonScreen
 //   /ai-interview → AIInterviewScreen (placeholder)
 // ============================================================
-import 'package:ewmapp/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-'package:ewmapp/core/theme/app_theme.dart';
+import 'package:zenglishapp/core/theme/app_theme.dart';
 import '../../features/home/home_screen.dart';
 import '../providers/user_profile_provider.dart';
 import '../../models/user_profile.dart';

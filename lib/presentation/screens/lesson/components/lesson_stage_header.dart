@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
+import 'package:zenglishapp/core/theme/app_theme.dart';
 import '../../../providers/lesson_provider.dart';
 
 class LessonStageHeader extends StatelessWidget {

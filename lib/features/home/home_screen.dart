@@ -2,17 +2,16 @@
 // HOME SCREEN
 // Layout: AppBar → User Profile Card → Suggestion Card → AI Button
 // ============================================================
-import 'package:flutter/material.dart';
+import 'package:zenglishapp/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-'package:ewmapp/core/theme/app_theme.dart';
-import '../../core/providers/user_profile_provider.dart';
 import '../../core/providers/lesson_provider.dart';
-import '../../models/user_profile.dart';
+import '../../core/providers/user_profile_provider.dart';
 import '../../models/lesson.dart';
+import '../../models/user_profile.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -64,7 +63,7 @@ class HomeScreen extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            'EWM',
+            'ZENGLISH',
             style: GoogleFonts.merriweather(
               color: AppColors.earthBrown,
               fontSize: 18,

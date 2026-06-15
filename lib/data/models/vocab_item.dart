@@ -1,4 +1,3 @@
-import '../../core/enums/cefr_level.dart';
 
 /// Tri-lingual vocabulary item
 /// English — Vietnamese — Pāḷi (với diacritics chuẩn)

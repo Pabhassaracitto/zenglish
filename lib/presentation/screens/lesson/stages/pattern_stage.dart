@@ -1,7 +1,7 @@
-import 'package:ewmapp/data/models/vocab_item.dart';
+import 'package:zenglishapp/data/models/vocab_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_theme.dart';
+import 'package:zenglishapp/core/theme/app_theme.dart';
 import '../../../providers/lesson_provider.dart';
 
 class PatternStage extends ConsumerWidget {
