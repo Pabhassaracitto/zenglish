@@ -1,3 +1,4 @@
+//lib\data\models\user_profile.dart
 import '../../core/enums/cefr_level.dart';
 import '../../core/enums/meditation_stage.dart';
 /// UserProfile — đánh giá 3 trục độc lập

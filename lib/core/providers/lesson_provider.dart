@@ -2,6 +2,7 @@
 // PROVIDER: Lesson data & Smart Suggestion logic
 // ============================================================
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../data/models/user_profile.dart';
 import '../../models/lesson.dart';
 import '../../models/user_profile.dart';
 import 'user_profile_provider.dart';

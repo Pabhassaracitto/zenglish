@@ -1,3 +1,4 @@
+//lib\models\lesson.dart
 import 'user_profile.dart';
 
 enum LessonType {
