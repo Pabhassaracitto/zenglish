@@ -1,0 +1,333 @@
+{
+  "lesson_id": "TASK_010_MONASTERY_ENGLISH",
+  "title": "Monastery English — 10 Cultural Cards",
+  "title_vi": "Tiếng Anh Thiền Viện — 10 Thẻ Văn Hóa",
+  "level": "A1–B1",
+  "purpose": "Cung cấp hiểu biết văn hóa và cách giao tiếp thực tế tại thiền viện Theravāda quốc tế.",
+  "cards": [
+    {
+      "card_id": "MC_01",
+      "title_en": "Greeting the teacher — 'Bhante' vs other forms",
+      "title_vi": "Chào thiền sư — 'Bhante' và các hình thức khác",
+      "level_range": "A1–A2",
+      "goal": "Biết cách gọi thiền sư đúng chuẩn tại thiền viện quốc tế.",
+      "when_to_use": "Khi gặp thiền sư lần đầu, bắt đầu interview, hoặc nói chuyện trực tiếp.",
+      "do": [
+        "Dùng 'Bhante' (phổ biến nhất, an toàn nhất).",
+        "Dùng 'Sayadaw' nếu thiền sư là người Miến Điện và bạn biết chắc.",
+        "Dùng 'Ajahn' nếu thiền sư là người Thái.",
+        "Luôn bắt đầu câu bằng 'Bhante, ...'"
+      ],
+      "dont": [
+        "Dùng 'Master' — nghe như võ thuật.",
+        "Dùng 'Sir' một mình — không đủ tôn trọng trong ngữ cảnh thiền viện.",
+        "Gọi tên riêng của thiền sư."
+      ],
+      "key_phrases_en": [
+        "Bhante, may I report my sitting?",
+        "Bhante, I have a question about my practice.",
+        "Bhante, I am not sure about this.",
+        "Thank you, Bhante."
+      ],
+      "mini_dialogue_en": [
+        "Yogi: Bhante, may I report?",
+        "Teacher: Yes. Tell me what you know.",
+        "Yogi: Bhante, I have been practicing ānāpāna for one week.",
+        "Teacher: Good. Continue."
+      ],
+      "pali_bridge": {
+        "pali": "bhante",
+        "pali_romanized": "bhan-te",
+        "english": "Venerable Sir",
+        "vietnamese": "Bạch Ngài"
+      },
+      "extra_note": "'Bhante' là từ an toàn nhất — dùng được với mọi thiền sư Theravāda, mọi quốc tịch."
+    },
+    {
+      "card_id": "MC_02",
+      "title_en": "The bell system — what each sound means",
+      "title_vi": "Hệ thống chuông — mỗi âm thanh có nghĩa gì",
+      "level_range": "A1",
+      "goal": "Hiểu và phản ứng đúng với các loại chuông tại thiền viện.",
+      "when_to_use": "Khi nghe chuông trong ngày — biết mình cần làm gì.",
+      "do": [
+        "Nghe kỹ số tiếng chuông.",
+        "1 tiếng chuông dài = chuẩn bị cho dāna (bữa ăn).",
+        "3 tiếng chuông ngắn = chuẩn bị cho thiền tập chung.",
+        "Chuông liên tục = thông báo khẩn cấp hoặc đặc biệt.",
+        "Nếu không chắc: hỏi người bên cạnh hoặc helper."
+      ],
+      "dont": [
+        "Bỏ qua chuông — có thể bạn sẽ bỏ lỡ hoạt động quan trọng.",
+        "Tự diễn giải chuông theo ý mình."
+      ],
+      "key_phrases_en": [
+        "What does the bell mean?",
+        "Is that the bell for sitting?",
+        "I heard three bells — does that mean we start now?"
+      ],
+      "mini_dialogue_en": [
+        "Yogi: (hears bell) What does that bell mean?",
+        "Helper: That is the bell for sitting. You should go to the hall.",
+        "Yogi: Thank you."
+      ],
+      "pali_bridge": null,
+      "extra_note": "Mỗi thiền viện có hệ thống chuông khác nhau. Hỏi ngay ngày đầu: 'What does the bell mean here?'"
+    },
+    {
+      "card_id": "MC_03",
+      "title_en": "Interview etiquette — what to expect",
+      "title_vi": "Nghi thức trình pháp — điều gì sẽ xảy ra",
+      "level_range": "A2–B1",
+      "goal": "Không bị sốc khi vào buổi trình pháp. Biết format và cách ứng xử.",
+      "when_to_use": "Trước và trong buổi interview với thiền sư.",
+      "do": [
+        "Đến đúng giờ (hoặc sớm 5 phút).",
+        "Ngồi xuống trước khi nói — không đứng.",
+        "Bắt đầu bằng: 'Bhante, may I report my practice?'",
+        "Nói ngắn, rõ ràng, đúng trọng tâm.",
+        "Nếu thiền sư ngắt lời — đó là bình thường, không phải thô lỗ.",
+        "Kết thúc bằng: 'Thank you, Bhante.' và cúi chào nhẹ."
+      ],
+      "dont": [
+        "Nói dài dòng, lan man.",
+        "Hỏi quá nhiều câu — giới hạn 1-2 câu hỏi.",
+        "Tranh luận với thiền sư về phương pháp.",
+        "Nói 'I realized' hoặc 'I attained' khi không chắc."
+      ],
+      "key_phrases_en": [
+        "Bhante, may I report?",
+        "Since my last interview, I followed the schedule.",
+        "My main difficulty is uddhacca-kukkucca.",
+        "Bhante, what should I do about this?",
+        "Thank you, Bhante."
+      ],
+      "mini_dialogue_en": [
+        "Yogi: Bhante, may I report?",
+        "Teacher: Yes. What do you know?",
+        "Yogi: Bhante, the breath is subtle today. I am not sure what to do.",
+        "Teacher: Just know it. Go back and sit.",
+        "Yogi: Thank you, Bhante."
+      ],
+      "pali_bridge": null,
+      "extra_note": "Interview thường chỉ 2-10 phút. Thiền sư muốn nghe 'what you know' — không nghe lý thuyết hay cảm xúc dài dòng."
+    },
+    {
+      "card_id": "MC_04",
+      "title_en": "Direct phrases are normal (not rude)",
+      "title_vi": "Câu nói 'thẳng' là bình thường (không phải thô)",
+      "level_range": "A2–B1",
+      "goal": "Không sốc văn hóa khi nghe câu ngắn, trực tiếp trong retreat.",
+      "when_to_use": "Khi nhận instruction nhanh hoặc được trả lời rất ngắn.",
+      "do": [
+        "Hiểu ý chính và quay lại hành thiền.",
+        "Nếu không hiểu: xin nhắc lại."
+      ],
+      "dont": [
+        "Diễn giải theo cảm xúc (nghĩ là bị mắng).",
+        "Cố kéo dài câu chuyện để được giải thích."
+      ],
+      "key_phrases_en": [
+        "Go back and sit.",
+        "Just know it.",
+        "No problem.",
+        "Okay, okay."
+      ],
+      "mini_dialogue_en": [
+        "Yogi: Bhante, I'm not sure.",
+        "Teacher: No problem. Go back and sit.",
+        "Yogi: Yes, Bhante."
+      ],
+      "pali_bridge": null,
+      "extra_note": "Đây là 'Monastery English' đã được chấp nhận trong baseline. 'No problem' = okay / yes / được."
+    },
+    {
+      "card_id": "MC_05",
+      "title_en": "Noble silence: ask only what is necessary",
+      "title_vi": "Im lặng thánh: chỉ hỏi điều cần thiết",
+      "level_range": "A1–A2",
+      "goal": "Hỏi đúng việc cần thiết mà vẫn giữ nội quy im lặng.",
+      "when_to_use": "Khi cần hỏi lịch, đường đi, sức khoẻ, hoặc kỹ thuật thiền.",
+      "do": [
+        "Xin phép một câu, rồi hỏi ngắn.",
+        "Tập câu kết: 'Thank you. I will keep silence.'"
+      ],
+      "dont": [
+        "Nói chuyện xã giao trong khu thiền.",
+        "Không dám hỏi chuyện quan trọng (sức khỏe / lịch interview)."
+      ],
+      "key_phrases_en": [
+        "Is it okay to ask a practical question?",
+        "Where should I go for the interview?",
+        "I have a health issue. Who should I tell?",
+        "Thank you. I will keep silence."
+      ],
+      "mini_dialogue_en": [
+        "Yogi: Excuse me, is it okay to ask a practical question?",
+        "Helper: Yes.",
+        "Yogi: Where should I go for the interview?",
+        "Helper: Please wait outside the teacher's room."
+      ],
+      "pali_bridge": null,
+      "extra_note": "Ở A1 không cần ép thuật ngữ Pāḷi hiếm cho 'noble silence'. Dùng English 'silence' là đủ."
+    },
+    {
+      "card_id": "MC_06",
+      "title_en": "Report experience, not Dhamma theories",
+      "title_vi": "Trình kinh nghiệm, không bàn lý thuyết",
+      "level_range": "B1",
+      "goal": "Giữ đúng mục tiêu interview: báo cáo cái mình biết/quan sát được.",
+      "when_to_use": "Khi người học có xu hướng trích sách, nói triết lý thay vì mô tả thực hành.",
+      "do": [
+        "Dùng: 'I noticed…' / 'I observed…' / 'I'm not sure…'.",
+        "Nói 1 vấn đề chính + 1 câu hỏi."
+      ],
+      "dont": [
+        "Nói 'I attained/realized…' khi không chắc.",
+        "Trình bày dài về sách vở."
+      ],
+      "key_phrases_en": [
+        "Bhante, I will report what I observed.",
+        "I'm not sure. This is what I noticed.",
+        "My main difficulty is restlessness and thinking.",
+        "My question is about the method."
+      ],
+      "mini_dialogue_en": [
+        "Teacher: What do you know?",
+        "Yogi: Bhante, I noticed the breath becomes subtle, and then my mind starts thinking.",
+        "Teacher: What is your main question?",
+        "Yogi: When it becomes subtle, should I just wait?"
+      ],
+      "pali_bridge": null,
+      "extra_note": "Safe language for interviews: 'I noticed…' / 'I observed…' / 'I'm not sure, Bhante.' These phrases keep the report honest and clear."
+    },
+    {
+      "card_id": "MC_07",
+      "title_en": "Ask permission (the default is to ask)",
+      "title_vi": "Xin phép (mặc định là hỏi trước)",
+      "level_range": "A2–B1",
+      "goal": "Nói câu xin phép tự nhiên, rõ thời gian và lý do thực tế.",
+      "when_to_use": "Ra ngoài, dùng điện thoại, đổi phòng, cần nghỉ vì bệnh.",
+      "do": [
+        "Dùng 'May I…?' và nói rõ thời gian.",
+        "Nếu là sức khoẻ: nói ngắn và thẳng."
+      ],
+      "dont": [
+        "Tự ý làm rồi mới báo.",
+        "Nói kiểu thông báo: 'I will…' (nghe như không xin phép)."
+      ],
+      "key_phrases_en": [
+        "May I leave the monastery for one hour?",
+        "Is it okay if I use my phone for a short call?",
+        "May I change my room?",
+        "I'm not feeling well. May I rest?"
+      ],
+      "mini_dialogue_en": [
+        "Yogi: Excuse me, may I leave the monastery for one hour?",
+        "Helper: Yes, please come back before lunch.",
+        "Yogi: Thank you."
+      ],
+      "pali_bridge": null,
+      "extra_note": "Thiền viện quốc tế thường ưu tiên rõ ràng hơn là lịch sự vòng vo."
+    },
+    {
+      "card_id": "MC_08",
+      "title_en": "Food questions: use \"allowable\"",
+      "title_vi": "Hỏi ăn uống: dùng \"allowable\" (được phép)",
+      "level_range": "A2",
+      "goal": "Hỏi đúng kiểu khi giữ Tám Giới hoặc theo nội quy ăn uống.",
+      "when_to_use": "Khi không chắc đồ uống/đồ ăn có được dùng sau giờ ngọ không.",
+      "do": [
+        "Nói điều kiện: 'after noon' + 'I'm keeping the Eight Precepts'.",
+        "Nếu có guidelines: hỏi chỗ kiểm tra."
+      ],
+      "dont": [
+        "Hỏi chung chung: 'Can I eat this?'",
+        "Tự suy diễn rồi làm theo ý mình."
+      ],
+      "key_phrases_en": [
+        "I am keeping the Eight Precepts. Is this allowable after noon?",
+        "Is there a medicine allowance?",
+        "May I take this for health reasons?",
+        "Who should I ask about food rules?"
+      ],
+      "mini_dialogue_en": [
+        "Yogi: I am keeping the Eight Precepts. Is this allowable after noon?",
+        "Helper: Please check the retreat guidelines.",
+        "Yogi: Okay, thank you."
+      ],
+      "pali_bridge": {
+        "pali": "aṭṭha-sīla",
+        "pali_romanized": "at-tha sii-la",
+        "english": "Eight Precepts",
+        "vietnamese": "Tám Giới"
+      },
+      "extra_note": "Câu 'Please check the retreat guidelines.' là phản hồi rất thường gặp."
+    },
+    {
+      "card_id": "MC_09",
+      "title_en": "Work period: ask short task questions",
+      "title_vi": "Giờ công quả: hỏi ngắn, rõ việc",
+      "level_range": "A1–A2",
+      "goal": "Không làm sai vì ngại hỏi; dùng câu cực ngắn mà hiệu quả.",
+      "when_to_use": "Trong giờ công quả: rửa chén, quét dọn, lau nhà, dọn phòng.",
+      "do": [
+        "Hỏi ngắn: 'What should I do now?'",
+        "Nếu không hiểu: 'Could you show me?'"
+      ],
+      "dont": [
+        "Im lặng làm đại rồi làm sai.",
+        "Hỏi dài dòng."
+      ],
+      "key_phrases_en": [
+        "What should I do now?",
+        "Where should I put this?",
+        "Is this the right place?",
+        "Could you show me?"
+      ],
+      "mini_dialogue_en": [
+        "Yogi: What should I do now?",
+        "Helper: Please sweep this area.",
+        "Yogi: Okay. Could you show me the broom?",
+        "Helper: Here."
+      ],
+      "pali_bridge": null,
+      "extra_note": "Trong môi trường đa accent, 'show me' thường hiệu quả hơn giải thích dài."
+    },
+    {
+      "card_id": "MC_10",
+      "title_en": "Repair phrases when you don't understand",
+      "title_vi": "Câu sửa khi nghe không hiểu",
+      "level_range": "A1–B1",
+      "goal": "Xin nhắc lại và xác nhận instruction để tránh làm sai phương pháp.",
+      "when_to_use": "Khi nghe accent lạ hoặc instruction nhanh.",
+      "do": [
+        "Dùng câu xin nhắc lại + câu xác nhận lại.",
+        "Nếu vẫn không hiểu: nhờ nói chậm."
+      ],
+      "dont": [
+        "Gật đầu theo phản xạ.",
+        "Nói 'Yes' khi chưa hiểu rõ instruction."
+      ],
+      "key_phrases_en": [
+        "Sorry, I didn't catch that.",
+        "Could you please repeat that slowly?",
+        "Do you mean I should keep the same method?",
+        "Let me check if I understood correctly: …"
+      ],
+      "mini_dialogue_en": [
+        "Teacher: Keep attention at the touching point. Don't control the breath.",
+        "Yogi: Sorry, I didn't catch that. Could you repeat that slowly?",
+        "Teacher: Don't control the breath.",
+        "Yogi: Do you mean I should just know the breath as it is?",
+        "Teacher: Yes."
+      ],
+      "pali_bridge": null,
+      "extra_note": "Card này đặc biệt quan trọng cho Pa-Auk: hiểu đúng 'touching point' và 'don't control'."
+    }
+  ],
+  "patches_applied": [
+    "PATCH 010-A: Đã chuẩn hoá toàn bộ 10 cards theo template thống nhất (goal / when_to_use / do / dont / key_phrases_en / mini_dialogue_en / pali_bridge / extra_note)",
+    "PATCH 010-B: MC_06 extra_note đã sửa từ ghi chú nội bộ thành hướng dẫn thực tế cho người dùng: 'Safe language for interviews...'"
+  ]
+}

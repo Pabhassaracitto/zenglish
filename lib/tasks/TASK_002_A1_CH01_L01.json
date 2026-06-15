@@ -1,0 +1,283 @@
+{
+  "lesson_id": "A1_CH01_L01",
+  "title_en": "How I Found the Dhamma",
+  "title_vi": "Cơ Duyên Đến Với Đạo Phật",
+  "level": "A1",
+  "meditation_stage_min": "pre-retreat",
+  "situation_type": "A + B + C + D + E",
+  "temporal_context": "past / present intention",
+  "prerequisites": [],
+  "monastery_note": "Đây thường là câu chuyện thiền sinh kể trong buổi gặp đầu tiên với thiền sư hoặc với bạn đồng tu. Tại Pa-Auk và các thiền viện Miến Điện, thiền sư ít khi hỏi lý do cá nhân — nhưng thiền sinh nước ngoài thường hỏi nhau câu này khi mới gặp. Ngữ cảnh thực tế nhất: nói chuyện với thiền sinh quốc tế tại phòng ăn hoặc hành lang.",
+  "authenticity_reminder": "App KHÔNG yêu cầu người dùng phải có câu chuyện 'hay'. Lý do đến với Đạo Phật rất đa dạng: khổ đau, tò mò, gia đình, bạn bè, hoặc đơn giản là cơ duyên không rõ ràng. Tất cả đều được phản ánh trong bài học.",
+  "vocabulary": [
+    {
+      "stt": 1,
+      "en": "suffering",
+      "vi": "khổ đau / khổ",
+      "pali": "dukkha",
+      "pali_romanized": "duk-kha",
+      "example_en": "I came to practice because I wanted to understand suffering.",
+      "example_context": "Giải thích lý do tìm đến tu tập với bạn đồng tu quốc tế.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO]"
+    },
+    {
+      "stt": 2,
+      "en": "the Dhamma / the Teaching",
+      "vi": "Chánh Pháp / giáo pháp",
+      "pali": "Dhamma",
+      "pali_romanized": "dham-ma",
+      "example_en": "I first heard about the Dhamma from a friend.",
+      "example_context": "Kể lại cơ duyên lần đầu nghe Pháp.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO]"
+    },
+    {
+      "stt": 3,
+      "en": "the Buddha",
+      "vi": "Đức Phật",
+      "pali": "Buddha",
+      "pali_romanized": "bud-dha",
+      "example_en": "I began to learn about the Buddha about three years ago.",
+      "example_context": "Nói về thời điểm bắt đầu tìm hiểu.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 4,
+      "en": "monk / bhikkhu",
+      "vi": "tỳ khưu / vị sư",
+      "pali": "bhikkhu",
+      "pali_romanized": "bhik-khu",
+      "example_en": "A bhikkhu at my local temple encouraged me to come here.",
+      "example_context": "Giải thích ai đã hướng dẫn mình.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 5,
+      "en": "meditation",
+      "vi": "thiền / thiền tập",
+      "pali": "bhāvanā",
+      "pali_romanized": "bhaa-va-naa",
+      "example_en": "I wanted to try meditation, so I came to this monastery.",
+      "example_context": "Nói lý do cụ thể đến thiền viện.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO]"
+    },
+    {
+      "stt": 6,
+      "en": "retreat",
+      "vi": "khóa thiền",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "This is my first retreat.",
+      "example_context": "Câu nói phổ biến nhất của thiền sinh mới.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 7,
+      "en": "peace / inner peace",
+      "vi": "bình an / an lạc nội tâm",
+      "pali": "santi",
+      "pali_romanized": "san-ti",
+      "example_en": "I was looking for peace — I could not find it outside.",
+      "example_context": "Mô tả động lực nội tâm khi đến tu tập.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 8,
+      "en": "condition / cause",
+      "vi": "duyên / nhân duyên",
+      "pali": "paccaya",
+      "pali_romanized": "pac-ca-ya",
+      "example_en": "I do not know exactly — maybe it was just the right paccaya.",
+      "example_context": "Dùng khi không có lý do rõ ràng — câu này rất tự nhiên tại thiền viện.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 9,
+      "en": "to practice / to cultivate",
+      "vi": "thực hành / tu tập",
+      "pali": "bhāveti",
+      "pali_romanized": "bhaa-ve-ti",
+      "example_en": "I have been trying to practice for about one year.",
+      "example_context": "Nói về quá trình tu tập của mình.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 10,
+      "en": "monastery / temple",
+      "vi": "thiền viện / tu viện",
+      "pali": "vihāra",
+      "pali_romanized": "vi-haa-ra",
+      "example_en": "I found this vihāra through the internet.",
+      "example_context": "Giải thích cách tìm đến thiền viện.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO]"
+    }
+  ],
+  "lesson_flow": {
+    "input": {
+      "title": "Nghe & Hiểu",
+      "description": "Nghe hai thiền sinh quốc tế nói chuyện lần đầu gặp nhau. Họ hỏi nhau: 'How did you find this place?' và 'Why did you come?'",
+      "sample_dialogues": [
+        {
+          "context": "Hai thiền sinh gặp nhau lần đầu",
+          "dialogue": [
+            "A: Hi. Is this your first time here?",
+            "B: Yes. First retreat. You?",
+            "A: My third time. How did you find this monastery?",
+            "B: A friend told me about it. And you?",
+            "A: I read a book about the Buddha — and just came."
+          ]
+        }
+      ]
+    },
+    "pattern": {
+      "title": "Mẫu Câu Cốt Lõi",
+      "description": "Ba mẫu câu đủ để kể cơ duyên đến với Đạo Phật ở cấp A1.",
+      "core_patterns": [
+        {
+          "pattern_id": "P1",
+          "function": "Nói lý do đến",
+          "template": "I came here because ___.",
+          "examples": [
+            "I came here because I wanted to learn meditation.",
+            "I came here because I was suffering.",
+            "I came here because a friend recommended it."
+          ]
+        },
+        {
+          "pattern_id": "P2",
+          "function": "Nói nguồn gốc",
+          "template": "I first heard about ___ from ___.",
+          "examples": [
+            "I first heard about this monastery from a monk.",
+            "I first heard about the Dhamma from a book.",
+            "I first heard about Pa-Auk from the internet."
+          ]
+        },
+        {
+          "pattern_id": "P3",
+          "function": "Nói thời gian quan tâm",
+          "template": "I have been interested in ___ for about ___.",
+          "examples": [
+            "I have been interested in meditation for about two years.",
+            "I have been interested in the Dhamma for about six months.",
+            "I have been interested in Buddhism for a long time."
+          ]
+        }
+      ]
+    },
+    "guided": {
+      "title": "Luyện Tập Có Hướng Dẫn",
+      "description": "AI Interview hỏi từng bước. Người dùng trả lời bằng tiếng Anh.",
+      "ai_interview_sequence": [
+        {
+          "step": 1,
+          "ai_prompt": "Is this your first retreat, or have you been here before?",
+          "purpose": "Xác định bối cảnh cá nhân."
+        },
+        {
+          "step": 2,
+          "ai_prompt": "How did you hear about this monastery or this tradition?",
+          "purpose": "Khai thác cơ duyên."
+        },
+        {
+          "step": 3,
+          "ai_prompt": "Why did you want to come and practice here?",
+          "purpose": "Giúp người dùng diễn đạt động lực sâu hơn."
+        },
+        {
+          "step": 4,
+          "ai_prompt": "How long have you been interested in meditation or the Dhamma?",
+          "purpose": "Dùng mẫu câu P3."
+        }
+      ]
+    },
+    "output": {
+      "title": "Tự Nói — Không Có Gợi Ý",
+      "description": "Người dùng tự kể cơ duyên của mình trong 3–5 câu tiếng Anh.",
+      "prompt_for_user": "Introduce yourself and explain why you came to practice in 3-5 sentences.",
+      "sample_output_A1": "I came here because I was unhappy. I first heard about the Dhamma from my mother. She gave me a book about the Buddha. I have been interested in meditation for about one year.",
+      "evaluation_criteria": [
+        "Có ít nhất 1 câu dùng mẫu P1, P2, hoặc P3",
+        "Người nghe hiểu được lý do cơ bản",
+        "Không cần grammar hoàn hảo ở A1"
+      ]
+    }
+  },
+  "situation_variants": {
+    "A_preparation": {
+      "situation_type": "A",
+      "temporal_context": "future",
+      "description": "Người dùng chưa đến thiền viện. Đang chuẩn bị cho khóa thiền đầu tiên.",
+      "context_en": "You are going to your first retreat next month. You want to practice how to introduce yourself.",
+      "context_vi": "Bạn sắp đi khóa thiền đầu tiên vào tháng sau. Bạn muốn tập nói trước.",
+      "sample_sentences": [
+        "Next month, I am going to my first retreat.",
+        "I want to practice because I am looking for peace.",
+        "I first heard about this monastery from a friend online."
+      ]
+    },
+    "B_first_appearance": {
+      "situation_type": "B",
+      "temporal_context": "present",
+      "description": "Ngày đầu tiên tại thiền viện. Gặp thiền sinh quốc tế lần đầu.",
+      "context_en": "It is your first day at the monastery. You meet a meditator from Germany at lunch.",
+      "context_vi": "Ngày đầu tiên tại thiền viện. Bạn gặp một thiền sinh người Đức lúc ăn trưa.",
+      "sample_sentences": [
+        "Yes, this is my first time here.",
+        "I found this monastery through the internet.",
+        "I came here because I wanted to understand my own suffering.",
+        "I have been interested in Theravāda meditation for about two years."
+      ]
+    },
+    "C_stable_tracking": {
+      "situation_type": "C",
+      "temporal_context": "present",
+      "description": "Đã ở thiền viện được vài ngày. Kể chuyện cơ duyên tự nhiên hơn.",
+      "context_en": "You have been at the monastery for five days. Another meditator asks you over afternoon tea.",
+      "context_vi": "Bạn đã ở thiền viện được năm ngày. Một thiền sinh người Úc hỏi bạn lúc uống trà chiều.",
+      "sample_sentences": [
+        "Actually, it started with a difficult time in my life.",
+        "I lost my job two years ago — and I started looking for something deeper.",
+        "A friend gave me a book about the Buddha. I read it and came here."
+      ]
+    },
+    "D_disappeared_changed": {
+      "situation_type": "D",
+      "temporal_context": "recent past",
+      "description": "Sau khóa thiền, nhìn lại lý do ban đầu. Có thể lý do đã thay đổi hoặc sâu hơn.",
+      "context_en": "The retreat has ended. A foreign meditator asks: 'When you first came, why did you come? And now — has anything changed?'",
+      "context_vi": "Khóa thiền đã kết thúc. Một thiền sinh nước ngoài hỏi về lý do và sự thay đổi.",
+      "sample_sentences": [
+        "When I first came, I just wanted some peace.",
+        "But now I think I understand a little more about dukkha.",
+        "My reason has not changed — but it is deeper now.",
+        "Actually, I am not sure anymore. I need more time to sit."
+      ],
+      "note": "Câu 'I need more time to sit' là câu rất thật và rất phổ biến."
+    },
+    "E_past_future": {
+      "situation_type": "E",
+      "temporal_context": "past / future",
+      "description": "Kể lại câu chuyện cơ duyên với người thân hoặc bạn bè sau khi về nhà.",
+      "context_en": "You are back home after the retreat. Your non-Buddhist friend asks: 'So why did you go there in the first place?'",
+      "context_vi": "Bạn đã về nhà sau khóa thiền. Một người bạn không theo Đạo hỏi.",
+      "sample_sentences_past": [
+        "I went because I was looking for a way out of suffering.",
+        "I had heard about it for years — but finally I just went."
+      ],
+      "sample_sentences_future": [
+        "Bhante, I came here because of suffering. Is this a good reason to continue practicing?"
+      ],
+      "monastery_note": "Thiền sư Pa-Auk thường trả lời ngắn gọn: 'Yes. That is the right reason. Go back and sit.'"
+    }
+  }
+}

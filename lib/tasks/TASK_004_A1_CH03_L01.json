@@ -1,0 +1,319 @@
+{
+  "lesson_id": "A1_CH03_L01",
+  "title_en": "Daily Life at the Monastery",
+  "title_vi": "Sinh Hoạt Hằng Ngày Tại Thiền Viện",
+  "level": "A1",
+  "meditation_stage_min": "pre-retreat / first week",
+  "situation_type": "A + B + C + D + E",
+  "temporal_context": "present routine / present continuous",
+  "prerequisites": ["A1_CH01_L01", "A1_CH02_L01"],
+  "monastery_note": "Lịch trình tại các thiền viện Theravāda khác nhau. Ví dụ Pa-Auk Myanmar: 4:00 thức dậy, 4:30 ngồi thiền, 6:00–6:30 dāna (sáng), 8:00–11:00 thiền, 11:00–11:30 dāna (trưa, bữa cuối), 13:00–17:00 thiền, 17:00 nước trái cây, 18:00–21:00 thiền tối. Bài học KHÔNG áp đặt một lịch trình cụ thể — câu hỏi và câu trả lời áp dụng được ở bất kỳ thiền viện nào.\n\nLưu ý quan trọng:\n- 'Sitting' và 'walking' = hai hoạt động chính của ngày tu tập\n- 'Dana' thay cho 'breakfast/lunch' — nhiều thiền viện chỉ có 2 bữa/ngày\n- 'Interview' = buổi trình pháp với thiền sư, không phải phỏng vấn xin việc",
+  "authenticity_reminder": "Người dùng có thể đang ở thiền viện ngay lúc học — hoặc chưa bao giờ đến. AI Interview phân biệt: (1) mô tả lịch trình thực đang sống (2) hỏi về lịch trình sắp tới (3) kể lại lịch trình đã qua.",
+  "vocabulary": [
+    {
+      "stt": 1,
+      "en": "wake up",
+      "vi": "thức dậy",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "I wake up at four o'clock every morning.",
+      "example_context": "Mô tả thời gian thức dậy hằng ngày.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 2,
+      "en": "morning sitting",
+      "vi": "buổi ngồi thiền sáng",
+      "pali": "pubbaṇha-bhāvanā",
+      "pali_romanized": "pub-ban-ha bhaa-va-naa",
+      "example_en": "The morning sitting starts at four thirty.",
+      "example_context": "Mô tả lịch trình buổi sáng.",
+      "priority": "High",
+      "note": "Ở A1 dùng 'morning sitting' — Pāḷi term chỉ để tham khảo."
+    },
+    {
+      "stt": 3,
+      "en": "sitting meditation",
+      "vi": "ngồi thiền",
+      "pali": "nisajja-bhāvanā",
+      "pali_romanized": "ni-saj-ja bhaa-va-naa",
+      "example_en": "I do sitting meditation for one hour in the morning.",
+      "example_context": "Nói về thời lượng và thời điểm ngồi thiền.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 4,
+      "en": "walking meditation",
+      "vi": "thiền hành",
+      "pali": "caṅkamana-bhāvanā",
+      "pali_romanized": "chang-ka-ma-na bhaa-va-naa",
+      "example_en": "After sitting, I do walking meditation for thirty minutes.",
+      "example_context": "Mô tả thực hành luân phiên ngồi – đi.",
+      "priority": "High",
+      "note": "Patch 003-C: romanized 'chang-ka-ma-na'."
+    },
+    {
+      "stt": 5,
+      "en": "dana / meal",
+      "vi": "dāna / bữa ăn",
+      "pali": "dāna",
+      "pali_romanized": "daa-na",
+      "example_en": "Dana is at six thirty. I eat only two meals a day.",
+      "example_context": "Nói về lịch dāna và số bữa ăn.",
+      "priority": "High",
+      "note": "Patch 003-D: Hỏi 'What time is dana?' — nhiều thiền viện chỉ có 2 bữa/ngày."
+    },
+    {
+      "stt": 6,
+      "en": "rest / break",
+      "vi": "nghỉ ngơi",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "I rest for one hour after dana.",
+      "example_context": "Nói về thời gian nghỉ giữa các buổi thiền.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 7,
+      "en": "chanting / recitation",
+      "vi": "tụng kinh",
+      "pali": "pāṭha",
+      "pali_romanized": "paa-tha",
+      "example_en": "We do chanting together every evening at six o'clock.",
+      "example_context": "Mô tả buổi tụng kinh tập thể.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 8,
+      "en": "interview / teacher meeting",
+      "vi": "trình pháp / gặp thiền sư",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "My interview with the teacher is at ten o'clock.",
+      "example_context": "Nói về lịch hẹn trình pháp. 'Interview' = trình pháp tại thiền viện.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 9,
+      "en": "lights out / bedtime",
+      "vi": "tắt đèn / giờ đi ngủ",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "Lights out is at ten o'clock.",
+      "example_context": "Quy định giờ nghỉ tại thiền viện.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 10,
+      "en": "noble silence",
+      "vi": "giữ im lặng",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "We keep noble silence from after evening chanting until after morning dana.",
+      "example_context": "Giải thích quy định im lặng.",
+      "priority": "Medium",
+      "note": "Patch 003-B: Ở A1, không ép 'ariya-tuṇhī-bhāva'. Dùng English là đủ."
+    }
+  ],
+  "lesson_flow": {
+    "input": {
+      "title": "Nghe & Hiểu",
+      "description": "Nghe một thiền sinh mô tả lịch trình một ngày tại thiền viện.",
+      "sample_dialogues": [
+        {
+          "context": "Mô tả lịch trình với bạn đồng tu",
+          "dialogue": [
+            "A: So... what is a normal day like here?",
+            "B: Well — I wake up at four. Then there is sitting meditation until six.",
+            "A: That is early.",
+            "B: Yes. Then dana at six thirty. After that, more sitting and walking.",
+            "A: When do you meet the teacher?",
+            "B: My interview is at ten. Just fifteen minutes.",
+            "A: And in the evening?",
+            "B: Chanting at six. Then sitting until nine. Lights out at ten."
+          ]
+        }
+      ]
+    },
+    "pattern": {
+      "title": "Mẫu Câu Cốt Lõi",
+      "description": "Bốn mẫu câu để mô tả lịch trình hằng ngày.",
+      "core_patterns": [
+        {
+          "pattern_id": "P1",
+          "function": "Giờ cụ thể",
+          "template": "I wake up / start / finish at ___.",
+          "examples": [
+            "I wake up at four o'clock.",
+            "I start sitting at four thirty.",
+            "I finish walking meditation at eight."
+          ]
+        },
+        {
+          "pattern_id": "P2",
+          "function": "Trình tự hoạt động",
+          "template": "After ___, I ___.",
+          "examples": [
+            "After dana, I rest for one hour.",
+            "After sitting, I do walking meditation.",
+            "After chanting, I go back to my kuti."
+          ]
+        },
+        {
+          "pattern_id": "P3",
+          "function": "Thời lượng",
+          "template": "I do ___ for ___ (time).",
+          "examples": [
+            "I do sitting meditation for one hour.",
+            "I do walking meditation for thirty minutes.",
+            "I rest for about forty-five minutes."
+          ]
+        },
+        {
+          "pattern_id": "P4",
+          "function": "Hoạt động tập thể",
+          "template": "We ___ together at ___.",
+          "examples": [
+            "We do chanting together at six.",
+            "We sit together in the hall at four thirty.",
+            "We eat dana together at six thirty."
+          ]
+        }
+      ]
+    },
+    "guided": {
+      "title": "Luyện Tập Có Hỗ Trợ",
+      "description": "AI hỏi về lịch trình hằng ngày. Người dùng trả lời theo thực tế hoặc theo tình huống giả định.",
+      "ai_interview_sequence": [
+        {
+          "step": 1,
+          "ai_prompt": "What time do you wake up at the monastery?",
+          "purpose": "Dùng mẫu P1 — giờ cụ thể.",
+          "expected_pattern": "P1"
+        },
+        {
+          "step": 2,
+          "ai_prompt": "After you wake up, what do you do first?",
+          "purpose": "Dùng mẫu P2 — trình tự.",
+          "expected_pattern": "P2"
+        },
+        {
+          "step": 3,
+          "ai_prompt": "How long do you sit in the morning?",
+          "purpose": "Dùng mẫu P3 — thời lượng.",
+          "expected_pattern": "P3"
+        },
+        {
+          "step": 4,
+          "ai_prompt": "Do you have walking meditation? When and how long?",
+          "purpose": "Kết hợp P2 + P3.",
+          "expected_pattern": "P2 + P3"
+        },
+        {
+          "step": 5,
+          "ai_prompt": "What do you do in the evening?",
+          "purpose": "Mô tả lịch trình buổi tối.",
+          "expected_pattern": "P1 + P2"
+        }
+      ]
+    },
+    "output": {
+      "title": "Tự Mô Tả — Không Có Gợi Ý",
+      "description": "Người dùng mô tả một ngày tại thiền viện bằng tiếng Anh — ít nhất 5 câu.",
+      "prompt_for_user": "Describe one day at the monastery in 5-7 sentences. Include: wake-up time, sitting, walking, dana, and lights out.",
+      "sample_output_A1": "I wake up at four o'clock. After waking up, I go to the meditation hall. I do sitting meditation for ninety minutes. After sitting, I do walking meditation for thirty minutes. Dana is at six thirty. I eat only two meals a day.",
+      "evaluation_criteria": [
+        "Đề cập ít nhất 3 hoạt động khác nhau",
+        "Nói được giờ cụ thể của ít nhất 2 hoạt động",
+        "Dùng ít nhất 1 câu với 'After ___'",
+        "Người nghe hình dung được một ngày tu tập"
+      ]
+    }
+  },
+  "situation_variants": {
+    "A_preparation": {
+      "situation_type": "A",
+      "temporal_context": "future",
+      "description": "Người dùng chưa đến thiền viện. Đang chuẩn bị tâm lý và ngôn ngữ cho lịch trình.",
+      "context_en": "You are going to a monastery next week. A friend who has been there tells you the schedule.",
+      "context_vi": "Bạn sắp đến thiền viện tuần sau. Một người bạn đã từng ở đó kể cho bạn nghe lịch trình.",
+      "focus_patterns": ["P1", "P2"],
+      "sample_sentences": [
+        "My friend said we wake up at four.",
+        "After waking up, there is sitting meditation.",
+        "Dana is at six thirty in the morning.",
+        "There is no dinner — only two meals."
+      ],
+      "ai_prompt": "Look at the sample Pa-Auk schedule. Try to describe three activities using 'After ___, I ___'."
+    },
+    "B_first_appearance": {
+      "situation_type": "B",
+      "temporal_context": "present",
+      "description": "Ngày đầu tại thiền viện. Đang cố hiểu và theo lịch trình.",
+      "context_en": "It is your first morning. Another meditator asks: 'Do you know the schedule?'",
+      "context_vi": "Buổi sáng đầu tiên. Một thiền sinh khác hỏi: 'Bạn biết lịch trình chưa?'",
+      "focus_patterns": ["P1", "P2", "P3"],
+      "sample_sentences": [
+        "I think dana is at six thirty.",
+        "After dana, we sit again — I think.",
+        "I am not sure about the afternoon schedule.",
+        "Do you know when the interview is?"
+      ],
+      "note": "Câu 'I am not sure' và 'I think' rất quan trọng ở giai đoạn này."
+    },
+    "C_stable_tracking": {
+      "situation_type": "C",
+      "temporal_context": "present",
+      "description": "Sau một tuần. Đã nhớ lịch trình. Có thể mô tả một ngày tự tin hơn.",
+      "context_en": "You have been at the monastery for one week. A new meditator arrives and asks you to explain.",
+      "context_vi": "Bạn đã ở thiền viện một tuần. Một thiền sinh mới nhờ bạn giải thích.",
+      "focus_patterns": ["P1", "P2", "P3", "P4"],
+      "sample_sentences": [
+        "So — we wake up at four every day.",
+        "After waking up, we go to the hall for the morning sitting.",
+        "I sit for about ninety minutes, then walk for thirty.",
+        "We only eat two meals — breakfast and lunch. No dinner."
+      ]
+    },
+    "D_disappeared_changed": {
+      "situation_type": "D",
+      "temporal_context": "recent past",
+      "description": "Thiền viện thay đổi lịch trình. Cần hỏi lại.",
+      "context_en": "The teacher changed your schedule. Now your interview is in the afternoon, not the morning.",
+      "context_vi": "Thiền sư thay đổi lịch trình của bạn. Buổi trình pháp giờ ở buổi chiều.",
+      "focus_patterns": ["P1", "P2"],
+      "sample_sentences": [
+        "The teacher changed my interview.",
+        "Now my interview is at two o'clock in the afternoon.",
+        "Before, it was at ten in the morning.",
+        "So I can sit longer in the morning now."
+      ]
+    },
+    "E_past_future": {
+      "situation_type": "E",
+      "temporal_context": "past / future",
+      "description": "Kể lại lịch trình cho người thân hoặc hỏi về lịch trình khóa thiền sắp tới.",
+      "context_en": "You are home after the retreat. Your family asks: 'What did you do all day?'",
+      "context_vi": "Bạn đã về nhà sau khóa thiền. Gia đình hỏi: 'Cả ngày bạn làm gì ở đó?'",
+      "focus_patterns": ["P1", "P2", "P3"],
+      "sample_sentences_past": [
+        "Every day, I woke up at four AM.",
+        "We meditated for most of the day — sitting and walking.",
+        "We only ate twice a day.",
+        "It was difficult at first — but I got used to it."
+      ],
+      "sample_sentences_future": [
+        "Excuse me, what time do you wake up at your monastery?",
+        "How many meals are there per day?",
+        "Is there a group sitting in the evening?"
+      ],
+      "monastery_note": "Câu 'It was difficult at first — but I got used to it.' là câu rất thật."
+    }
+  }
+}

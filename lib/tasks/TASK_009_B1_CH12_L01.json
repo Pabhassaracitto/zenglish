@@ -1,0 +1,351 @@
+{
+  "lesson_id": "B1_CH12_L01",
+  "title_en": "The 5-Part Meditation Interview Report (Core)",
+  "title_vi": "Trình Pháp 5 Phần (Cốt Lõi)",
+  "level": "B1",
+  "meditation_stage_min": "samatha_preliminary",
+  "situation_type": "A + B + C + D + E",
+  "temporal_context": "past / present / future — all five temporal situations covered",
+  "prerequisites": [
+    "A1_CH01_L01",
+    "A1_CH02_L01",
+    "A1_CH03_L01",
+    "A1_CH04_L01",
+    "A1_CH05_L01",
+    "A2_CH06_L01",
+    "A2_CH07_L01"
+  ],
+  "monastery_note": "Trong thiền viện quốc tế, 'interview' thường có nghĩa là buổi trình pháp ngắn với thiền sư (không phải phỏng vấn xin việc). Thời lượng có thể rất ngắn (2–10 phút). Thiền sư có thể ngắt lời để hỏi thẳng vào điểm chính — điều đó là bình thường.\n\nVì vậy, một cấu trúc 5 phần giúp người tu học nói rõ, nhanh, và đúng trọng tâm:\n(1) TÓM TẮT THỜI GIAN: Từ buổi trình pháp trước đến nay mình ngồi/đi bao nhiêu, có gì thay đổi lớn.\n(2) ĐỀ MỤC / CÁCH THỰC HÀNH: Mình đang dùng đề mục nào (kammaṭṭhāna), giữ tâm ở đâu, làm gì khi tâm rời đề mục.\n(3) CÁI MÌNH BIẾT (KNOWING): Mình biết hơi thở/đề mục ra sao, ổn định hay không (mô tả, không cần 'khen/chê').\n(4) KHÓ KHĂN: Nīvaraṇa (hôn trầm, phóng dật, nghi, v.v.) hoặc vấn đề cụ thể.\n(5) CÂU HỎI / XIN CHỈ DẠY: Hỏi 1–2 câu rõ ràng hoặc xác nhận instruction.\n\nTrong truyền thống Pa-Auk, không cần dùng từ phức tạp. Quan trọng nhất là: đúng sự thật, đúng phương pháp, và mô tả được cái mình đang 'know'.",
+  "authenticity_reminder": "Bài này dùng được cho: (1) kinh nghiệm thật, (2) chuẩn bị ngôn ngữ trước khi đi retreat, (3) luyện tình huống giả định. Người dùng không phải tự nhận các mức định/chứng. Nếu không chắc, dùng ngôn ngữ an toàn: 'I'm not sure' / 'I think' / 'Please correct me, Bhante.'",
+  "vocabulary": [
+    {
+      "stt": 1,
+      "en": "meditation subject / meditation work",
+      "vi": "đề mục / công việc thiền",
+      "pali": "kammaṭṭhāna",
+      "pali_romanized": "kam-mat-thaa-na",
+      "example_en": "Bhante, my current kammaṭṭhāna is ānāpāna.",
+      "example_context": "Nêu đề mục ngay đầu buổi trình pháp.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — người Việt hay đọc thiếu cụm ṭṭh; nhắc đọc tách: mat-thaa."
+    },
+    {
+      "stt": 2,
+      "en": "meditation object",
+      "vi": "đối tượng thiền / cảnh",
+      "pali": "ārammaṇa",
+      "pali_romanized": "aa-ram-ma-na",
+      "example_en": "Bhante, I try to keep the ārammaṇa at the touching point.",
+      "example_context": "Khi thiền sư hỏi: 'What is your object?'",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — âm dài ā- ở đầu."
+    },
+    {
+      "stt": 3,
+      "en": "instruction / guidance",
+      "vi": "lời hướng dẫn / chỉ dạy",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "Bhante, in my last interview, you told me to stay at the touching point and not control the breath.",
+      "example_context": "Phần (1) và (5): nhắc lại instruction gần nhất để xác nhận mình làm đúng.",
+      "priority": "High",
+      "note": "Patch 009-A: Dùng English thực tế. 'ovāda' ít được dùng trong giao tiếp trực tiếp tại thiền viện. Ưu tiên: 'you told me to…' / 'your instruction was…' / 'you asked me to…'"
+    },
+    {
+      "stt": 4,
+      "en": "mindfulness",
+      "vi": "niệm / chánh niệm",
+      "pali": "sati",
+      "pali_romanized": "sa-ti",
+      "example_en": "Bhante, when I lose sati, my mind goes into thinking quickly.",
+      "example_context": "Mô tả cơ chế 'mất niệm → phóng tâm'.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 5,
+      "en": "concentration",
+      "vi": "định",
+      "pali": "samādhi",
+      "pali_romanized": "sa-maa-di",
+      "example_en": "Bhante, my samādhi is more stable than last week, but it still drops sometimes.",
+      "example_context": "Phần (3): mô tả độ ổn định, không cần khẳng định tầng định.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — người Việt hay nói 'sa-ma-di' (âm ngắn)."
+    },
+    {
+      "stt": 6,
+      "en": "access concentration",
+      "vi": "cận định",
+      "pali": "upacāra-samādhi",
+      "pali_romanized": "u-pa-chaa-ra sa-maa-di",
+      "example_en": "Bhante, I'm not sure, but I think it might be upacāra-samādhi. Please correct me.",
+      "example_context": "Ngôn ngữ an toàn khi muốn hỏi về mức định mà không tự khẳng định.",
+      "priority": "Medium",
+      "note": "[NEEDS AUDIO] — nên dạy kèm câu 'I'm not sure' để tránh over-claiming."
+    },
+    {
+      "stt": 7,
+      "en": "hindrances",
+      "vi": "ngũ triền cái",
+      "pali": "nīvaraṇa",
+      "pali_romanized": "nii-va-ra-na",
+      "example_en": "Bhante, my main difficulty is nīvaraṇa, especially restlessness and doubt.",
+      "example_context": "Phần (4): gom nhóm vấn đề để nói gọn.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — âm dài 'nī-'."
+    },
+    {
+      "stt": 8,
+      "en": "sloth and torpor",
+      "vi": "hôn trầm thụy miên",
+      "pali": "thīna-middha",
+      "pali_romanized": "thii-na mid-dha",
+      "example_en": "Bhante, during sitting, thīna-middha comes strongly after about fifteen minutes. I try to open my eyes slightly, but it still comes back.",
+      "example_context": "Patch 009-B: Mô tả cụ thể 'khi nào' và 'mức độ' — kèm theo 'what I did about it'.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — 'thī-' kéo dài; 'ddha' dễ đọc sai. Patch 009-B: Thiền sư Pa-Auk thường muốn nghe cả phần 'what I did about it' chứ không chỉ mô tả vấn đề."
+    },
+    {
+      "stt": 9,
+      "en": "restlessness and worry",
+      "vi": "trạo cử và hối quá",
+      "pali": "uddhacca-kukkucca",
+      "pali_romanized": "ud-dhat-cha kuk-kut-cha",
+      "example_en": "Bhante, I have a lot of uddhacca-kukkucca in the evening.",
+      "example_context": "Phần (4): nói đúng thuật ngữ khi trình pháp với thiền sư quen Pāḷi.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — romanized 'ud-dhat-cha' đã được chốt theo baseline."
+    },
+    {
+      "stt": 10,
+      "en": "doubt",
+      "vi": "nghi",
+      "pali": "vicikicchā",
+      "pali_romanized": "vi-chi-kich-chaa",
+      "example_en": "Bhante, I have vicikicchā about whether I'm placing attention correctly.",
+      "example_context": "Phần (4)+(5): nêu nghi cụ thể và chuyển thành câu hỏi.",
+      "priority": "Medium",
+      "note": "[NEEDS AUDIO] — âm cuối 'chā' kéo dài."
+    }
+  ],
+  "lesson_flow": {
+    "input": {
+      "title": "Nghe & Nhận Biết (5-Part Report in Real Monastery English)",
+      "description": "Người học nghe 2 mẫu trình pháp theo cấu trúc 5 phần. Lưu ý cách nói ngắn, trực tiếp, và cách thiền sư ngắt lời.",
+      "sample_dialogues": [
+        {
+          "context": "Situation B — lần đầu dùng cấu trúc 5 phần",
+          "dialogue": [
+            "Yogi: Bhante, may I report my practice?",
+            "Teacher: Yes. What do you know?",
+            "Yogi: (1) Since my last interview, I did six sittings and six walking sessions per day.",
+            "Yogi: (2) My kammaṭṭhāna is ānāpāna. I keep attention at the touching point.",
+            "Yogi: (3) The breath is sometimes clear, sometimes subtle. I can stay for a few minutes, then the mind wanders.",
+            "Yogi: (4) The main problem is uddhacca-kukkucca and a lot of thinking.",
+            "Yogi: (5) Bhante, when the breath becomes subtle, what should I do?",
+            "Teacher: Keep your attention there. Don't look for it. Just know. Go back and sit."
+          ]
+        },
+        {
+          "context": "Situation D — khi thực hành bị tụt / thay đổi",
+          "dialogue": [
+            "Yogi: Bhante, (1) last week my sitting was stable, but these two days it changed.",
+            "Teacher: Changed how?",
+            "Yogi: (2) Same ānāpāna, same touching point.",
+            "Yogi: (3) Now the breath is not clear and samādhi drops quickly.",
+            "Yogi: (4) Thīna-middha comes strongly in the morning. In the afternoon, I have doubt.",
+            "Yogi: (5) Bhante, should I adjust anything, or just continue?",
+            "Teacher: Just continue. Keep the schedule. Report again tomorrow."
+          ]
+        }
+      ]
+    },
+    "pattern": {
+      "title": "Mẫu Câu Cốt Lõi (5 Parts)",
+      "description": "Người học luyện 5 khung câu. Mục tiêu: nói được nhanh, không cần dài.",
+      "core_patterns": [
+        {
+          "pattern_id": "Part1",
+          "function": "Tóm tắt thời gian / lịch thực hành",
+          "template": "(1) Since my last interview, I did [number] sittings and [number] walking sessions per day.",
+          "examples": [
+            "Since my last interview, I followed the schedule most days.",
+            "Since yesterday, I missed one walking session because of knee pain."
+          ],
+          "monastery_english_note": "Ở thiền viện, 'follow the schedule' là câu rất thực dụng. Thiền sư thường muốn nghe tổng quan trước."
+        },
+        {
+          "pattern_id": "Part2",
+          "function": "Nêu đề mục và cách đặt tâm",
+          "template": "(2) My kammaṭṭhāna is [ānāpāna / ...]. I keep my attention at [touching point].",
+          "examples": [
+            "My kammaṭṭhāna is ānāpāna. I stay at the touching point.",
+            "I try not to control the breath."
+          ]
+        },
+        {
+          "pattern_id": "Part3",
+          "function": "Mô tả 'cái mình biết' (knowing) một cách trung tính",
+          "template": "(3) The [breath/object] is [clear/subtle/steady/unstable]. Samādhi is [stable/unstable].",
+          "examples": [
+            "The breath is subtle, but I can still know it.",
+            "Samādhi is better than before, but it still drops."
+          ],
+          "monastery_english_note": "Tránh đánh giá kiểu 'good/bad' quá nhiều. Chỉ mô tả: clear/subtle/stable/unstable."
+        },
+        {
+          "pattern_id": "Part4",
+          "function": "Nêu 1–2 khó khăn chính",
+          "template": "(4) The main difficulty is [nīvaraṇa], especially [thīna-middha / uddhacca-kukkucca / vicikicchā].",
+          "examples": [
+            "The main difficulty is thīna-middha after fifteen minutes.",
+            "The main difficulty is vicikicchā about the method."
+          ]
+        },
+        {
+          "pattern_id": "Part5",
+          "function": "Hỏi / xin xác nhận chỉ dạy",
+          "template": "(5) Bhante, [clear question]. / Bhante, in my last interview, you told me [instruction]. Is that still correct?",
+          "examples": [
+            "Bhante, when the breath becomes subtle, what should I do?",
+            "Bhante, should I just continue with the same method?",
+            "Bhante, in my last interview, you told me not to control the breath. I have been doing that. Is that still correct?"
+          ],
+          "monastery_english_note": "Patch 009-D: Một câu hỏi rõ ràng thường tốt hơn 5 câu hỏi nhỏ. Nhiều thiền sư sẽ trả lời ngắn. Câu xác nhận instruction cũ là rất thực tế."
+        }
+      ]
+    },
+    "guided": {
+      "title": "AI Interview — Dẫn Dắt Trình Pháp 5 Phần",
+      "description": "AI đóng vai thiền sư và kéo người dùng vào đúng cấu trúc. Người dùng được phép nói 'I'm not sure'.",
+      "ai_interview_sequence": [
+        {
+          "step": 0,
+          "ai_prompt": "Are you reporting a real experience, preparing for a retreat, or practicing a scenario?",
+          "purpose": "Authenticity check."
+        },
+        {
+          "step": 1,
+          "ai_prompt": "(Part 1) Since your last interview, how has your daily schedule been — sitting and walking?",
+          "expected_answer_type": "Time summary + schedule"
+        },
+        {
+          "step": 2,
+          "ai_prompt": "(Part 2) What is your kammaṭṭhāna, and where do you keep your attention?",
+          "expected_answer_type": "Object + method"
+        },
+        {
+          "step": 3,
+          "ai_prompt": "(Part 3) What do you know about the object now — clear or subtle, stable or unstable?",
+          "expected_answer_type": "Neutral description"
+        },
+        {
+          "step": 4,
+          "ai_prompt": "(Part 4) What is the main difficulty — thīna-middha, uddhacca-kukkucca, vicikicchā, or something else?",
+          "expected_answer_type": "Name hindrance(s) + when"
+        },
+        {
+          "step": 5,
+          "ai_prompt": "(Part 5) What is your one main question for today?",
+          "expected_answer_type": "One clear question / confirmation request"
+        }
+      ]
+    },
+    "output": {
+      "title": "Trình Pháp Độc Lập (5-Part Report)",
+      "description": "Người học tự nói/viết một bản trình pháp 5 phần trong 60–120 giây (hoặc 8–12 câu).",
+      "prompt_for_user": "Please give a 5-part report to your teacher. Keep it short and clear. Use (1) schedule, (2) kammaṭṭhāna & method, (3) what you know, (4) main difficulty, (5) one question.",
+      "sample_output_B1": "Bhante, (1) since my last interview, I followed the schedule most days: about six sittings and six walking sessions. (2) My kammaṭṭhāna is ānāpāna, and I keep attention at the touching point below the nostrils. (3) The breath is sometimes clear, but often it becomes subtle. Samādhi is a bit more stable than last week, but it still drops. (4) The main difficulty is uddhacca-kukkucca in the evening and vicikicchā about whether I am doing it correctly. (5) Bhante, when the breath becomes very subtle, should I just wait at the touching point, or do something else?",
+      "evaluation_criteria": [
+        "Có đủ 5 phần, theo đúng thứ tự hoặc gần đúng",
+        "Không over-claiming (nếu không chắc thì nói 'I'm not sure')",
+        "Câu hỏi cuối rõ ràng, không lan man",
+        "Ngôn ngữ dùng được thật trong thiền viện"
+      ]
+    }
+  },
+  "situation_variants": {
+    "A_preparation": {
+      "situation_type": "A",
+      "temporal_context": "future / hypothetical",
+      "description": "Người dùng chưa quen trình pháp hoặc sắp đi retreat. Mục tiêu: chuẩn bị một format an toàn để nói với thiền sư.",
+      "learning_focus": "Thuộc khung 5 phần + câu mở đầu/lời kết lịch sự.",
+      "sample_sentences": [
+        "Bhante, this will be my first meditation interview. May I report in a simple way?",
+        "I would like to use a 5-part report so I can be clear.",
+        "If I'm not sure about something, may I say 'I'm not sure'?"
+      ]
+    },
+    "B_first_appearance": {
+      "situation_type": "B",
+      "temporal_context": "present",
+      "description": "Lần đầu trình pháp theo đúng khung 5 phần (thường trong tuần đầu retreat).",
+      "learning_focus": "Nói ngắn, không giải thích dài, để thiền sư hỏi thêm nếu cần.",
+      "sample_sentences": [
+        "(1) Since yesterday, I followed the schedule, but I missed one session.",
+        "(2) My kammaṭṭhāna is ānāpāna. I stay at the touching point.",
+        "(3) The breath is rough at first, then becomes a bit smoother.",
+        "(4) The main difficulty is thinking and uddhacca-kukkucca.",
+        "(5) Bhante, how should I work with the thinking?"
+      ],
+      "typical_teacher_response": [
+        "Just know. Don't follow the thoughts.",
+        "Keep the schedule. Report again tomorrow."
+      ]
+    },
+    "C_stable_tracking": {
+      "situation_type": "C",
+      "temporal_context": "present — ongoing",
+      "description": "Đã quen trình pháp và theo dõi tiến triển qua nhiều ngày/tuần. Bắt đầu dùng so sánh và định lượng.",
+      "learning_focus": "So sánh theo thời gian + nêu 1 điểm tiến triển, 1 điểm còn yếu.",
+      "sample_sentences": [
+        "(1) Over the last week, my practice has been steady.",
+        "Compared to last week, my samādhi is more stable.",
+        "Over the last three days, the breath has been clearer.",
+        "(3) Samādhi is more stable than before, especially in the morning.",
+        "(4) Thīna-middha still comes in the afternoon walking.",
+        "(5) Bhante, should I keep the same schedule or increase walking?"
+      ],
+      "monastery_note": "Một số thiền sư thích nghe 'trend' (xu hướng) thay vì kể từng buổi. B1 nên tập nói: 'over the last three days / compared to last week'."
+    },
+    "D_disappeared_changed": {
+      "situation_type": "D",
+      "temporal_context": "present / recent past",
+      "description": "Thực hành bị thay đổi: định tụt, tâm bất an, nghi tăng, hoặc lịch sinh hoạt bị xáo trộn.",
+      "learning_focus": "Ngôn ngữ mô tả 'changed / dropped / came back' + hỏi cách xử lý mà không hoảng.",
+      "sample_sentences": [
+        "(1) For the past two days, my schedule is the same, but the sitting changed.",
+        "(3) The breath is not clear and samādhi drops quickly.",
+        "(4) The main difficulty is vicikicchā and strong uddhacca-kukkucca.",
+        "(5) Bhante, should I just continue, or check my method again?"
+      ],
+      "typical_teacher_response": [
+        "Just continue. Don't change too much.",
+        "Be patient. Report again."
+      ]
+    },
+    "E_past_future": {
+      "situation_type": "E",
+      "temporal_context": "past / future",
+      "description": "Kể lại cách mình trình pháp ở retreat trước, hoặc hỏi về kế hoạch tương lai (ví dụ: chuyển thiền viện, đổi thời khóa, xin thêm hướng dẫn).",
+      "learning_focus": "Kể quá khứ mạch lạc + đặt câu hỏi tương lai lịch sự và thực tế.",
+      "sample_sentences_past": [
+        "In my last retreat, my interviews were very short, so I learned to report in five parts.",
+        "At that time, my main difficulty was thīna-middha in the morning.",
+        "The teacher's instruction was to keep the same method and not control the breath."
+      ],
+      "sample_sentences_future": [
+        "Bhante, if I move to another monastery, how should I explain my current practice to the new teacher?",
+        "Bhante, in future interviews, what should I focus on reporting more clearly?",
+        "Bhante, if I have only two minutes, which parts are most important?"
+      ]
+    }
+  },
+  "patches_applied": [
+    "PATCH 009-A: 'ovāda' → replaced with English 'instruction/guidance'. Example: 'Bhante, in my last interview, you told me to stay at the touching point and not control the breath.'",
+    "PATCH 009-B: thīna-middha example_en thêm 'what I did about it': 'Bhante, during sitting, thīna-middha comes strongly after about fifteen minutes. I try to open my eyes slightly, but it still comes back.'",
+    "PATCH 009-C: Situation C thêm câu so sánh định lượng: 'Compared to last week, my samādhi is more stable.' và 'Over the last three days, the breath has been clearer.'",
+    "PATCH 009-D: Part 5 (Pattern) thêm variant xác nhận instruction: 'Bhante, in my last interview, you told me not to control the breath. I have been doing that. Is that still correct?'"
+  ]
+}

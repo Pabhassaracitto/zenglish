@@ -1,0 +1,376 @@
+{
+  "lesson_id": "A2_CH06_L01",
+  "title_en": "Ānāpāna — Reporting Your Breath Meditation",
+  "title_vi": "Ānāpāna — Trình Pháp Về Thiền Hơi Thở",
+  "level": "A2",
+  "meditation_stage_min": "samatha_preliminary",
+  "situation_type": "A + B + C + D + E",
+  "temporal_context": "past / present / future — all five temporal situations covered",
+  "prerequisites": [
+    "A1_CH01_L01",
+    "A1_CH02_L01",
+    "A1_CH03_L01",
+    "A1_CH04_L01",
+    "A1_CH05_L01"
+  ],
+  "monastery_note": "Ānāpāna là đối tượng thiền đầu tiên trong hệ thống Pa-Auk. Thiền sinh chú ý đến hơi thở tại vùng xúc chạm dưới mũi / môi trên — không phải theo dõi hơi thở vào bụng (phương pháp Mahasi — KHÔNG trộn lẫn). Trong Pa-Auk: điểm chú ý là vùng xúc chạm tại lỗ mũi / môi trên, không hình dung hơi thở di chuyển vào trong, không phồng xẹp bụng. Thiền sư thường hỏi: 'What do you know about the breath?' — không phải 'How do you feel?'",
+  "authenticity_reminder": "Người dùng có thể đang ở nhiều giai đoạn: chưa bắt đầu, mới bắt đầu, đã thực hành vài tuần, hoặc đang hỏi về tương lai. App không yêu cầu phải có kinh nghiệm thật. AI Interview cần phân biệt rõ: kinh nghiệm thật / kỳ vọng / luyện tập giả định.",
+  "vocabulary": [
+    {
+      "stt": 1,
+      "en": "breath / breathing",
+      "vi": "hơi thở",
+      "pali": "ānāpāna",
+      "pali_romanized": "aa-naa-paa-na",
+      "example_en": "Bhante, I am practicing ānāpāna. I keep my attention on the breath.",
+      "example_context": "Câu mở đầu chuẩn khi trình pháp ānāpāna lần đầu với thiền sư.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — người Việt hay đọc nhầm thành 'a-na-pa-na' bỏ dấu dài. Nhắc: aa = âm dài, không phải ngắn."
+    },
+    {
+      "stt": 2,
+      "en": "touching point / contact point",
+      "vi": "điểm xúc chạm",
+      "pali": "phassa",
+      "pali_romanized": "phat-sa",
+      "example_en": "Bhante, I keep my mind at the touching point, below the nostrils.",
+      "example_context": "Mô tả vị trí chú ý đúng theo Pa-Auk. Dùng khi thiền sư hỏi 'Where do you put your attention?'",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — 'touching point' là cụm từ đặc trưng của Pa-Auk. Không dùng 'spot' hay 'area' vì kém chính xác hơn trong ngữ cảnh này."
+    },
+    {
+      "stt": 3,
+      "en": "in-breath",
+      "vi": "hơi thở vào",
+      "pali": "assāsa",
+      "pali_romanized": "at-saa-sa",
+      "example_en": "Bhante, I notice the in-breath touching above the upper lip.",
+      "example_context": "Dùng khi mô tả cảm giác hơi thở vào tại điểm xúc chạm.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — phân biệt rõ với out-breath (passāsa). Hay dùng cặp: in-breath / out-breath."
+    },
+    {
+      "stt": 4,
+      "en": "out-breath",
+      "vi": "hơi thở ra",
+      "pali": "passāsa",
+      "pali_romanized": "pat-saa-sa",
+      "example_en": "Bhante, the out-breath feels longer than the in-breath.",
+      "example_context": "Mô tả quan sát đặc điểm hơi thở ra. Hay xuất hiện trong trình pháp tuần đầu.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — cặp assāsa / passāsa cần học cùng nhau."
+    },
+    {
+      "stt": 5,
+      "en": "long breath",
+      "vi": "hơi thở dài",
+      "pali": "dīgha assāsa / dīgha passāsa",
+      "pali_romanized": "dee-ga at-saa-sa / dee-ga pat-saa-sa",
+      "example_en": "Bhante, sometimes the breath becomes long and smooth.",
+      "example_context": "Mô tả hơi thở dài — dấu hiệu tâm bắt đầu lắng xuống. Dùng khi trình pháp về sự thay đổi của hơi thở.",
+      "priority": "Medium",
+      "note": "Trong Pa-Auk, thiền sư không yêu cầu cố ý thở dài. Nếu hơi thở dài là tự nhiên — đó là dấu hiệu tốt."
+    },
+    {
+      "stt": 6,
+      "en": "short breath",
+      "vi": "hơi thở ngắn",
+      "pali": "rassa assāsa / rassa passāsa",
+      "pali_romanized": "rat-sa at-saa-sa / rat-sa pat-saa-sa",
+      "example_en": "Bhante, the breath is short and I lose it sometimes.",
+      "example_context": "Mô tả hơi thở ngắn — hay xảy ra khi tâm chưa ổn định hoặc hơi thở trở nên tế nhị.",
+      "priority": "Medium",
+      "note": "Hơi thở ngắn / tế không phải vấn đề — thiền sư sẽ hướng dẫn tiếp. Người dùng cần biết mô tả chính xác thay vì nói 'I can't breathe properly.'"
+    },
+    {
+      "stt": 7,
+      "en": "subtle breath / fine breath",
+      "vi": "hơi thở tế / hơi thở vi tế",
+      "pali": "sukhumā assāsa",
+      "pali_romanized": "su-ku-maa at-saa-sa",
+      "example_en": "Bhante, the breath has become very subtle. I can barely feel it.",
+      "example_context": "Dùng khi hơi thở trở nên rất nhẹ, khó nhận ra. Đây là giai đoạn quan trọng — thiền sinh hay lo lắng và cần trình pháp để được hướng dẫn.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — giai đoạn hơi thở tế là bước ngoặt quan trọng trong Pa-Auk ānāpāna. Không được nói 'I lost the breath' như thể đó là thất bại — chỉ mô tả: 'The breath has become very subtle.'"
+    },
+    {
+      "stt": 8,
+      "en": "the whole breath body",
+      "vi": "toàn thân hơi thở",
+      "pali": "sabba-kāya",
+      "pali_romanized": "sap-ba-kaa-ya",
+      "example_en": "Bhante, I try to be aware of the whole breath, from beginning to end.",
+      "example_context": "Mô tả giai đoạn thực hành 'sabbakāyapaṭisaṃvedī' — biết toàn thân hơi thở. Đây là bước trong tiến trình Pa-Auk ānāpāna.",
+      "priority": "Medium",
+      "note": "Đã xác nhận: sabba-kāya = 'Toàn bộ thân hơi thở' (The whole body of breath) — bao gồm điểm đầu, điểm giữa và điểm cuối của hơi thở tại vùng mũi/môi trên. KHÔNG phải thân vật lý (physical body)."
+    },
+    {
+      "stt": 9,
+      "en": "mind / attention",
+      "vi": "tâm / sự chú ý",
+      "pali": "citta / manasikāra",
+      "pali_romanized": "chit-ta / ma-na-si-kaa-ra",
+      "example_en": "Bhante, my mind keeps wandering. I bring it back to the breath.",
+      "example_context": "Mô tả tâm phóng dật và động tác kéo tâm về. Câu phổ biến nhất trong trình pháp ānāpāna giai đoạn đầu.",
+      "priority": "High",
+      "note": "Ở A2 không cần phân biệt citta / manasikāra trong câu nói. Chỉ cần biết: 'my mind' = tâm. Phần Pāḷi để nhận diện thuật ngữ."
+    },
+    {
+      "stt": 10,
+      "en": "wandering mind / distracted",
+      "vi": "tâm phóng dật / tâm tán loạn",
+      "pali": "vikkhitta citta",
+      "pali_romanized": "vik-kit-ta chit-ta",
+      "example_en": "Bhante, my mind wanders a lot. Especially in the morning sitting.",
+      "example_context": "Mô tả vấn đề phổ biến nhất trong giai đoạn đầu. Dùng khi trình pháp về khó khăn.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — người dùng hay nói 'I cannot concentrate' — câu này đúng nhưng thiếu thông tin cho thiền sư. Nên nói cụ thể hơn: 'My mind wanders to [thinking / planning / remembering].'"
+    },
+    {
+      "stt": 11,
+      "en": "nimitta / meditation sign",
+      "vi": "tướng thiền / quang tướng",
+      "pali": "nimitta",
+      "pali_romanized": "ni-mit-ta",
+      "example_en": "Bhante, I think something appeared — a light in front of me. Is that the nimitta?",
+      "example_context": "Dùng khi thiền sinh lần đầu thấy dấu hiệu ánh sáng / hình ảnh trong thiền. Luôn hỏi lại thiền sư — không tự xác nhận.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — giữ nguyên từ Pāḷi 'nimitta' trong câu tiếng Anh. Không dịch thành 'sign' một mình vì mất nghĩa kỹ thuật."
+    },
+    {
+      "stt": 12,
+      "en": "concentration / stillness of mind",
+      "vi": "tâm định / sự tập trung",
+      "pali": "samādhi",
+      "pali_romanized": "sa-maa-di",
+      "example_en": "Bhante, today my samādhi feels better. I could stay with the breath for longer.",
+      "example_context": "Mô tả chất lượng định tâm trong buổi thiền. Dùng 'samādhi' trực tiếp trong câu tiếng Anh — thiền sư Pa-Auk hiểu ngay.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — không dùng 'my focus is good' vì quá chung chung và không có nghĩa kỹ thuật."
+    }
+  ],
+  "lesson_flow": {
+    "input": {
+      "title": "Nghe & Nhận Biết",
+      "description": "Thiền sinh nghe các đoạn hội thoại trình pháp thật — từ Situation A đến E. Nhận ra từ khóa và cấu trúc câu hay dùng.",
+      "sample_dialogues": [
+        {
+          "context": "Situation B — Lần đầu trình pháp về ānāpāna",
+          "dialogue": [
+            "Yogi: Bhante, this is my first interview about the breath.",
+            "Teacher: Yes. Tell me — what do you know about the breath?",
+            "Yogi: Bhante, I keep my attention at the touching point, below the nostrils. I notice the in-breath and the out-breath.",
+            "Teacher: Good. Is the breath long or short?",
+            "Yogi: Bhante, sometimes long, sometimes short. I am not sure.",
+            "Teacher: Just know whatever is there. Go back and sit."
+          ]
+        },
+        {
+          "context": "Situation D — Hơi thở trở nên tế, thiền sinh lo lắng",
+          "dialogue": [
+            "Yogi: Bhante, the breath has become very subtle. I can barely feel it.",
+            "Teacher: That is good. Don't try to make it stronger. Just know it is there.",
+            "Yogi: Bhante, sometimes I cannot find it at all.",
+            "Teacher: If you cannot find it, wait. It will come back. Just keep your attention at the touching point."
+          ]
+        }
+      ]
+    },
+    "pattern": {
+      "title": "Cấu Trúc Câu Cốt Lõi",
+      "description": "5 mẫu câu thiết yếu cho trình pháp ānāpāna. Mỗi mẫu có ví dụ và biến thể.",
+      "core_patterns": [
+        {
+          "pattern_id": "P1",
+          "function": "Mô tả điểm chú ý",
+          "template": "Bhante, I keep my attention at [location].",
+          "examples": [
+            "Bhante, I keep my attention at the touching point, below the nostrils.",
+            "Bhante, I keep my attention at the area above the upper lip."
+          ],
+          "monastery_english_note": "Thiền sư Pa-Auk hay xác nhận bằng 'Good' hoặc 'Yes, that is correct.' — không cần thêm gì."
+        },
+        {
+          "pattern_id": "P2",
+          "function": "Mô tả đặc điểm hơi thở",
+          "template": "Bhante, the breath is [adjective].",
+          "examples": [
+            "Bhante, the breath is long and smooth.",
+            "Bhante, the breath is short and difficult to follow.",
+            "Bhante, the breath has become very subtle."
+          ]
+        },
+        {
+          "pattern_id": "P3",
+          "function": "Mô tả vấn đề tâm",
+          "template": "Bhante, my mind [problem]. I [action taken].",
+          "examples": [
+            "Bhante, my mind wanders a lot. I try to bring it back to the breath.",
+            "Bhante, my mind is sleepy. I cannot stay with the breath.",
+            "Bhante, my mind keeps thinking. I cannot stop it."
+          ],
+          "monastery_english_note": "Không cần nói 'I am sorry' khi báo cáo vấn đề. Chỉ mô tả thật."
+        },
+        {
+          "pattern_id": "P4",
+          "function": "Hỏi về nimitta / dấu hiệu thiền",
+          "template": "Bhante, I noticed [description]. Is that the nimitta?",
+          "examples": [
+            "Bhante, I noticed a light in front of me. Is that the nimitta?",
+            "Bhante, I saw something white, like a small cloud. Is that the nimitta?",
+            "Bhante, I felt a warm feeling at the touching point. Is that normal?"
+          ],
+          "monastery_english_note": "Luôn hỏi thiền sư — không tự xác nhận đây là nimitta hay không."
+        },
+        {
+          "pattern_id": "P5",
+          "function": "Mô tả buổi thiền tổng quát",
+          "template": "Bhante, [time reference], my sitting was [quality].",
+          "examples": [
+            "Bhante, this morning, my sitting was quite good. The mind was still.",
+            "Bhante, last night, my sitting was difficult. There was a lot of thinking.",
+            "Bhante, yesterday, the breath became subtle and I lost it."
+          ]
+        }
+      ]
+    },
+    "guided": {
+      "title": "Luyện Tập Có Hỗ Trợ",
+      "description": "AI Interview mô phỏng thiền sư hỏi — người dùng trả lời. AI phân biệt rõ: đây là kinh nghiệm thật hay luyện tập giả định?",
+      "ai_interview_sequence": [
+        {
+          "step": 1,
+          "ai_prompt": "Tell me — are you reporting a real experience, or practicing a scenario?",
+          "purpose": "Authenticity check — phân loại người dùng trước khi bắt đầu."
+        },
+        {
+          "step": 2,
+          "ai_prompt": "Good. Now — where do you keep your attention when you meditate?",
+          "expected_answer_type": "Mô tả điểm chú ý — touching point / below nostrils / above upper lip",
+          "if_incorrect": "Gợi ý: 'Try this: I keep my attention at the touching point, below the nostrils.'"
+        },
+        {
+          "step": 3,
+          "ai_prompt": "Tell me about the breath. Is it long or short? Rough or smooth?",
+          "expected_answer_type": "Dùng tính từ mô tả hơi thở",
+          "if_incorrect": "Gợi ý Pattern P2"
+        },
+        {
+          "step": 4,
+          "ai_prompt": "Is there any problem with the mind? Thinking? Sleepiness?",
+          "expected_answer_type": "Mô tả trạng thái tâm — Pattern P3",
+          "if_incorrect": "Gợi ý câu mẫu"
+        },
+        {
+          "step": 5,
+          "ai_prompt": "Has anything appeared at the touching point — any light, any feeling, anything unusual?",
+          "expected_answer_type": "Mô tả / hỏi về nimitta — Pattern P4",
+          "authenticity_note": "Nếu người dùng chưa có kinh nghiệm thật: ghi 'I have not noticed anything yet.' — đây cũng là câu trả lời hợp lệ."
+        }
+      ]
+    },
+    "output": {
+      "title": "Trình Pháp Độc Lập",
+      "description": "Người dùng tự tạo một đoạn trình pháp 5-7 câu về buổi thiền ānāpāna. Không cần hoàn hảo — cần đúng và dùng được.",
+      "prompt_for_user": "Imagine you are sitting in front of your teacher. Report your ānāpāna practice in 5-7 sentences. Include: where you put your attention, what the breath was like, any problem with the mind, and anything unusual you noticed.",
+      "sample_output_A2": "Bhante, I have been practicing ānāpāna for one week. I keep my attention at the touching point, below the nostrils. The breath is sometimes long, sometimes short. My mind wanders quite often — especially in the evening sitting. I bring it back to the breath when I notice it has gone. I have not seen any nimitta yet. Is that okay, Bhante?",
+      "evaluation_criteria": [
+        "Có mô tả điểm chú ý đúng (touching point)",
+        "Có mô tả đặc điểm hơi thở",
+        "Có mô tả trạng thái tâm",
+        "Câu cuối có thể là câu hỏi — hoàn toàn tự nhiên trong trình pháp thật"
+      ]
+    }
+  },
+  "situation_variants": {
+    "A_preparation": {
+      "situation_type": "A",
+      "temporal_context": "future / hypothetical",
+      "description": "Người dùng chưa bắt đầu thiền ānāpāna — đang chuẩn bị ngôn ngữ trước khi vào khóa thiền hoặc trước buổi trình pháp đầu tiên.",
+      "learning_focus": "Học cách giới thiệu bản thân với thiền sư, xác nhận phương pháp đúng, hỏi về hướng dẫn ban đầu.",
+      "sample_sentences": [
+        "Bhante, I have not started yet. Can you please give me the instruction?",
+        "Bhante, I understand I should keep my attention at the touching point. Is that correct?",
+        "Bhante, this is my first time practicing ānāpāna. I am not sure what I should notice.",
+        "Bhante, how long should I sit in each session?"
+      ],
+      "vocabulary_focus": ["ānāpāna", "touching point", "in-breath", "out-breath"],
+      "monastery_note": "Ở nhiều thiền viện Pa-Auk, buổi đầu tiên thiền sư sẽ cho instruction ngắn rồi bảo đi ngồi thiền. Câu hay nhất lúc này: 'Bhante, I understand. Thank you.' Không cần hỏi nhiều."
+    },
+    "B_first_appearance": {
+      "situation_type": "B",
+      "temporal_context": "present — first report",
+      "description": "Lần đầu trình pháp về ānāpāna sau khi đã thực hành vài buổi. Tâm chưa ổn định, hơi thở thô, nhiều phóng tâm.",
+      "learning_focus": "Mô tả trung thực: điểm chú ý, hơi thở, phóng tâm. Không tự đánh giá tốt/xấu.",
+      "sample_sentences": [
+        "Bhante, I keep my attention at the touching point, below the nostrils.",
+        "Bhante, the breath is rough and uneven.",
+        "Bhante, my mind wanders a lot. I notice thoughts about daily life.",
+        "Bhante, I try to bring my mind back to the breath when it wanders.",
+        "Bhante, I am not sure if I am doing it correctly."
+      ],
+      "typical_teacher_response": [
+        "'Just keep your attention there. Don't worry about the thinking.'",
+        "'Go back and sit. Try again.'",
+        "'That is normal. Just know the breath.'"
+      ],
+      "vocabulary_focus": ["wandering mind", "in-breath", "out-breath", "touching point", "bring back"]
+    },
+    "C_stable_tracking": {
+      "situation_type": "C",
+      "temporal_context": "present — ongoing",
+      "description": "Sau vài ngày / vài tuần thực hành — tâm bắt đầu ổn định hơn. Hơi thở có thể trở nên dài hơn, mịn hơn. Có thể bắt đầu thấy dấu hiệu sơ khởi của nimitta.",
+      "learning_focus": "Mô tả sự ổn định và thay đổi tích cực. Biết dùng so sánh: 'better than before / more stable / longer'.",
+      "sample_sentences": [
+        "Bhante, the mind is more stable now. There is less wandering.",
+        "Bhante, the breath has become longer and smoother.",
+        "Bhante, I can stay with the breath for longer periods now.",
+        "Bhante, sometimes I notice a warm feeling at the touching point.",
+        "Bhante, sometimes there is a faint light. I am not sure what it is."
+      ],
+      "vocabulary_focus": ["samādhi", "nimitta", "subtle breath", "long breath", "stable"],
+      "monastery_note": "Khi thiền sư nghe về ánh sáng sơ khởi, thường sẽ hỏi thêm về màu sắc, hình dạng, độ ổn định. Người dùng nên chuẩn bị mô tả bằng tính từ đơn giản."
+    },
+    "D_disappeared_changed": {
+      "situation_type": "D",
+      "temporal_context": "present / recent past",
+      "description": "Samādhi đã tốt nhưng hôm nay mất — hoặc hơi thở trở nên quá tế không tìm được, hoặc nimitta biến mất. Cần báo cáo sự thay đổi.",
+      "learning_focus": "Mô tả sự thay đổi / mất mát trạng thái thiền mà không hoảng loạn hay thất vọng trong câu từ.",
+      "sample_sentences": [
+        "Bhante, this morning the breath became very subtle. I could not find it.",
+        "Bhante, the nimitta appeared yesterday but today it is gone.",
+        "Bhante, my samādhi was good last week but this week the mind is restless again.",
+        "Bhante, I am not sure what happened. The practice changed.",
+        "Bhante, there is more thinking today. I don't know why."
+      ],
+      "typical_teacher_response": [
+        "'That is normal. Just go back and sit.'",
+        "'If the breath is subtle, just wait. Keep your attention at the touching point.'",
+        "'The nimitta will come back. Don't look for it. Just know the breath.'"
+      ],
+      "vocabulary_focus": ["subtle breath", "nimitta", "restless", "wandering", "gone / disappeared"],
+      "monastery_note": "Mất nimitta hoặc mất định là chuyện thường xảy ra. Điều quan trọng là mô tả thật — không nói 'I failed' hay 'I cannot do it.' Chỉ mô tả những gì xảy ra."
+    },
+    "E_past_future": {
+      "situation_type": "E",
+      "temporal_context": "past report / future question",
+      "description": "Hai loại tình huống: (1) Kể lại kinh nghiệm ānāpāna của khóa thiền trước với người khác (không phải thiền sư). (2) Hỏi thiền sư về điều gì có thể xảy ra trong tương lai / bước tiếp theo.",
+      "learning_focus": "Dùng thì quá khứ để kể lại. Dùng câu hỏi lịch sự để hỏi về tiến trình tương lai.",
+      "sample_sentences_past": [
+        "In my last retreat, I practiced ānāpāna for two weeks.",
+        "During that retreat, I noticed a light — the nimitta appeared on the fifth day.",
+        "At that time, my mind was quite restless in the first few days.",
+        "After one week, the breath became subtle and I was not sure what to do.",
+        "The teacher told me to just wait at the touching point."
+      ],
+      "sample_sentences_future": [
+        "Bhante, after the nimitta is stable, what should I do next?",
+        "Bhante, how will I know when I am ready to move to the next step?",
+        "Bhante, is it normal that the breath disappears completely?",
+        "Bhante, what should I do if the nimitta changes color?"
+      ],
+      "vocabulary_focus": ["past tense verbs", "nimitta", "stable", "next step", "ready"],
+      "monastery_note": "[NEEDS REVIEW] — câu hỏi về màu nimitta và tiến trình tiếp theo (vào jhāna) là chủ đề của cấp B1/C1. Ở A2 chỉ cần biết cách hỏi — không cần biết câu trả lời chi tiết."
+    }
+  }
+}

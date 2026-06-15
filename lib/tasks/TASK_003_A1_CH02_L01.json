@@ -1,0 +1,313 @@
+{
+  "lesson_id": "A1_CH02_L01",
+  "title_en": "Arriving at the Monastery",
+  "title_vi": "Đến Thiền Viện Lần Đầu",
+  "level": "A1",
+  "meditation_stage_min": "pre-retreat",
+  "situation_type": "A + B + C + D + E",
+  "temporal_context": "present / future intention",
+  "prerequisites": ["A1_CH01_L01"],
+  "monastery_note": "Tại thiền viện Theravāda quốc tế, người mới đến thường bỡ ngỡ về chỗ ở, giờ giấc, và quy định.\n\nLưu ý quan trọng:\n- Tại nhiều thiền viện, nên hỏi 'What time is dana?' thay vì 'breakfast/lunch'\n- Nhiều thiền viện chỉ có 2 bữa/ngày (sáng sớm và trưa)\n- 'Kuti' (kuṭi) được dùng thay cho 'room' hoặc 'hut'\n- 'No problem' = okay / yes / được\n- 'Meditation hall' — dùng tiếng Anh, KHÔNG dùng 'bhāvanā sālā'. Nếu cần Pāḷi bridge: dùng 'sālā' hoặc [NEEDS REVIEW] 'dhamma sālā'\n- Chuông: 1 tiếng dài = dāna sắp bắt đầu; 3 tiếng ngắn = thiền tập chung",
+  "authenticity_reminder": "Người dùng có thể đang ở thiền viện ngay lúc học — hoặc chưa bao giờ đến. AI Interview phân biệt: (1) đang ở thật (2) chuẩn bị trước khi đi (3) luyện tập giả định.",
+  "vocabulary": [
+    {
+      "stt": 1,
+      "en": "kuti",
+      "vi": "chòi / phòng ở",
+      "pali": "kuṭi",
+      "pali_romanized": "ku-ti",
+      "example_en": "Excuse me, where is my kuti?",
+      "example_context": "Câu hỏi đầu tiên khi đến thiền viện.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO] — Người Việt hay nói 'my room' — không tự nhiên tại thiền viện."
+    },
+    {
+      "stt": 2,
+      "en": "meditation hall",
+      "vi": "thiền đường",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "Where is the meditation hall?",
+      "example_context": "Hỏi đường đến nơi thiền tập chung.",
+      "priority": "High",
+      "note": "Dùng tiếng Anh. Patch 003-A: KHÔNG dùng 'bhāvanā sālā'. Nếu cần Pāḷi: 'sālā' hoặc [NEEDS REVIEW] 'dhamma sālā'."
+    },
+    {
+      "stt": 3,
+      "en": "dana",
+      "vi": "bữa ăn / cúng dường",
+      "pali": "dāna",
+      "pali_romanized": "daa-na",
+      "example_en": "What time is dana?",
+      "example_context": "Hỏi giờ ăn. Patch 003-D: nhiều thiền viện chỉ có 2 bữa/ngày.",
+      "priority": "High",
+      "note": "[NEEDS AUDIO]"
+    },
+    {
+      "stt": 4,
+      "en": "walking path",
+      "vi": "đường hành thiền",
+      "pali": "caṅkamana",
+      "pali_romanized": "chang-ka-ma-na",
+      "example_en": "Where is the walking path?",
+      "example_context": "Hỏi nơi thiền hành.",
+      "priority": "Medium",
+      "note": "Patch 003-C: romanized 'chang-ka-ma-na' (âm mũi 'ng' cuối)."
+    },
+    {
+      "stt": 5,
+      "en": "schedule",
+      "vi": "lịch trình",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "Can I see the schedule, please?",
+      "example_context": "Hỏi lịch trình hằng ngày.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 6,
+      "en": "bathroom",
+      "vi": "nhà vệ sinh",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "Where is the bathroom?",
+      "example_context": "Câu hỏi thực tế cần thiết nhất ngày đầu.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 7,
+      "en": "silence",
+      "vi": "im lặng",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "Should I keep silence here?",
+      "example_context": "Hỏi về quy định im lặng.",
+      "priority": "High",
+      "note": "Patch 003-B: Ở A1, không ép 'ariya-tuṇhī-bhāva'. Dùng English 'silence' là đủ."
+    },
+    {
+      "stt": 8,
+      "en": "mosquito net",
+      "vi": "màn chống muỗi",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "Can I get a mosquito net?",
+      "example_context": "Xin vật dụng cần thiết tại kuti.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 9,
+      "en": "hot water",
+      "vi": "nước nóng",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "Where can I get hot water?",
+      "example_context": "Hỏi về nước nóng.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 10,
+      "en": "bow / pay respect",
+      "vi": "cúi chào / đảnh lễ",
+      "pali": "vandana",
+      "pali_romanized": "van-da-na",
+      "example_en": "Should I bow to the Buddha image?",
+      "example_context": "Hỏi về nghi thức.",
+      "priority": "Medium",
+      "note": ""
+    }
+  ],
+  "lesson_flow": {
+    "input": {
+      "title": "Nghe & Nhận Biết",
+      "description": "Thiền sinh mới đến nghe các đoạn hội thoại ngắn tại văn phòng thiền viện.",
+      "sample_dialogues": [
+        {
+          "context": "Ngày đầu đến thiền viện",
+          "dialogue": [
+            "Yogi: Excuse me. I just arrived.",
+            "Helper: Welcome. Do you have a registration letter?",
+            "Yogi: Yes, here it is.",
+            "Helper: Good. Your kuti is number seven.",
+            "Yogi: Thank you. Where is the meditation hall?",
+            "Helper: Straight ahead, on the left.",
+            "Yogi: And... what time is dana?",
+            "Helper: Morning dana at six thirty. Lunch at eleven.",
+            "Yogi: Thank you."
+          ]
+        },
+        {
+          "context": "Hỏi về quy định",
+          "dialogue": [
+            "Yogi: Should I keep silence in the hall?",
+            "Helper: Yes. Noble silence from evening chanting until morning dana.",
+            "Yogi: Okay. And can I get a mosquito net?",
+            "Helper: No problem. They are in the storage room.",
+            "Yogi: Thank you."
+          ]
+        }
+      ]
+    },
+    "pattern": {
+      "title": "Cấu Trúc Câu Cốt Lõi",
+      "description": "Bốn mẫu câu để hỏi thông tin cơ bản tại thiền viện.",
+      "core_patterns": [
+        {
+          "pattern_id": "P1",
+          "function": "Hỏi địa điểm",
+          "template": "Where is ___?",
+          "examples": [
+            "Where is my kuti?",
+            "Where is the meditation hall?",
+            "Where is the bathroom?"
+          ]
+        },
+        {
+          "pattern_id": "P2",
+          "function": "Hỏi giờ giấc",
+          "template": "What time is ___?",
+          "examples": [
+            "What time is dana?",
+            "What time is the morning sitting?",
+            "What time do we start?"
+          ]
+        },
+        {
+          "pattern_id": "P3",
+          "function": "Xin phép / hỏi khả năng",
+          "template": "Can I ___?",
+          "examples": [
+            "Can I see the schedule?",
+            "Can I get a mosquito net?",
+            "Can I ask a question?"
+          ]
+        },
+        {
+          "pattern_id": "P4",
+          "function": "Hỏi về quy định / nghi thức",
+          "template": "Should I ___?",
+          "examples": [
+            "Should I keep silence here?",
+            "Should I take off my shoes?",
+            "Should I bow to the Buddha image?"
+          ]
+        }
+      ]
+    },
+    "guided": {
+      "title": "Luyện Tập Có Hỗ Trợ",
+      "description": "AI giả lập tình huống: bạn vừa đến thiền viện.",
+      "ai_interview_sequence": [
+        {
+          "step": 1,
+          "ai_prompt": "You just arrived. You are standing at the office. What is the first thing you need to know?",
+          "purpose": "Giúp người dùng nhận ra câu hỏi ưu tiên.",
+          "expected_pattern": "P1"
+        },
+        {
+          "step": 2,
+          "ai_prompt": "The helper shows you your kuti. You want to know about meals. What do you ask?",
+          "purpose": "Dùng mẫu P2.",
+          "expected_pattern": "P2"
+        },
+        {
+          "step": 3,
+          "ai_prompt": "You see other people bowing before entering the meditation hall. You are not sure if you should do the same.",
+          "purpose": "Dùng mẫu P4.",
+          "expected_pattern": "P4"
+        },
+        {
+          "step": 4,
+          "ai_prompt": "You want to see the daily schedule. What do you say?",
+          "purpose": "Dùng mẫu P3.",
+          "expected_pattern": "P3"
+        }
+      ]
+    },
+    "output": {
+      "title": "Tự Hỏi — Không Có Gợi Ý",
+      "description": "AI giả lập: bạn vừa đến thiền viện. Bạn cần hỏi ít nhất 3 câu để biết cách bắt đầu.",
+      "prompt_for_user": "You just arrived at the monastery. A helper is standing at the office. Ask at least 3 questions to get started.",
+      "sample_output_A1": "Excuse me. Where is my kuti? What time is dana? And... can I see the schedule, please?",
+      "evaluation_criteria": [
+        "Dùng ít nhất 2 trong 4 mẫu câu (P1–P4)",
+        "Câu hỏi rõ ràng và cụ thể",
+        "Người nghe hiểu được bạn cần gì"
+      ]
+    }
+  },
+  "situation_variants": {
+    "A_preparation": {
+      "situation_type": "A",
+      "temporal_context": "future",
+      "description": "Người dùng chưa đến thiền viện. Đang chuẩn bị danh sách câu hỏi.",
+      "context_en": "You are packing for your retreat. You want to practice what to say when you arrive.",
+      "context_vi": "Bạn đang chuẩn bị hành lý cho khóa thiền. Bạn muốn tập nói trước khi đến nơi.",
+      "sample_sentences": [
+        "Excuse me, where is my kuti?",
+        "What time is dana?",
+        "Can I see the schedule?"
+      ]
+    },
+    "B_first_appearance": {
+      "situation_type": "B",
+      "temporal_context": "present",
+      "description": "Người dùng đang ở thiền viện. Ngày đầu tiên.",
+      "context_en": "You just arrived at the monastery. A helper is standing at the office.",
+      "context_vi": "Bạn vừa đến thiền viện. Có người hướng dẫn đang đứng ở văn phòng.",
+      "sample_sentences": [
+        "Excuse me, I just arrived. Where is my kuti?",
+        "What time is dana?",
+        "Where is the meditation hall?",
+        "Should I keep silence in the hall?"
+      ],
+      "monastery_note": "Người hướng dẫn có thể không nói tiếng Anh rất tốt. Câu ngắn, rõ ràng là tốt nhất. 'No problem' = 'Okay / Yes'."
+    },
+    "C_stable_tracking": {
+      "situation_type": "C",
+      "temporal_context": "present",
+      "description": "Đã ở thiền viện được 2–3 ngày. Biết cơ bản rồi.",
+      "context_en": "You have been here for two days. You know where your kuti is.",
+      "context_vi": "Bạn đã ở đây được hai ngày. Bạn biết chòi ở đâu rồi.",
+      "sample_sentences": [
+        "Where can I get hot water?",
+        "Can I do laundry here?",
+        "Can I change to a different kuti? This one has many mosquitoes."
+      ]
+    },
+    "D_disappeared_changed": {
+      "situation_type": "D",
+      "temporal_context": "recent past",
+      "description": "Thiền viện thông báo thay đổi lịch trình hoặc địa điểm.",
+      "context_en": "The helper tells you: 'Tomorrow, dana is at 7:00, not 6:30.' You want to confirm.",
+      "context_vi": "Người hướng dẫn nói: 'Ngày mai, dāna lúc 7 giờ, không phải 6 rưỡi.'",
+      "sample_sentences": [
+        "So... what time is dana tomorrow?",
+        "Should I come at seven?",
+        "Is the meditation hall the same?"
+      ]
+    },
+    "E_past_future": {
+      "situation_type": "E",
+      "temporal_context": "past / future",
+      "description": "Sau khi kết thúc khóa thiền, kể lại những câu hỏi đã hỏi ngày đầu.",
+      "context_en": "You are talking to a friend who wants to go to the same monastery.",
+      "context_vi": "Bạn đang nói chuyện với bạn bè muốn đến cùng thiền viện.",
+      "sample_sentences": [
+        "When you arrive, ask: 'Where is my kuti?'",
+        "Then ask: 'What time is dana?'",
+        "And it is good to ask: 'Can I see the schedule?'"
+      ]
+    }
+  },
+  "patches_applied": [
+    "PATCH 003-A: 'meditation hall' — dùng English, KHÔNG dùng 'bhāvanā sālā'",
+    "PATCH 003-B: 'noble silence' ở A1 — không ép 'ariya-tuṇhī-bhāva'",
+    "PATCH 003-C: caṅkamana romanized → 'chang-ka-ma-na'",
+    "PATCH 003-D: Dana cultural note — nhiều thiền viện chỉ có 2 bữa/ngày"
+  ]
+}

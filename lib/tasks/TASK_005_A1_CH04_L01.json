@@ -1,0 +1,300 @@
+{
+  "lesson_id": "A1_CH04_L01",
+  "title_en": "Registering for a Retreat",
+  "title_vi": "Đăng Ký Khóa Thiền",
+  "level": "A1",
+  "meditation_stage_min": "pre-retreat",
+  "situation_type": "A + B + C + D + E",
+  "temporal_context": "future intention / immediate present",
+  "prerequisites": ["A1_CH01_L01", "A1_CH02_L01", "A1_CH03_L01"],
+  "monastery_note": "Quy trình đăng ký khóa thiền tại các thiền viện Theravāda quốc tế rất khác nhau. Pa-Auk Myanmar: thường có form đăng ký online hoặc gửi email trực tiếp cho monastery secretary. Cần nêu: tên, quốc tịch, kinh nghiệm thiền, thời gian muốn ở, truyền thống đang theo. Có thể cần thư giới thiệu từ thiền sư. Lưu ý: tại nhiều thiền viện Miến Điện, quy trình đăng ký không chính thức — có thể chỉ cần đến và nói chuyện trực tiếp.\n\nDāna vs. Fee: Tại hầu hết thiền viện Theravāda, không có phí cố định cho khóa thiền. Dāna (cúng dường) là tùy tâm — nhưng được mong đợi. Một số thiền viện có 'suggested dāna' (mức gợi ý).\n\nEmail ngắn là email tốt: Thiền viện nhận rất nhiều email đăng ký. Email hiệu quả nhất là ngắn, rõ ràng, đủ thông tin, tôn trọng.",
+  "authenticity_reminder": "Người dùng có thể: (1) đang chuẩn bị viết email đăng ký thật (2) đang điền form tại thiền viện (3) đang luyện tập cho tình huống sắp tới (4) đã đăng ký rồi — học lại để hiểu những gì đã viết. AI cần xác nhận người dùng đang ở ngữ cảnh nào trước khi bắt đầu interview luyện tập.",
+  "vocabulary": [
+    {
+      "stt": 1,
+      "en": "to register / to apply",
+      "vi": "đăng ký / nộp đơn",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "I would like to register for a retreat at your monastery.",
+      "example_context": "Câu mở đầu của email đăng ký — câu quan trọng nhất trong bài.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 2,
+      "en": "retreat",
+      "vi": "khóa thiền",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "I would like to join a one-month retreat.",
+      "example_context": "Nói về loại và độ dài khóa thiền.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 3,
+      "en": "duration / length of stay",
+      "vi": "thời gian ở / độ dài lưu trú",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "I plan to stay for three weeks.",
+      "example_context": "Thông tin cần thiết khi đăng ký.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 4,
+      "en": "meditation experience",
+      "vi": "kinh nghiệm thiền",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "I have two years of meditation experience.",
+      "example_context": "Thông tin thiền viện thường hỏi.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 5,
+      "en": "tradition / lineage",
+      "vi": "truyền thống / hệ phái",
+      "pali": "nikāya",
+      "pali_romanized": "ni-kaa-ya",
+      "example_en": "I practice in the Theravāda tradition.",
+      "example_context": "Nói về truyền thống tu tập của mình.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 6,
+      "en": "precepts",
+      "vi": "giới",
+      "pali": "sīla",
+      "pali_romanized": "see-la",
+      "example_en": "I am keeping the five precepts.",
+      "example_context": "Thiền viện thường hỏi về sīla của người đăng ký.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 7,
+      "en": "accommodation / kuti",
+      "vi": "chỗ ở / chòi",
+      "pali": "kuṭi",
+      "pali_romanized": "ku-ti",
+      "example_en": "Is accommodation available for the dates I mentioned?",
+      "example_context": "Hỏi về khả năng có chỗ ở.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 8,
+      "en": "arrival date / departure date",
+      "vi": "ngày đến / ngày đi",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "My arrival date is March fifteenth. My departure date is April fifteenth.",
+      "example_context": "Thông tin cơ bản trong mọi form đăng ký.",
+      "priority": "High",
+      "note": ""
+    },
+    {
+      "stt": 9,
+      "en": "visa / travel document",
+      "vi": "thị thực / giấy tờ du lịch",
+      "pali": null,
+      "pali_romanized": null,
+      "example_en": "Do I need a special visa to stay at the monastery?",
+      "example_context": "Hỏi về giấy tờ cần thiết — đặc biệt quan trọng với thiền sinh Việt Nam đến Myanmar.",
+      "priority": "Medium",
+      "note": ""
+    },
+    {
+      "stt": 10,
+      "en": "dana / offering",
+      "vi": "cúng dường / phí",
+      "pali": "dāna",
+      "pali_romanized": "daa-na",
+      "example_en": "Is there a suggested dāna for the retreat?",
+      "example_context": "Hỏi về cúng dường hoặc chi phí. Nhiều thiền viện không thu phí — chỉ nhận dāna tùy tâm.",
+      "priority": "High",
+      "note": ""
+    }
+  ],
+  "lesson_flow": {
+    "input": {
+      "title": "Đọc & Hiểu",
+      "description": "Đọc một email đăng ký thật từ thiền sinh gửi cho thiền viện. Email này ở cấp A1: câu ngắn, rõ ràng, đủ thông tin.",
+      "reading_text_en": "Subject: Retreat Registration Request\n\nDear Venerable Sir / Monastery Office,\n\nMy name is Minh. I am from Vietnam.\nI would like to register for a retreat at Pa-Auk Tawya Monastery.\nI plan to arrive on March fifteenth.\nI would like to stay for one month.\nI have been practicing meditation for two years.\nI practice in the Theravāda tradition.\nI am keeping the five precepts.\nIs accommodation available?\nIs there a suggested dāna?\n\nThank you very much.\nWith respect,\nMinh",
+      "email_structure_note": "Cấu trúc email đăng ký tối giản — A1: [1] Giới thiệu tên và quốc tịch [2] Mục đích: muốn đăng ký [3] Ngày đến + thời gian ở [4] Kinh nghiệm thiền + giới [5] 1-2 câu hỏi cụ thể [6] Kết thúc trang trọng"
+    },
+    "pattern": {
+      "title": "Mẫu Câu Cốt Lõi",
+      "description": "Năm mẫu câu đủ để viết email đăng ký khóa thiền ở cấp A1.",
+      "core_patterns": [
+        {
+          "pattern_id": "P1",
+          "function": "Nói mong muốn (lịch sự)",
+          "template": "I would like to ___.",
+          "examples": [
+            "I would like to register for a retreat.",
+            "I would like to stay for one month.",
+            "I would like to arrive on March fifteenth."
+          ],
+          "note": "'Would like to' = muốn (trang trọng hơn 'want to'). Dùng trong MỌI email trang trọng."
+        },
+        {
+          "pattern_id": "P2",
+          "function": "Nói kinh nghiệm",
+          "template": "I have been practicing ___ for ___.",
+          "examples": [
+            "I have been practicing meditation for two years.",
+            "I have been practicing ānāpāna for six months.",
+            "I have been practicing in the Theravāda tradition for three years."
+          ],
+          "note": "Dùng Present Perfect Continuous để nói về kinh nghiệm đang tiếp diễn."
+        },
+        {
+          "pattern_id": "P3",
+          "function": "Nói về giới đang giữ",
+          "template": "I am keeping the ___ precepts.",
+          "examples": [
+            "I am keeping the five precepts.",
+            "I am keeping the eight precepts.",
+            "I am keeping the ten precepts."
+          ],
+          "note": "'Keep' (giữ) là từ chuẩn trong thiền viện quốc tế khi nói về giới. KHÔNG dùng 'follow' hay 'obey'."
+        },
+        {
+          "pattern_id": "P4",
+          "function": "Nói ngày đến / đi",
+          "template": "My ___ date is ___.",
+          "examples": [
+            "My arrival date is March fifteenth.",
+            "My departure date is April fifteenth.",
+            "My planned arrival date is the first of May."
+          ],
+          "note": "Luôn nêu cả ngày đến VÀ ngày đi khi đăng ký."
+        },
+        {
+          "pattern_id": "P5",
+          "function": "Hỏi về khả năng",
+          "template": "Is ___ available?",
+          "examples": [
+            "Is accommodation available?",
+            "Is a kuti available for that period?",
+            "Is a place still available for March?"
+          ],
+          "note": "Câu hỏi lịch sự để hỏi về khả năng — không áp lực."
+        }
+      ]
+    },
+    "guided": {
+      "title": "Luyện Tập Có Hướng Dẫn",
+      "description": "AI giúp người dùng viết email đăng ký theo từng phần.",
+      "ai_interview_sequence": [
+        {
+          "step": 1,
+          "ai_prompt": "What is your name and where are you from?",
+          "purpose": "Phần giới thiệu cơ bản."
+        },
+        {
+          "step": 2,
+          "ai_prompt": "When do you want to arrive and how long do you plan to stay?",
+          "purpose": "Dùng mẫu P1 + P4."
+        },
+        {
+          "step": 3,
+          "ai_prompt": "How long have you been practicing meditation?",
+          "purpose": "Dùng mẫu P2."
+        },
+        {
+          "step": 4,
+          "ai_prompt": "Which precepts are you keeping?",
+          "purpose": "Dùng mẫu P3."
+        },
+        {
+          "step": 5,
+          "ai_prompt": "What questions do you have for the monastery?",
+          "purpose": "Dùng mẫu P5 — tập đặt câu hỏi lịch sự."
+        }
+      ]
+    },
+    "output": {
+      "title": "Tự Viết Email — Không Có Gợi Ý",
+      "description": "Người dùng tự viết email đăng ký hoàn chỉnh bằng tiếng Anh.",
+      "prompt_for_user": "Write a registration email to a monastery. Include: name, country, arrival date, length of stay, meditation experience, precepts, and one question.",
+      "sample_output_A1": "Dear Monastery Office,\nMy name is Linh. I am from Vietnam.\nI would like to register for a retreat.\nMy arrival date is May first.\nI would like to stay for two weeks.\nI have been practicing meditation for one year.\nI practice in the Theravāda tradition.\nI am keeping the five precepts.\nIs accommodation available for that period?\nThank you very much.\nWith respect,\nLinh",
+      "evaluation_criteria": [
+        "Có đủ 6 phần của email (xem email_structure_note)",
+        "Nêu được ngày đến và thời gian ở",
+        "Nêu được kinh nghiệm thiền",
+        "Nêu được giới đang giữ",
+        "Có ít nhất 1 câu hỏi cụ thể",
+        "Kết thúc trang trọng"
+      ]
+    }
+  },
+  "situation_variants": {
+    "A_preparation": {
+      "situation_type": "A",
+      "temporal_context": "future",
+      "description": "Người dùng chưa viết email. Đang thu thập thông tin cần thiết và luyện tập các mẫu câu.",
+      "context_en": "You want to go to a monastery in three months. You need to write a registration email.",
+      "context_vi": "Bạn muốn đến thiền viện trong ba tháng nữa. Bạn cần viết email đăng ký.",
+      "checklist": [
+        "Tên đầy đủ (bằng tiếng Anh)",
+        "Quốc tịch",
+        "Ngày dự kiến đến",
+        "Thời gian muốn ở",
+        "Kinh nghiệm thiền (bao nhiêu năm/tháng)",
+        "Truyền thống đang tu theo",
+        "Giới đang giữ (5/8/10)",
+        "Câu hỏi cụ thể muốn hỏi monastery"
+      ]
+    },
+    "B_first_appearance": {
+      "situation_type": "B",
+      "temporal_context": "present",
+      "description": "Lần đầu tiên viết email đăng ký bằng tiếng Anh. Có thể ngắn và đơn giản.",
+      "context_en": "You are writing your first registration email to a monastery.",
+      "context_vi": "Bạn đang viết email đăng ký đầu tiên cho thiền viện.",
+      "monastery_note": "Email ngắn là TỐT ở A1. Monastery nhận rất nhiều email — email ngắn, rõ ràng, đủ thông tin sẽ được trả lời nhanh hơn."
+    },
+    "C_stable_tracking": {
+      "situation_type": "C",
+      "temporal_context": "present",
+      "description": "Monastery đã phản hồi và đặt thêm câu hỏi. Thiền sinh cần trả lời từng câu hỏi một.",
+      "context_en": "The monastery replied to your email. They ask three questions.",
+      "context_vi": "Thiền viện đã trả lời email của bạn. Họ hỏi ba câu.",
+      "sample_reply_en": "Dear Venerable Sir,\nThank you for your reply.\nI have not practiced at your monastery before. This will be my first time.\nI do not have a recommendation letter. Is it required?\nMy meditation background: I have been practicing ānāpāna for two years. I practice in the Theravāda tradition. I am keeping the five precepts.\nWith respect,\nMinh"
+    },
+    "D_disappeared_changed": {
+      "situation_type": "D",
+      "temporal_context": "recent past",
+      "description": "Người dùng đã đăng ký rồi nhưng cần thay đổi ngày đến hoặc hủy bỏ.",
+      "context_en": "You registered for a retreat starting March fifteenth. But now you need to change your arrival date.",
+      "context_vi": "Bạn đã đăng ký khóa thiền bắt đầu ngày 15 tháng 3. Nhưng bây giờ bạn cần thay đổi ngày đến.",
+      "sample_sentences": [
+        "I am sorry — I need to change my arrival date.",
+        "I registered to arrive on March fifteenth.",
+        "But now I would like to arrive on March twenty-second.",
+        "Is this possible?",
+        "I apologize for the change."
+      ]
+    },
+    "E_past_future": {
+      "situation_type": "E",
+      "temporal_context": "past / future",
+      "description": "Kể lại quá trình đăng ký cho người khác nghe. Hoặc chuẩn bị cho lần đăng ký tiếp theo.",
+      "context_en": "A Vietnamese friend wants to go to the same monastery. She asks: 'How did you register?'",
+      "context_vi": "Một người bạn Việt Nam muốn đến cùng thiền viện. Cô ấy hỏi: 'Bạn đăng ký như thế nào?'",
+      "sample_sentences": [
+        "I sent a simple email with my name and dates.",
+        "I wrote that I have been practicing for two years.",
+        "They asked if I had a recommendation letter — I did not, but it was okay.",
+        "Next time, I will add more details about my meditation experience."
+      ]
+    }
+  }
+}
