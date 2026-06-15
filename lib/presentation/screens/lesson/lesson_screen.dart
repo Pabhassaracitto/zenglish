@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../presentation/theme/app_theme.dart';
+'package:ewmapp/core/theme/app_theme.dart';
 import '../../providers/lesson_provider.dart';
 import 'components/lesson_progress_bar.dart';
 import 'components/lesson_stage_header.dart';
@@ -91,9 +91,8 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     if (state.error != null) {
       return _ErrorView(
         error: state.error!,
-        onRetry: () => ref
-            .read(lessonProvider.notifier)
-            .loadLesson(widget.lessonId),
+        onRetry: () =>
+            ref.read(lessonProvider.notifier).loadLesson(widget.lessonId),
       );
     }
 
@@ -222,8 +221,7 @@ class _ErrorView extends StatelessWidget {
                 backgroundColor: AppTheme.primary,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(AppTheme.radiusMD),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                 ),
               ),
               child: const Text('Thử lại'),

@@ -1,6 +1,7 @@
+import 'package:ewmapp/data/models/lesson_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../presentation/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../providers/lesson_provider.dart';
 
 class GuidedStage extends ConsumerWidget {
@@ -28,13 +29,15 @@ class GuidedStage extends ConsumerWidget {
           const SizedBox(height: AppTheme.spaceLG),
 
           // Interview steps
-          ...guided.interviewSteps.asMap().entries.map((entry) =>
-                _InterviewStepCard(
-                  index: entry.key,
-                  step: entry.value,
-                  state: state,
-                  notifier: notifier,
-                )),
+          ...guided.interviewSteps
+              .asMap()
+              .entries
+              .map((entry) => _InterviewStepCard(
+                    index: entry.key,
+                    step: entry.value,
+                    state: state,
+                    notifier: notifier,
+                  )),
 
           const SizedBox(height: AppTheme.spaceLG),
 
@@ -84,8 +87,7 @@ class GuidedStage extends ConsumerWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: AppTheme.spaceMD),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(AppTheme.radiusMD),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                   ),
                   elevation: 0,
                 ),
@@ -102,8 +104,7 @@ class GuidedStage extends ConsumerWidget {
 
           if (!state.canProceedFromGuided)
             Padding(
-              padding:
-                  const EdgeInsets.only(top: AppTheme.spaceSM),
+              padding: const EdgeInsets.only(top: AppTheme.spaceSM),
               child: Center(
                 child: Text(
                   'Cần trả lời ít nhất 60% câu hỏi để tiếp tục',
@@ -157,12 +158,10 @@ class _InterviewStepCard extends ConsumerStatefulWidget {
   final LessonNotifier notifier;
 
   @override
-  ConsumerState<_InterviewStepCard> createState() =>
-      _InterviewStepCardState();
+  ConsumerState<_InterviewStepCard> createState() => _InterviewStepCardState();
 }
 
-class _InterviewStepCardState
-    extends ConsumerState<_InterviewStepCard> {
+class _InterviewStepCardState extends ConsumerState<_InterviewStepCard> {
   late final TextEditingController _ctrl;
   bool _isFocused = false;
 
@@ -230,12 +229,9 @@ class _InterviewStepCardState
                       decoration: BoxDecoration(
                         color: AppTheme.secondary.withOpacity(0.08),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(
-                              AppTheme.radiusMD),
-                          bottomLeft: Radius.circular(
-                              AppTheme.radiusMD),
-                          bottomRight: Radius.circular(
-                              AppTheme.radiusMD),
+                          topRight: Radius.circular(AppTheme.radiusMD),
+                          bottomLeft: Radius.circular(AppTheme.radiusMD),
+                          bottomRight: Radius.circular(AppTheme.radiusMD),
                         ),
                       ),
                       child: Text(
@@ -261,8 +257,7 @@ class _InterviewStepCardState
 
           // User answer field
           Padding(
-            padding:
-                const EdgeInsets.only(left: 40),
+            padding: const EdgeInsets.only(left: 40),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -275,21 +270,18 @@ class _InterviewStepCardState
                 ),
                 const SizedBox(height: 4),
                 Focus(
-                  onFocusChange: (f) =>
-                      setState(() => _isFocused = f),
+                  onFocusChange: (f) => setState(() => _isFocused = f),
                   child: TextField(
                     controller: _ctrl,
                     maxLines: null,
                     minLines: 2,
                     onChanged: (v) =>
-                        widget.notifier.updateGuidedAnswer(
-                            widget.index, v),
+                        widget.notifier.updateGuidedAnswer(widget.index, v),
                     style: AppTheme.bodyLarge.copyWith(
                       fontSize: 15,
                     ),
                     decoration: InputDecoration(
-                      hintText:
-                          'Bhante, ...',
+                      hintText: 'Bhante, ...',
                       hintStyle: AppTheme.bodyMedium.copyWith(
                         fontStyle: FontStyle.italic,
                       ),
@@ -301,15 +293,13 @@ class _InterviewStepCardState
                           ? AppTheme.primary.withOpacity(0.04)
                           : AppTheme.surfaceVariant,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                            AppTheme.radiusMD),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                         borderSide: BorderSide(
                           color: AppTheme.divider,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                            AppTheme.radiusMD),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                         borderSide: BorderSide(
                           color: hasAnswer
                               ? AppTheme.secondary.withOpacity(0.4)
@@ -317,8 +307,7 @@ class _InterviewStepCardState
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                            AppTheme.radiusMD),
+                        borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                         borderSide: BorderSide(
                           color: AppTheme.primary,
                           width: 1.5,

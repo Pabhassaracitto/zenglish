@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../presentation/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../providers/lesson_provider.dart';
 
 class SilentModeButton extends ConsumerWidget {
@@ -26,14 +26,10 @@ class SilentModeButton extends ConsumerWidget {
           vertical: AppTheme.spaceXS + 2,
         ),
         decoration: BoxDecoration(
-          color: isSilent
-              ? AppTheme.silentModeActive
-              : AppTheme.surfaceVariant,
+          color: isSilent ? AppTheme.silentModeActive : AppTheme.surfaceVariant,
           borderRadius: BorderRadius.circular(AppTheme.radiusSM),
           border: Border.all(
-            color: isSilent
-                ? AppTheme.silentModeActive
-                : AppTheme.divider,
+            color: isSilent ? AppTheme.silentModeActive : AppTheme.divider,
           ),
         ),
         child: Row(
@@ -48,8 +44,7 @@ class SilentModeButton extends ConsumerWidget {
             Text(
               isSilent ? 'Im Lặng' : 'Âm Thanh',
               style: AppTheme.labelSmall.copyWith(
-                color:
-                    isSilent ? Colors.white : AppTheme.textSecondary,
+                color: isSilent ? Colors.white : AppTheme.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
             ),

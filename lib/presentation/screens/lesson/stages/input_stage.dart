@@ -1,6 +1,7 @@
+import 'package:ewmapp/data/models/lesson_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../presentation/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../providers/lesson_provider.dart';
 
 class InputStage extends ConsumerWidget {
@@ -70,8 +71,7 @@ class InputStage extends ConsumerWidget {
                   vertical: AppTheme.spaceMD,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(AppTheme.radiusMD),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                 ),
                 elevation: 0,
               ),
@@ -110,9 +110,8 @@ class _AudioPlayerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final position = state.audioPositionSeconds;
-    final duration = state.audioDurationSeconds == 0
-        ? 120
-        : state.audioDurationSeconds;
+    final duration =
+        state.audioDurationSeconds == 0 ? 120 : state.audioDurationSeconds;
     final progress = duration > 0 ? position / duration : 0.0;
 
     return Container(
@@ -170,15 +169,13 @@ class _AudioPlayerCard extends StatelessWidget {
             ),
             child: Slider(
               value: progress.clamp(0.0, 1.0),
-              onChanged: (v) =>
-                  notifier.seekAudio((v * duration).round()),
+              onChanged: (v) => notifier.seekAudio((v * duration).round()),
             ),
           ),
 
           // Time indicators
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -227,9 +224,7 @@ class _AudioPlayerCard extends StatelessWidget {
                     ],
                   ),
                   child: Icon(
-                    state.isAudioPlaying
-                        ? Icons.pause
-                        : Icons.play_arrow,
+                    state.isAudioPlaying ? Icons.pause : Icons.play_arrow,
                     color: Colors.white,
                     size: 28,
                   ),
@@ -283,8 +278,7 @@ class _WaveformVisualizer extends StatefulWidget {
   final bool isPlaying;
 
   @override
-  State<_WaveformVisualizer> createState() =>
-      _WaveformVisualizerState();
+  State<_WaveformVisualizer> createState() => _WaveformVisualizerState();
 }
 
 class _WaveformVisualizerState extends State<_WaveformVisualizer>
@@ -292,9 +286,30 @@ class _WaveformVisualizerState extends State<_WaveformVisualizer>
   late final AnimationController _ctrl;
 
   final List<double> _heights = [
-    0.3, 0.7, 0.5, 0.9, 0.4, 0.8, 0.6, 0.4,
-    0.7, 0.5, 0.8, 0.3, 0.9, 0.6, 0.4, 0.7,
-    0.5, 0.8, 0.3, 0.6, 0.9, 0.4, 0.7, 0.5,
+    0.3,
+    0.7,
+    0.5,
+    0.9,
+    0.4,
+    0.8,
+    0.6,
+    0.4,
+    0.7,
+    0.5,
+    0.8,
+    0.3,
+    0.9,
+    0.6,
+    0.4,
+    0.7,
+    0.5,
+    0.8,
+    0.3,
+    0.6,
+    0.9,
+    0.4,
+    0.7,
+    0.5,
   ];
 
   @override
@@ -339,8 +354,7 @@ class _WaveformVisualizerState extends State<_WaveformVisualizer>
                   ? baseH * (0.5 + _ctrl.value * 0.5)
                   : baseH * 0.3;
               return Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 1.5),
+                padding: const EdgeInsets.symmetric(horizontal: 1.5),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 100),
                   width: 3,
@@ -442,8 +456,7 @@ class _DialogueNavigator extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed:
-              currentIndex < dialogues.length - 1 ? onNext : null,
+          onPressed: currentIndex < dialogues.length - 1 ? onNext : null,
           icon: const Icon(Icons.chevron_right),
           iconSize: 20,
           color: AppTheme.textSecondary,
@@ -484,8 +497,8 @@ class _TranscriptCard extends StatelessWidget {
           // Dialogue lines
           ...dialogue.lines.asMap().entries.map((entry) {
             final line = entry.value;
-            final isYogi = line.startsWith('Yogi:') ||
-                line.startsWith('Retreatant:');
+            final isYogi =
+                line.startsWith('Yogi:') || line.startsWith('Retreatant:');
             final isTeacher = line.startsWith('Teacher:');
             final isHelper = line.startsWith('Helper:');
 
@@ -524,8 +537,7 @@ class _DialogueLine extends StatelessWidget {
   Widget build(BuildContext context) {
     // Parse speaker and content
     final colonIndex = line.indexOf(':');
-    final speaker =
-        colonIndex > 0 ? line.substring(0, colonIndex) : '';
+    final speaker = colonIndex > 0 ? line.substring(0, colonIndex) : '';
     final content =
         colonIndex > 0 ? line.substring(colonIndex + 1).trim() : line;
 

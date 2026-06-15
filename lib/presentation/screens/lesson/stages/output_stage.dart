@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../presentation/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../providers/lesson_provider.dart';
 
 class OutputStage extends ConsumerWidget {
@@ -59,8 +59,7 @@ class OutputStage extends ConsumerWidget {
           const SizedBox(height: AppTheme.spaceLG),
 
           // Finish lesson button
-          if (state.outputRecordingState ==
-              OutputRecordingState.recorded) ...[
+          if (state.outputRecordingState == OutputRecordingState.recorded) ...[
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -76,8 +75,7 @@ class OutputStage extends ConsumerWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: AppTheme.spaceMD),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(AppTheme.radiusMD),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                   ),
                   elevation: 0,
                 ),
@@ -89,14 +87,12 @@ class OutputStage extends ConsumerWidget {
     );
   }
 
-  void _showCompletionDialog(
-      BuildContext context, LessonState state) {
+  void _showCompletionDialog(BuildContext context, LessonState state) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (_) => _LessonCompleteDialog(
-        lessonTitle:
-            state.lesson?.titleVi ?? 'Bài học đã hoàn thành',
+        lessonTitle: state.lesson?.titleVi ?? 'Bài học đã hoàn thành',
       ),
     );
   }
@@ -138,8 +134,7 @@ class _SilentModeFullBlock extends StatelessWidget {
                 foregroundColor: AppTheme.primary,
                 side: const BorderSide(color: AppTheme.primary),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(AppTheme.radiusMD),
+                  borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                 ),
               ),
               child: const Text('Tắt im lặng để ghi âm'),
@@ -199,8 +194,7 @@ class _OutputTaskCard extends StatelessWidget {
             padding: const EdgeInsets.all(AppTheme.spaceSM),
             decoration: BoxDecoration(
               color: AppTheme.cardBackground,
-              borderRadius:
-                  BorderRadius.circular(AppTheme.radiusSM),
+              borderRadius: BorderRadius.circular(AppTheme.radiusSM),
             ),
             child: Text(
               prompt,
@@ -223,8 +217,7 @@ class _SampleOutputCard extends StatefulWidget {
   final Map<String, String> samples;
 
   @override
-  State<_SampleOutputCard> createState() =>
-      _SampleOutputCardState();
+  State<_SampleOutputCard> createState() => _SampleOutputCardState();
 }
 
 class _SampleOutputCardState extends State<_SampleOutputCard> {
@@ -253,8 +246,7 @@ class _SampleOutputCardState extends State<_SampleOutputCard> {
               ),
               const Spacer(),
               GestureDetector(
-                onTap: () =>
-                    setState(() => _revealed = !_revealed),
+                onTap: () => setState(() => _revealed = !_revealed),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppTheme.spaceSM,
@@ -262,8 +254,7 @@ class _SampleOutputCardState extends State<_SampleOutputCard> {
                   ),
                   decoration: BoxDecoration(
                     color: AppTheme.surfaceVariant,
-                    borderRadius: BorderRadius.circular(
-                        AppTheme.radiusSM),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusSM),
                   ),
                   child: Text(
                     _revealed ? 'Ẩn đi' : 'Xem mẫu',
@@ -288,8 +279,7 @@ class _SampleOutputCardState extends State<_SampleOutputCard> {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color:
-                            AppTheme.primary.withOpacity(0.08),
+                        color: AppTheme.primary.withOpacity(0.08),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
@@ -352,8 +342,7 @@ class _EvaluationCriteriaCard extends StatelessWidget {
           ),
           const SizedBox(height: AppTheme.spaceSM),
           ...criteria.map((c) => Padding(
-                padding: const EdgeInsets.only(
-                    bottom: AppTheme.spaceSM),
+                padding: const EdgeInsets.only(bottom: AppTheme.spaceSM),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -429,8 +418,7 @@ class _VoiceRecordingCard extends StatelessWidget {
           if (recState == OutputRecordingState.idle ||
               recState == OutputRecordingState.recording)
             _HoldToRecordButton(
-              isRecording:
-                  recState == OutputRecordingState.recording,
+              isRecording: recState == OutputRecordingState.recording,
               onStart: () {
                 HapticFeedback.mediumImpact();
                 notifier.startRecording();
@@ -546,14 +534,10 @@ class _HoldToRecordButton extends StatelessWidget {
         height: isRecording ? 88 : 80,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isRecording
-              ? AppTheme.errorSoft
-              : AppTheme.primary,
+          color: isRecording ? AppTheme.errorSoft : AppTheme.primary,
           boxShadow: [
             BoxShadow(
-              color: (isRecording
-                      ? AppTheme.errorSoft
-                      : AppTheme.primary)
+              color: (isRecording ? AppTheme.errorSoft : AppTheme.primary)
                   .withOpacity(0.35),
               blurRadius: isRecording ? 24 : 16,
               spreadRadius: isRecording ? 4 : 0,
@@ -616,12 +600,10 @@ class _RecordedControls extends StatelessWidget {
 
         // Play / Stop playback
         _RecordingActionButton(
-          icon: state.outputRecordingState ==
-                  OutputRecordingState.playing
+          icon: state.outputRecordingState == OutputRecordingState.playing
               ? Icons.stop
               : Icons.play_arrow,
-          label: state.outputRecordingState ==
-                  OutputRecordingState.playing
+          label: state.outputRecordingState == OutputRecordingState.playing
               ? 'Dừng'
               : 'Nghe lại',
           color: AppTheme.primary,
@@ -706,8 +688,7 @@ class _LessonCompleteDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppTheme.spaceMD),
-            Text('Bài Học Hoàn Thành',
-                style: AppTheme.headingMedium),
+            Text('Bài Học Hoàn Thành', style: AppTheme.headingMedium),
             const SizedBox(height: AppTheme.spaceSM),
             Text(
               lessonTitle,
@@ -718,16 +699,14 @@ class _LessonCompleteDialog extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () =>
-                    Navigator.of(context).popUntil(
-                      (route) => route.isFirst,
-                    ),
+                onPressed: () => Navigator.of(context).popUntil(
+                  (route) => route.isFirst,
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        AppTheme.radiusMD),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                   ),
                   elevation: 0,
                 ),

@@ -1,6 +1,7 @@
+import 'package:ewmapp/data/models/vocab_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../presentation/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../providers/lesson_provider.dart';
 
 class PatternStage extends ConsumerWidget {
@@ -26,8 +27,7 @@ class PatternStage extends ConsumerWidget {
           // Header
           Row(
             children: [
-              Text('Nối Từ Tam Ngữ',
-                  style: AppTheme.headingMedium),
+              Text('Nối Từ Tam Ngữ', style: AppTheme.headingMedium),
               const Spacer(),
               TextButton.icon(
                 onPressed: notifier.resetPatternAnswers,
@@ -81,8 +81,7 @@ class PatternStage extends ConsumerWidget {
                     vertical: AppTheme.spaceMD,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(AppTheme.radiusMD),
+                    borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                   ),
                   elevation: 0,
                 ),
@@ -129,8 +128,7 @@ class _MatchProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (total == 0) return const SizedBox();
-    final correct =
-        state.patternCorrect.values.where((v) => v).length;
+    final correct = state.patternCorrect.values.where((v) => v).length;
     final answered = state.patternAnswers.length;
 
     return Container(
@@ -158,8 +156,7 @@ class _MatchProgress extends StatelessWidget {
                   backgroundColor: AppTheme.divider,
                   color: AppTheme.secondary,
                   minHeight: 4,
-                  borderRadius:
-                      BorderRadius.circular(2),
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ],
             ),
@@ -232,9 +229,7 @@ class _TrilingualMatchCard extends StatelessWidget {
               ),
               if (hasAnswered)
                 Icon(
-                  isCorrect == true
-                      ? Icons.check_circle
-                      : Icons.cancel,
+                  isCorrect == true ? Icons.check_circle : Icons.cancel,
                   color: isCorrect == true
                       ? AppTheme.secondary
                       : AppTheme.errorSoft,
@@ -259,8 +254,7 @@ class _TrilingualMatchCard extends StatelessWidget {
                   selected: answered,
                   getLabel: (v) => v.vietnamese,
                   onSelected: (v) =>
-                      notifier.submitPatternAnswer(
-                          vocabItem.stt, v),
+                      notifier.submitPatternAnswer(vocabItem.stt, v),
                 ),
               ),
             ],
@@ -284,8 +278,7 @@ class _TrilingualMatchCard extends StatelessWidget {
                       Text(
                         '[${vocabItem.paliRomanized}]',
                         style: AppTheme.labelSmall.copyWith(
-                          color: AppTheme.paliColor
-                              .withOpacity(0.7),
+                          color: AppTheme.paliColor.withOpacity(0.7),
                         ),
                       ),
                   ],
@@ -298,8 +291,7 @@ class _TrilingualMatchCard extends StatelessWidget {
               padding: const EdgeInsets.all(AppTheme.spaceSM),
               decoration: BoxDecoration(
                 color: AppTheme.surfaceVariant,
-                borderRadius:
-                    BorderRadius.circular(AppTheme.radiusSM),
+                borderRadius: BorderRadius.circular(AppTheme.radiusSM),
               ),
               child: Text(
                 vocabItem.exampleEn,

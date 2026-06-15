@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../presentation/theme/app_theme.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../providers/lesson_provider.dart';
 
 class LessonProgressBar extends ConsumerWidget {
@@ -37,9 +37,7 @@ class LessonProgressBar extends ConsumerWidget {
 
               return Expanded(
                 child: GestureDetector(
-                  onTap: isCompleted
-                      ? () => notifier.goToStage(stage)
-                      : null,
+                  onTap: isCompleted ? () => notifier.goToStage(stage) : null,
                   child: Column(
                     children: [
                       // Connector line (except first)
@@ -81,9 +79,8 @@ class LessonProgressBar extends ConsumerWidget {
                               : isCompleted
                                   ? AppTheme.textSecondary
                                   : AppTheme.textMuted,
-                          fontWeight: isCurrent
-                              ? FontWeight.w600
-                              : FontWeight.w400,
+                          fontWeight:
+                              isCurrent ? FontWeight.w600 : FontWeight.w400,
                         ),
                         textAlign: TextAlign.center,
                         maxLines: 1,
