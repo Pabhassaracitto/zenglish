@@ -329,3 +329,5 @@ firebase_options.dart
 auth_service.dart
 google_sign_in_config.dart
 *.bin
+.roo/
+.roomodes

@@ -1,0 +1,297 @@
+{
+  "lesson_id": "A2_CH06_L01",
+  "title_en": "Describing What You Observe in Meditation",
+  "title_vi": "Mô tả những gì bạn quan sát trong thiền",
+  "level": "A2",
+  "meditation_stage_min": "access_concentration",
+  "prerequisites": ["A2_CH05_L03", "A2_CH05_L04"],
+  "monastery_note": "Bài học này tập trung vào ngôn ngữ mô tả trung tính. Nhắc học viên tránh dùng các từ có màu sắc cảm xúc khi báo cáo thiền.",
+  "authenticity_reminder": "Chỉ mô tả những gì thực sự quan sát được. Không thêm diễn giải hay đánh giá vào báo cáo thiền.",
+
+  "vocabulary": [
+    {
+      "word": "observe",
+      "phonetic": "/əbˈzɜːv/",
+      "part_of_speech": "verb",
+      "definition_en": "To watch carefully and attentively",
+      "definition_vi": "Quan sát cẩn thận và chú tâm",
+      "example_sentence": "I observe the breath rising and falling.",
+      "example_translation": "Tôi quan sát hơi thở lên và xuống.",
+      "dhamma_context": "Dùng trong báo cáo thiền khi mô tả đối tượng thiền quán",
+      "audio_file": "observe.mp3",
+      "needs_audio": false,
+      "is_high_priority": true,
+      "tags": ["meditation", "reporting", "core-verb"]
+    },
+    {
+      "word": "sensation",
+      "phonetic": "/senˈseɪʃən/",
+      "part_of_speech": "noun",
+      "definition_en": "A physical feeling or perception",
+      "definition_vi": "Cảm giác hoặc nhận thức thể chất",
+      "example_sentence": "There is a tingling sensation in my hands.",
+      "example_translation": "Có cảm giác ngứa ran ở tay tôi.",
+      "dhamma_context": "Vedanā – cảm thọ. Dùng khi mô tả thọ uẩn",
+      "audio_file": "sensation.mp3",
+      "needs_audio": false,
+      "is_high_priority": true,
+      "tags": ["vedana", "body", "core-noun"]
+    },
+    {
+      "word": "arise",
+      "phonetic": "/əˈraɪz/",
+      "part_of_speech": "verb",
+      "definition_en": "To come into existence or become apparent",
+      "definition_vi": "Xuất hiện, khởi sinh",
+      "example_sentence": "Thoughts arise and pass away on their own.",
+      "example_translation": "Các suy nghĩ khởi sinh và tự tan biến.",
+      "dhamma_context": "Samudaya – sự sinh khởi. Một trong Tứ Diệu Đế",
+      "audio_file": "arise.mp3",
+      "needs_audio": false,
+      "is_high_priority": true,
+      "tags": ["impermanence", "anicca", "core-verb"]
+    },
+    {
+      "word": "pass away",
+      "phonetic": "/pɑːs əˈweɪ/",
+      "part_of_speech": "phrasal verb",
+      "definition_en": "To cease to exist; to disappear",
+      "definition_vi": "Không còn tồn tại; biến mất",
+      "example_sentence": "The pain arose and then passed away within a few breaths.",
+      "example_translation": "Cơn đau xuất hiện rồi biến mất trong vài hơi thở.",
+      "dhamma_context": "Nirodha – sự diệt. Tránh dùng theo nghĩa 'qua đời' trong ngữ cảnh thiền",
+      "audio_file": "pass_away.mp3",
+      "needs_audio": true,
+      "is_high_priority": true,
+      "tags": ["impermanence", "anicca", "phrasal-verb"]
+    },
+    {
+      "word": "neutral",
+      "phonetic": "/ˈnjuːtrəl/",
+      "part_of_speech": "adjective",
+      "definition_en": "Neither pleasant nor unpleasant; not taking sides",
+      "definition_vi": "Không dễ chịu cũng không khó chịu; trung tính",
+      "example_sentence": "I try to maintain a neutral attitude toward whatever arises.",
+      "example_translation": "Tôi cố gắng duy trì thái độ trung tính với bất cứ điều gì xuất hiện.",
+      "dhamma_context": "Upekkha – xả. Thái độ bình thản trong thiền quán",
+      "audio_file": "neutral.mp3",
+      "needs_audio": false,
+      "is_high_priority": false,
+      "tags": ["upekkha", "attitude", "adjective"]
+    },
+    {
+      "word": "wandering",
+      "phonetic": "/ˈwɒndərɪŋ/",
+      "part_of_speech": "adjective/gerund",
+      "definition_en": "Moving without a fixed direction; distracted",
+      "definition_vi": "Di chuyển không có hướng cố định; phóng tâm",
+      "example_sentence": "I noticed my mind was wandering to past events.",
+      "example_translation": "Tôi nhận thấy tâm mình đang phóng về các sự kiện quá khứ.",
+      "dhamma_context": "Vikkhitta – tán loạn tâm. Một trong 5 triền cái",
+      "audio_file": "wandering.mp3",
+      "needs_audio": false,
+      "is_high_priority": false,
+      "tags": ["hindrances", "mind-states", "awareness"]
+    }
+  ],
+
+  "lesson_flow": {
+    "warm_up": {
+      "duration_minutes": 5,
+      "activity_type": "reflection",
+      "prompt_en": "Think about your last meditation session. What did you notice? Can you describe it in one English sentence?",
+      "prompt_vi": "Hãy nghĩ về buổi thiền gần nhất của bạn. Bạn đã nhận thấy điều gì? Bạn có thể mô tả bằng một câu tiếng Anh không?",
+      "teacher_note": "Chấp nhận mọi mức độ. Mục tiêu là kích hoạt từ vựng liên quan đến thiền."
+    },
+    "presentation": {
+      "duration_minutes": 10,
+      "grammar_focus": "Present Continuous for ongoing observation",
+      "grammar_explanation_en": "Use 'I am observing...' or 'I notice that...' to describe what is happening right now in your meditation.",
+      "grammar_explanation_vi": "Dùng 'I am observing...' hoặc 'I notice that...' để mô tả những gì đang xảy ra ngay lúc này trong thiền.",
+      "key_structures": [
+        "I observe / I am observing + [object]",
+        "There is / There are + [phenomenon]",
+        "[Subject] arises and passes away",
+        "I notice that [clause]"
+      ]
+    },
+    "practice": {
+      "duration_minutes": 15,
+      "activity_type": "guided_reporting",
+      "steps": [
+        {
+          "step": 1,
+          "instruction_en": "Listen to the teacher's guided meditation report (2 min recording). Identify all observation vocabulary used.",
+          "instruction_vi": "Nghe báo cáo thiền có hướng dẫn của giáo viên (bản ghi 2 phút). Xác định tất cả từ vựng quan sát được sử dụng.",
+          "skill": "listening"
+        },
+        {
+          "step": 2,
+          "instruction_en": "In pairs, take turns giving a 1-minute meditation report. Partner notes down key vocabulary used.",
+          "instruction_vi": "Theo cặp, thay nhau đưa ra báo cáo thiền 1 phút. Bạn cùng học ghi lại từ vựng chính được sử dụng.",
+          "skill": "speaking"
+        },
+        {
+          "step": 3,
+          "instruction_en": "Write 3-5 sentences describing a recent meditation experience using today's vocabulary.",
+          "instruction_vi": "Viết 3-5 câu mô tả trải nghiệm thiền gần đây sử dụng từ vựng hôm nay.",
+          "skill": "writing"
+        }
+      ]
+    },
+    "production": {
+      "duration_minutes": 10,
+      "activity_type": "free_reporting",
+      "prompt_en": "Give a spontaneous 2-minute report to the class about any meditation experience. Use at least 4 vocabulary items from today.",
+      "prompt_vi": "Đưa ra báo cáo tự nhiên 2 phút cho lớp về bất kỳ trải nghiệm thiền nào. Sử dụng ít nhất 4 từ vựng từ hôm nay.",
+      "success_criteria": [
+        "Uses neutral, non-judgmental language",
+        "Correctly uses arise/pass away",
+        "Maintains present tense for ongoing states",
+        "Avoids over-interpretation"
+      ]
+    },
+    "closing": {
+      "duration_minutes": 5,
+      "activity_type": "reflection_sharing",
+      "prompt_en": "What is one English phrase you will use in your next meditation report?",
+      "prompt_vi": "Một cụm từ tiếng Anh nào bạn sẽ dùng trong báo cáo thiền tiếp theo?",
+      "homework": "Write a 5-sentence meditation report in English after your next sitting. Submit before next class."
+    }
+  },
+
+  "situation_variants": {
+    "A_preparation": {
+      "context_description_en": "Before meditation begins – settling in, setting intention",
+      "context_description_vi": "Trước khi bắt đầu thiền – ổn định tâm, đặt ý định",
+      "sample_dialogues": [
+        {
+          "speaker": "student",
+          "en": "Teacher, I want to learn how to describe my meditation experiences in English.",
+          "vi": "Thưa thầy, con muốn học cách mô tả trải nghiệm thiền bằng tiếng Anh."
+        },
+        {
+          "speaker": "teacher",
+          "en": "Very good. We begin with neutral observation. What do you notice right now, before we start?",
+          "vi": "Rất tốt. Chúng ta bắt đầu với quan sát trung tính. Bạn nhận thấy điều gì ngay lúc này, trước khi bắt đầu?"
+        },
+        {
+          "speaker": "student",
+          "en": "I observe some restlessness in my body. My mind is also wandering a little.",
+          "vi": "Con quan sát thấy có chút bất an trong cơ thể. Tâm con cũng đang phóng đi một chút."
+        }
+      ],
+      "language_tips": [
+        "Use present simple for habitual observations: 'Usually, I notice...'",
+        "Use present continuous for right-now observations: 'I am noticing...'"
+      ]
+    },
+    "B_first_appearance": {
+      "context_description_en": "A new phenomenon arises for the first time during meditation",
+      "context_description_vi": "Một hiện tượng mới xuất hiện lần đầu trong thiền",
+      "sample_dialogues": [
+        {
+          "speaker": "student",
+          "en": "Teacher, something new appeared during my sitting yesterday. A bright light arose in my mind.",
+          "vi": "Thưa thầy, hôm qua trong lúc thiền có điều gì đó mới xuất hiện. Một ánh sáng sáng rực khởi lên trong tâm con."
+        },
+        {
+          "speaker": "teacher",
+          "en": "Good observation. Can you describe it more precisely? How long did it last?",
+          "vi": "Quan sát tốt. Bạn có thể mô tả chính xác hơn không? Nó kéo dài bao lâu?"
+        },
+        {
+          "speaker": "student",
+          "en": "It arose suddenly and passed away within about ten seconds. The sensation was pleasant but I tried to stay neutral.",
+          "vi": "Nó khởi sinh đột ngột và biến mất trong khoảng mười giây. Cảm giác dễ chịu nhưng con cố gắng duy trì thái độ trung tính."
+        }
+      ],
+      "language_tips": [
+        "Use 'arose' (simple past) for completed appearances",
+        "Use 'for the first time' to indicate novelty",
+        "Describe duration: 'It lasted for...' / 'It passed away after...'"
+      ]
+    },
+    "C_stable_tracking": {
+      "context_description_en": "Maintaining steady observation of an ongoing phenomenon",
+      "context_description_vi": "Duy trì quan sát ổn định một hiện tượng đang diễn ra",
+      "sample_dialogues": [
+        {
+          "speaker": "student",
+          "en": "I have been observing the breath continuously for the past three sessions.",
+          "vi": "Con đã quan sát hơi thở liên tục trong ba buổi vừa qua."
+        },
+        {
+          "speaker": "teacher",
+          "en": "What sensations arise with each in-breath?",
+          "vi": "Những cảm giác gì khởi sinh với mỗi hơi thở vào?"
+        },
+        {
+          "speaker": "student",
+          "en": "There is a gentle expansion in the chest. The sensation is neutral – neither pleasant nor unpleasant.",
+          "vi": "Có sự giãn nở nhẹ nhàng ở ngực. Cảm giác trung tính – không dễ chịu cũng không khó chịu."
+        }
+      ],
+      "language_tips": [
+        "Present perfect continuous for ongoing: 'I have been observing...'",
+        "Use 'There is/are' for describing phenomena objectively",
+        "Quantify when possible: 'a gentle', 'a slight', 'a strong'"
+      ]
+    },
+    "D_disappeared_changed": {
+      "context_description_en": "A previously stable object has changed or vanished",
+      "context_description_vi": "Một đối tượng ổn định trước đó đã thay đổi hoặc biến mất",
+      "sample_dialogues": [
+        {
+          "speaker": "student",
+          "en": "The pain that I had been observing passed away completely during yesterday's session.",
+          "vi": "Cơn đau mà con đã quan sát đã biến mất hoàn toàn trong buổi thiền hôm qua."
+        },
+        {
+          "speaker": "teacher",
+          "en": "And what arose in its place?",
+          "vi": "Và điều gì đã khởi lên thay thế nó?"
+        },
+        {
+          "speaker": "student",
+          "en": "At first there was emptiness, and then a subtle warmth arose in the same area.",
+          "vi": "Đầu tiên có sự trống rỗng, rồi một hơi ấm tinh tế khởi lên ở cùng vị trí."
+        }
+      ],
+      "language_tips": [
+        "Past perfect for sequence: 'had been observing' → 'passed away'",
+        "Use 'completely', 'gradually', 'suddenly' to describe manner of change",
+        "Transition language: 'in its place', 'afterwards', 'subsequently'"
+      ]
+    },
+    "E_past_future": {
+      "context_description_en": "Discussing past sessions or intentions for future practice",
+      "context_description_vi": "Thảo luận về các buổi thiền trước hoặc ý định cho thực hành tương lai",
+      "sample_dialogues": [
+        {
+          "speaker": "student",
+          "en": "In my sitting last week, I observed that wandering thoughts arose very frequently.",
+          "vi": "Trong buổi thiền tuần trước, con quan sát thấy các suy nghĩ lang thang khởi lên rất thường xuyên."
+        },
+        {
+          "speaker": "teacher",
+          "en": "How will you work with that in your next session?",
+          "vi": "Bạn sẽ làm việc với điều đó như thế nào trong buổi thiền tiếp theo?"
+        },
+        {
+          "speaker": "student",
+          "en": "I will observe each thought as it arises and simply note 'thinking' without following it.",
+          "vi": "Con sẽ quan sát từng suy nghĩ khi nó khởi lên và đơn giản ghi nhận 'đang suy nghĩ' mà không theo đuổi nó."
+        }
+      ],
+      "language_tips": [
+        "Simple past for completed sessions: 'In my last sitting, I observed...'",
+        "'will + verb' for future intention: 'I will observe...'",
+        "Frequency adverbs: 'frequently', 'occasionally', 'rarely', 'continuously'"
+      ]
+    }
+  },
+
+  "patches_applied": [],
+  "needs_review": false
+}
