@@ -1,6 +1,28 @@
+/// lib/ai/engine/ai_interview_engine.dart
+///
+/// AIInterviewEngine — Production Version with Mock Fallback
+///
+/// Strategy:
+///   PRIMARY   → OpenAIService (nếu API Key hợp lệ)
+///   FALLBACK  → 5 Analyzers + MockResponseBuilder (nếu key trống hoặc lỗi)
+///
+/// UI layer KHÔNG biết đang chạy nhánh nào.
+/// LessonNotifier.analyzeInterview() chỉ cần await kết quả.
+///
+/// Dhamma Safety (áp dụng cho cả 2 nhánh):
+///   - Không kết luận trạng thái thiền
+///   - SemanticHint luôn dùng ngôn ngữ "possible / may indicate"
+///   - Mọi insight đều nhắc "report to teacher"
+library;
+
 import '../../core/constants/dhamma_keywords.dart';
+import '../../core/env/env.dart';
 import '../../data/models/lesson.dart';
 import '../models/interview_feedback.dart';
+import '../services/openai_service.dart';
+import '../parsers/openai_response_parser.dart';
+
+// Analyzers (Mock fallback path)
 import 'analyzers/opening_analyzer.dart';
 import 'analyzers/object_analyzer.dart';
 import 'analyzers/location_analyzer.dart';
@@ -8,53 +30,162 @@ import 'analyzers/difficulty_analyzer.dart';
 import 'analyzers/semantic_hint_analyzer.dart';
 import 'mock/mock_response_builder.dart';
 
-/// AIInterviewEngine — Mock Version
-/// 
-/// Architecture:
-/// [Transcript] → [5 Analyzers] → [ScoreEngine] → [InterviewFeedback]
-/// 
-/// Mỗi Analyzer độc lập → dễ swap sang LLM API sau này
-/// 
-/// Nguyên tắc an toàn Pháp học:
-/// - Engine CHỈ mô tả — không kết luận kinh nghiệm
-/// - SemanticHint dùng "possible" không phải "you have"
-/// - Mọi insight đều nhắc "report to teacher"
 class AIInterviewEngine {
+  // ─────────────────────────────────────────────
+  // CONSTRUCTOR & SINGLETON
+  // ─────────────────────────────────────────────
 
-  // ─── Singleton (stateless) ───────────────────
+  /// Cho phép inject dependencies để viết unit test dễ dàng.
+  /// Production dùng singleton [instance].
+  AIInterviewEngine({OpenAIService? openAIService})
+      : _openAIService = openAIService ?? OpenAIService();
 
-  AIInterviewEngine._();
-  static final AIInterviewEngine instance = AIInterviewEngine._();
+  static final AIInterviewEngine instance = AIInterviewEngine();
+
+  final OpenAIService _openAIService;
 
   // ─────────────────────────────────────────────
   // MAIN ENTRY POINT
   // ─────────────────────────────────────────────
 
-  /// Phân tích transcript và trả về InterviewFeedback
-  /// 
-  /// [userTranscript] — văn bản người dùng nói/nhập
-  /// [currentLesson] — bài học hiện tại (để context-aware analysis)
+  /// Phân tích transcript → InterviewFeedback.
+  ///
+  /// Tự động chọn nhánh:
+  ///   • API Key hợp lệ → OpenAI
+  ///   • API Key trống  → Mock (không cần log warning, đây là expected)
+  ///   • OpenAI lỗi    → Mock (fallback tự động, UI không bị crash)
+  ///
+  /// KHÔNG bao giờ throw exception ra ngoài.
   Future<InterviewFeedback> analyzeReport({
     required String userTranscript,
     required Lesson currentLesson,
   }) async {
-    // Simulate processing time (replace with real API call)
-    await Future.delayed(const Duration(milliseconds: 600));
-
     if (userTranscript.trim().isEmpty) {
       return _emptyTranscriptFeedback();
     }
 
     final transcript = userTranscript.trim();
+
+    // ─── Chọn nhánh ──────────────────────────
+
+    if (Env.isConfigured) {
+      return _analyzeWithOpenAI(
+        transcript: transcript,
+        currentLesson: currentLesson,
+      );
+    }
+
+    // Key trống → chạy Mock ngay, không cần thử OpenAI
+    _log('API Key not configured → running Mock analyzers');
+    return _analyzeWithMock(
+      transcript: transcript,
+      currentLesson: currentLesson,
+    );
+  }
+
+  // ─────────────────────────────────────────────
+  // NHÁNH 1: OPENAI
+  // ─────────────────────────────────────────────
+
+  Future<InterviewFeedback> _analyzeWithOpenAI({
+    required String transcript,
+    required Lesson currentLesson,
+  }) async {
+    try {
+      _log('Calling OpenAI API...');
+
+      final jsonString = await _openAIService.analyzeReport(
+        userTranscript: transcript,
+        currentLesson: currentLesson,
+      );
+
+      final parseResult = OpenAIResponseParser.parse(jsonString);
+
+      if (parseResult.hasError) {
+        // JSON từ OpenAI không parse được → fallback
+        _log(
+          'Parse error: ${parseResult.errorMessage} → falling back to Mock',
+        );
+        return _analyzeWithMock(
+          transcript: transcript,
+          currentLesson: currentLesson,
+        );
+      }
+
+      _log('OpenAI analysis successful (score: ${parseResult.feedback.overallScore})');
+
+      // Inject rawTranscript — field này không có trong AI response
+      return _injectTranscript(parseResult.feedback, transcript);
+
+    } on OpenAITimeoutError {
+      _log('OpenAI timeout → falling back to Mock');
+      return _analyzeWithMock(
+        transcript: transcript,
+        currentLesson: currentLesson,
+        fallbackNote: 'Phân tích nhanh (AI timeout — dùng phân tích cục bộ)',
+      );
+
+    } on OpenAINetworkError catch (e) {
+      _log('Network error: ${e.message} → falling back to Mock');
+      return _analyzeWithMock(
+        transcript: transcript,
+        currentLesson: currentLesson,
+        fallbackNote: 'Phân tích nhanh (không có mạng — dùng phân tích cục bộ)',
+      );
+
+    } on OpenAIHttpError catch (e) {
+      _log('HTTP ${e.statusCode} → falling back to Mock');
+      return _analyzeWithMock(
+        transcript: transcript,
+        currentLesson: currentLesson,
+        // Rate limit và quota cần thông báo riêng, các lỗi khác fallback im lặng
+        fallbackNote: e.isRateLimit || e.isQuotaExceeded
+            ? 'Phân tích nhanh (AI đang bận — dùng phân tích cục bộ)'
+            : null,
+      );
+
+    } on OpenAIConfigError catch (e) {
+      _log('Config error: ${e.message} → falling back to Mock');
+      return _analyzeWithMock(
+        transcript: transcript,
+        currentLesson: currentLesson,
+      );
+
+    } catch (e) {
+      _log('Unexpected error: $e → falling back to Mock');
+      return _analyzeWithMock(
+        transcript: transcript,
+        currentLesson: currentLesson,
+      );
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // NHÁNH 2: MOCK (5 ANALYZERS)
+  // ─────────────────────────────────────────────
+
+  /// Chạy toàn bộ 5 Analyzer cũ và build InterviewFeedback.
+  ///
+  /// [fallbackNote]: Nếu không null, append vào languageFeedback
+  /// để UI có thể hiển thị "đang dùng phân tích cục bộ" nếu muốn.
+  /// UI hiện tại KHÔNG cần xử lý gì thêm — field này chỉ là text.
+  Future<InterviewFeedback> _analyzeWithMock({
+    required String transcript,
+    required Lesson currentLesson,
+    String? fallbackNote,
+  }) async {
+    // Simulate processing time — giữ UX nhất quán với OpenAI path
+    await Future.delayed(const Duration(milliseconds: 600));
+
     final lower = transcript.toLowerCase();
 
-    // ─── Run all 5 analyzers ──────────────────
+    // ─── Run 5 Analyzers ──────────────────────
 
-    final openingResult  = OpeningAnalyzer.analyze(transcript);
-    final objectResult   = ObjectAnalyzer.analyze(transcript);
-    final locationResult = LocationAnalyzer.analyze(transcript);
+    final openingResult    = OpeningAnalyzer.analyze(transcript);
+    final objectResult     = ObjectAnalyzer.analyze(transcript);
+    final locationResult   = LocationAnalyzer.analyze(transcript);
     final difficultyResult = DifficultyAnalyzer.analyze(transcript);
-    final questionResult = _analyzeQuestion(transcript);
+    final questionResult   = _analyzeQuestion(transcript);
 
     final checkResults = [
       openingResult,
@@ -68,24 +199,15 @@ class AIInterviewEngine {
 
     final semanticHint = SemanticHintAnalyzer.analyze(transcript);
 
-    // ─── Detect keywords ─────────────────────
+    // ─── Keyword detection ────────────────────
 
     final detectedKeywords = _detectKeywords(lower);
 
-    // ─── Check Pāḷi terms ─────────────────────
+    // ─── Computed flags ───────────────────────
 
     final hasPaliTerms = _hasPaliTerms(lower);
-
-    // ─── Check question ───────────────────────
-
-    final hasQuestion = questionResult.passed;
-
-    // ─── Word count ───────────────────────────
-
-    final wordCount = transcript
-        .split(RegExp(r'\s+'))
-        .where((w) => w.isNotEmpty)
-        .length;
+    final hasQuestion  = questionResult.passed;
+    final wordCount    = _wordCount(transcript);
 
     // ─── Score ────────────────────────────────
 
@@ -110,7 +232,7 @@ class AIInterviewEngine {
 
     // ─── Language feedback ────────────────────
 
-    final langFeedback = MockResponseBuilder.buildLanguageFeedback(
+    var langFeedback = MockResponseBuilder.buildLanguageFeedback(
       results: checkResults,
       hasOpeningWithBhante: openingResult.passed,
       hasClearObject: objectResult.passed,
@@ -118,7 +240,12 @@ class AIInterviewEngine {
       wordCount: wordCount,
     );
 
-    // ─── Encouragement ────────────────────────
+    // Append fallback note nếu có (do lỗi OpenAI)
+    if (fallbackNote != null) {
+      langFeedback = '$langFeedback\n\n⚠ $fallbackNote.';
+    }
+
+    // ─── Encouragement & Next step ────────────
 
     final encouragement = MockResponseBuilder.buildEncouragement(
       overallScore: score,
@@ -126,20 +253,17 @@ class AIInterviewEngine {
       hasDifficulty: difficultyResult.passed,
     );
 
-    // ─── Next step ────────────────────────────
-
     final nextStep = MockResponseBuilder.buildNextStep(
       missingPoints: missing,
       hint: semanticHint,
       hasQuestion: hasQuestion,
     );
 
-    // ─── Authenticity check ───────────────────
+    // ─── Authenticity ─────────────────────────
 
     final isAuthentic = _checkAuthenticity(
       checkResults: checkResults,
       wordCount: wordCount,
-      hasPaliTerms: hasPaliTerms,
     );
 
     return InterviewFeedback(
@@ -158,8 +282,31 @@ class AIInterviewEngine {
   }
 
   // ─────────────────────────────────────────────
-  // PRIVATE ANALYZERS
+  // SHARED PRIVATE HELPERS
   // ─────────────────────────────────────────────
+
+  /// Inject rawTranscript vào feedback đến từ OpenAI.
+  /// AI response không chứa transcript gốc.
+  InterviewFeedback _injectTranscript(
+    InterviewFeedback feedback,
+    String transcript,
+  ) {
+    return InterviewFeedback(
+      isAuthentic: feedback.isAuthentic,
+      overallScore: feedback.overallScore,
+      checkResults: feedback.checkResults,
+      missingPoints: feedback.missingPoints,
+      presentPoints: feedback.presentPoints,
+      languageFeedback: feedback.languageFeedback,
+      semanticHint: feedback.semanticHint,
+      encouragement: feedback.encouragement,
+      suggestedNextStep: feedback.suggestedNextStep,
+      detectedKeywords: feedback.detectedKeywords,
+      rawTranscript: transcript,
+    );
+  }
+
+  // ─── Question Analyzer (dùng trong Mock path) ─
 
   CheckResult _analyzeQuestion(String transcript) {
     final lower = transcript.toLowerCase();
@@ -169,7 +316,9 @@ class AIInterviewEngine {
     for (final indicator in DhammaKeywords.questionIndicators) {
       if (lower.contains(indicator)) {
         hasQuestion = true;
-        detected = indicator == '?' ? 'Câu hỏi kết thúc bằng "?"' : indicator;
+        detected = indicator == '?'
+            ? 'Câu hỏi kết thúc bằng "?"'
+            : indicator;
         break;
       }
     }
@@ -187,30 +336,18 @@ class AIInterviewEngine {
             'đến thực hành hiện tại.'
           : 'Có thể kết thúc bằng: '
             '"Bhante, when the breath becomes subtle, '
-            'what should I do?" '
-            'Một câu hỏi cụ thể giúp thiền sư hướng dẫn hiệu quả hơn.',
+            'what should I do?"',
     );
   }
+
+  // ─── Keyword detection (dùng trong Mock path) ─
 
   List<String> _detectKeywords(String lower) {
     final keywords = <String>[];
 
-    // Samatha objects
-    for (final kw in DhammaKeywords.samathaObjects) {
-      if (lower.contains(kw) && !keywords.contains(kw)) {
-        keywords.add(kw);
-      }
-    }
-
-    // Locations
-    for (final kw in DhammaKeywords.paAukLocations) {
-      if (lower.contains(kw) && !keywords.contains(kw)) {
-        keywords.add(kw);
-      }
-    }
-
-    // Semantic indicators (sample)
     for (final kw in [
+      ...DhammaKeywords.samathaObjects,
+      ...DhammaKeywords.paAukLocations,
       ...DhammaKeywords.stillnessIndicators,
       ...DhammaKeywords.jhanaIndicators,
     ]) {
@@ -219,7 +356,7 @@ class AIInterviewEngine {
       }
     }
 
-    return keywords.take(10).toList(); // Cap at 10
+    return keywords.take(10).toList();
   }
 
   bool _hasPaliTerms(String lower) {
@@ -233,15 +370,20 @@ class AIInterviewEngine {
     return paliMarkers.any((p) => lower.contains(p));
   }
 
+  int _wordCount(String transcript) =>
+      transcript.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).length;
+
   bool _checkAuthenticity({
     required List<CheckResult> checkResults,
     required int wordCount,
-    required bool hasPaliTerms,
   }) {
-    // Cần ít nhất 3/5 checks pass + > 15 từ
     final passCount = checkResults.where((r) => r.passed).length;
     return passCount >= 3 && wordCount >= 15;
   }
+
+  // ─────────────────────────────────────────────
+  // EMPTY TRANSCRIPT
+  // ─────────────────────────────────────────────
 
   InterviewFeedback _emptyTranscriptFeedback() {
     return const InterviewFeedback(
@@ -256,6 +398,20 @@ class AIInterviewEngine {
       suggestedNextStep:
           'Bắt đầu bằng: "Bhante, may I report my sitting?"',
       rawTranscript: '',
+    );
+  }
+
+  // ─────────────────────────────────────────────
+  // LOGGING
+  // ─────────────────────────────────────────────
+
+  void _log(String message) {
+    assert(
+      () {
+        // ignore: avoid_print
+        print('[AIInterviewEngine] $message');
+        return true;
+      }(),
     );
   }
 }
