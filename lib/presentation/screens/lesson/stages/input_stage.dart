@@ -1,100 +1,10 @@
-//lib\presentation\screens\lesson\stages\input_stage.dart
-import 'package:zenglishapp/data/models/lesson_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:zenglishapp/core/theme/app_theme.dart';
-import '../../../providers/lesson_provider.dart';
+import 'package:zenglishapp/presentation/providers/audio_provider.dart';
+import 'package:zenglishapp/presentation/providers/lesson_provider.dart';
 
-class InputStage extends ConsumerWidget {
-  const InputStage({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(lessonProvider);
-    final notifier = ref.read(lessonProvider.notifier);
-    final dialogues = state.lesson?.lessonFlow.input.sampleDialogues ?? [];
-
-    if (dialogues.isEmpty) return const SizedBox();
-
-    final currentDialogue = dialogues[state.currentDialogueIndex];
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(
-        left: AppTheme.spaceMD,
-        right: AppTheme.spaceMD,
-        bottom: AppTheme.spaceXXL,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Description
-          Text(
-            state.lesson?.lessonFlow.input.description ?? '',
-            style: AppTheme.bodyMedium,
-          ),
-          const SizedBox(height: AppTheme.spaceLG),
-
-          // Audio Player or Silent Notice
-          if (state.isSilentMode)
-            const _SilentModeNotice()
-          else
-            _AudioPlayerCard(
-              state: state,
-              notifier: notifier,
-            ),
-          const SizedBox(height: AppTheme.spaceLG),
-
-          // Dialogue Navigator
-          _DialogueNavigator(
-            dialogues: dialogues,
-            currentIndex: state.currentDialogueIndex,
-            onPrevious: notifier.previousDialogue,
-            onNext: notifier.nextDialogue,
-          ),
-          const SizedBox(height: AppTheme.spaceMD),
-
-          // Transcript
-          _TranscriptCard(dialogue: currentDialogue),
-          const SizedBox(height: AppTheme.spaceLG),
-
-          // Continue
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                notifier.markCurrentStageComplete();
-                notifier.nextStage();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  vertical: AppTheme.spaceMD,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppTheme.radiusMD),
-                ),
-                elevation: 0,
-              ),
-              child: Text(
-                'Tiếp tục → Mẫu Câu',
-                style: AppTheme.bodyLarge.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-
-class _AudioPlayerCard extends StatelessWidget {
+class _AudioPlayerCard extends ConsumerWidget {
   const _AudioPlayerCard({
     required this.state,
     required this.notifier,
@@ -103,18 +13,55 @@ class _AudioPlayerCard extends StatelessWidget {
   final LessonState state;
   final LessonNotifier notifier;
 
-  String _formatTime(int seconds) {
+  String _formatTime(Duration duration) {
+    final seconds = duration.inSeconds;
     final m = seconds ~/ 60;
     final s = seconds % 60;
     return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
   }
 
   @override
-  Widget build(BuildContext context) {
-    final position = state.audioPositionSeconds;
-    final duration =
-        state.audioDurationSeconds == 0 ? 120 : state.audioDurationSeconds;
-    final progress = duration > 0 ? position / duration : 0.0;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final audioState = ref.watch(audioProvider);
+    final audioNotifier = ref.read(audioProvider.notifier);
+
+    // Xử lý lỗi Silent Mode
+    if (audioState.error == 'SILENT_MODE') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.volume_off, color: Colors.white, size: 20),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Please disable Silent Mode to hear audio',
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: AppTheme.secondary,
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 2),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        );
+        audioNotifier.clearError();
+      });
+    }
+
+    final position = audioState.position;
+    final duration = audioState.duration.inSeconds == 0
+        ? const Duration(seconds: 120)
+        : audioState.duration;
+    final progress = audioState.progress;
+
+    // URL audio từ lesson
+    final audioUrl = state.lesson?.lessonFlow.input.audioUrl;
 
     return Container(
       padding: const EdgeInsets.all(AppTheme.spaceMD),
@@ -153,8 +100,11 @@ class _AudioPlayerCard extends StatelessWidget {
           ),
           const SizedBox(height: AppTheme.spaceMD),
 
-          // Waveform visualization (static bars)
-          _WaveformVisualizer(isPlaying: state.isAudioPlaying),
+          // Waveform visualization
+          _WaveformVisualizer(
+            isPlaying: audioState.isPlaying,
+            isLoading: audioState.isLoading,
+          ),
           const SizedBox(height: AppTheme.spaceMD),
 
           // Progress bar
@@ -171,7 +121,10 @@ class _AudioPlayerCard extends StatelessWidget {
             ),
             child: Slider(
               value: progress.clamp(0.0, 1.0),
-              onChanged: (v) => notifier.seekAudio((v * duration).round()),
+              onChanged: (v) {
+                final newPosition = duration * v;
+                audioNotifier.seek(newPosition);
+              },
             ),
           ),
 
@@ -199,47 +152,61 @@ class _AudioPlayerCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Rewind 10s
-              _AudioControlButton(
-                icon: Icons.replay_10,
-                onTap: () => notifier.seekAudio(
-                  (position - 10).clamp(0, duration),
-                ),
+              // Rewind 10s
+              IconButton(
+                icon: const Icon(Icons.replay_10),
+                onPressed: () {
+                  final newPos = position - const Duration(seconds: 10);
+                  audioNotifier.seek(
+                    newPos < Duration.zero ? Duration.zero : newPos,
+                  );
+                },
               ),
               const SizedBox(width: AppTheme.spaceMD),
 
-              // Play / Pause
-              GestureDetector(
-                onTap: notifier.toggleAudio,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppTheme.primary,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppTheme.primary.withOpacity(0.3),
-                        blurRadius: 12,
-                        spreadRadius: 2,
+              // Play / Pause / Loading
+              audioUrl != null
+                  ? GestureDetector(
+                      onTap: () async {
+                        if (audioState.currentSource != audioUrl) {
+                          await audioNotifier.play(audioUrl);
+                        } else {
+                          await audioNotifier.togglePlayPause();
+                        }
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 52,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppTheme.primary,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppTheme.primary.withOpacity(0.3),
+                              blurRadius: 12,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: _buildPlayPauseIcon(audioState),
                       ),
-                    ],
-                  ),
-                  child: Icon(
-                    state.isAudioPlaying ? Icons.pause : Icons.play_arrow,
-                    color: Colors.white,
-                    size: 28,
-                  ),
-                ),
-              ),
+                    )
+                  : IconButton(
+                      icon: const Icon(Icons.play_arrow, color: Colors.grey),
+                      onPressed: null,
+                    ),
               const SizedBox(width: AppTheme.spaceMD),
 
               // Forward 10s
-              _AudioControlButton(
-                icon: Icons.forward_10,
-                onTap: () => notifier.seekAudio(
-                  (position + 10).clamp(0, duration),
-                ),
+              IconButton(
+                icon: const Icon(Icons.forward_10),
+                onPressed: () {
+                  final newPos = position + const Duration(seconds: 10);
+                  audioNotifier.seek(
+                    newPos > duration ? duration : newPos,
+                  );
+                },
               ),
             ],
           ),
@@ -247,37 +214,35 @@ class _AudioPlayerCard extends StatelessWidget {
       ),
     );
   }
-}
 
-class _AudioControlButton extends StatelessWidget {
-  const _AudioControlButton({
-    required this.icon,
-    required this.onTap,
-  });
-  final IconData icon;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: AppTheme.surfaceVariant,
-          border: Border.all(color: AppTheme.divider),
+  Widget _buildPlayPauseIcon(AudioState audioState) {
+    if (audioState.isLoading) {
+      return const SizedBox(
+        width: 24,
+        height: 24,
+        child: CircularProgressIndicator(
+          strokeWidth: 2.5,
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
         ),
-        child: Icon(icon, size: 20, color: AppTheme.textSecondary),
-      ),
+      );
+    }
+
+    return Icon(
+      audioState.isPlaying ? Icons.pause : Icons.play_arrow,
+      color: Colors.white,
+      size: 28,
     );
   }
 }
 
 class _WaveformVisualizer extends StatefulWidget {
-  const _WaveformVisualizer({required this.isPlaying});
+  const _WaveformVisualizer({
+    required this.isPlaying,
+    this.isLoading = false,
+  });
+
   final bool isPlaying;
+  final bool isLoading;
 
   @override
   State<_WaveformVisualizer> createState() => _WaveformVisualizerState();
@@ -342,6 +307,22 @@ class _WaveformVisualizerState extends State<_WaveformVisualizer>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.isLoading) {
+      return const SizedBox(
+        height: 40,
+        child: Center(
+          child: SizedBox(
+            width: 24,
+            height: 24,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation<Color>(AppTheme.primary),
+            ),
+          ),
+        ),
+      );
+    }
+
     return AnimatedBuilder(
       animation: _ctrl,
       builder: (context, _) {
@@ -362,8 +343,9 @@ class _WaveformVisualizerState extends State<_WaveformVisualizer>
                   width: 3,
                   height: 40 * animH,
                   decoration: BoxDecoration(
-                    color: AppTheme.primary
-                        .withOpacity(widget.isPlaying ? 0.7 : 0.3),
+                    color: AppTheme.primary.withOpacity(
+                      widget.isPlaying ? 0.7 : 0.3,
+                    ),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -372,231 +354,6 @@ class _WaveformVisualizerState extends State<_WaveformVisualizer>
           ),
         );
       },
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-
-class _SilentModeNotice extends StatelessWidget {
-  const _SilentModeNotice();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppTheme.spaceMD),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(AppTheme.radiusMD),
-        border: Border.all(color: AppTheme.divider),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.volume_off,
-            size: 18,
-            color: AppTheme.textSecondary,
-          ),
-          const SizedBox(width: AppTheme.spaceSM),
-          Expanded(
-            child: Text(
-              'Chế độ im lặng đang bật. Audio đã tắt.',
-              style: AppTheme.bodyMedium.copyWith(
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-
-class _DialogueNavigator extends StatelessWidget {
-  const _DialogueNavigator({
-    required this.dialogues,
-    required this.currentIndex,
-    required this.onPrevious,
-    required this.onNext,
-  });
-
-  final List<SampleDialogue> dialogues;
-  final int currentIndex;
-  final VoidCallback onPrevious;
-  final VoidCallback onNext;
-
-  @override
-  Widget build(BuildContext context) {
-    if (dialogues.length <= 1) return const SizedBox();
-
-    return Row(
-      children: [
-        Text(
-          'Đoạn hội thoại',
-          style: AppTheme.bodyMedium.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const Spacer(),
-        IconButton(
-          onPressed: currentIndex > 0 ? onPrevious : null,
-          icon: const Icon(Icons.chevron_left),
-          iconSize: 20,
-          color: AppTheme.textSecondary,
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppTheme.spaceSM,
-          ),
-          child: Text(
-            '${currentIndex + 1} / ${dialogues.length}',
-            style: AppTheme.labelSmall,
-          ),
-        ),
-        IconButton(
-          onPressed: currentIndex < dialogues.length - 1 ? onNext : null,
-          icon: const Icon(Icons.chevron_right),
-          iconSize: 20,
-          color: AppTheme.textSecondary,
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(),
-        ),
-      ],
-    );
-  }
-}
-
-// ─────────────────────────────────────────────
-
-class _TranscriptCard extends StatelessWidget {
-  const _TranscriptCard({required this.dialogue});
-  final SampleDialogue dialogue;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppTheme.spaceMD),
-      decoration: BoxDecoration(
-        color: AppTheme.cardBackground,
-        borderRadius: BorderRadius.circular(AppTheme.radiusMD),
-        boxShadow: AppTheme.cardShadow,
-        border: Border.all(color: AppTheme.divider),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Context label
-          Text(
-            dialogue.context,
-            style: AppTheme.monasteryNote,
-          ),
-          const Divider(height: AppTheme.spaceMD),
-
-          // Dialogue lines
-          ...dialogue.lines.asMap().entries.map((entry) {
-            final line = entry.value;
-            final isYogi =
-                line.startsWith('Yogi:') || line.startsWith('Retreatant:');
-            final isTeacher = line.startsWith('Teacher:');
-            final isHelper = line.startsWith('Helper:');
-
-            return Padding(
-              padding: const EdgeInsets.only(
-                bottom: AppTheme.spaceSM,
-              ),
-              child: _DialogueLine(
-                line: line,
-                isYogi: isYogi,
-                isTeacher: isTeacher,
-                isHelper: isHelper,
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-  }
-}
-
-class _DialogueLine extends StatelessWidget {
-  const _DialogueLine({
-    required this.line,
-    required this.isYogi,
-    required this.isTeacher,
-    required this.isHelper,
-  });
-
-  final String line;
-  final bool isYogi;
-  final bool isTeacher;
-  final bool isHelper;
-
-  @override
-  Widget build(BuildContext context) {
-    // Parse speaker and content
-    final colonIndex = line.indexOf(':');
-    final speaker = colonIndex > 0 ? line.substring(0, colonIndex) : '';
-    final content =
-        colonIndex > 0 ? line.substring(colonIndex + 1).trim() : line;
-
-    Color speakerColor;
-    Color bgColor;
-    CrossAxisAlignment alignment;
-
-    if (isTeacher) {
-      speakerColor = AppTheme.secondary;
-      bgColor = AppTheme.secondary.withOpacity(0.06);
-      alignment = CrossAxisAlignment.start;
-    } else if (isYogi) {
-      speakerColor = AppTheme.primary;
-      bgColor = AppTheme.primary.withOpacity(0.06);
-      alignment = CrossAxisAlignment.end;
-    } else {
-      speakerColor = AppTheme.accent;
-      bgColor = AppTheme.accent.withOpacity(0.06);
-      alignment = CrossAxisAlignment.start;
-    }
-
-    return Column(
-      crossAxisAlignment: alignment,
-      children: [
-        if (speaker.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: 2,
-              left: 2,
-              right: 2,
-            ),
-            child: Text(
-              speaker,
-              style: AppTheme.labelSmall.copyWith(
-                color: speakerColor,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        Container(
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.85,
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppTheme.spaceSM + 2,
-            vertical: AppTheme.spaceSM,
-          ),
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(AppTheme.radiusSM),
-          ),
-          child: Text(
-            content,
-            style: AppTheme.bodyLarge.copyWith(fontSize: 15),
-          ),
-        ),
-      ],
     );
   }
 }
