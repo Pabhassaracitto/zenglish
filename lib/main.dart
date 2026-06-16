@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zenglishapp/core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/providers/user_profile_provider.dart';
+import 'data/services/user_session_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 Future<void> main() async {
@@ -35,6 +36,9 @@ Future<void> main() async {
 
   // ── 3. Khởi tạo SharedPreferences ──
   final sharedPreferences = await SharedPreferences.getInstance();
+
+  // ── 3b. Khởi tạo UserSessionService ──
+  await UserSessionService.instance.init();
 
   // ── 4. Chạy app với ProviderScope ──
   runApp(
