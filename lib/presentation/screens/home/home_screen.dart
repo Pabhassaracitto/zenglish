@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zenglishapp/core/theme/app_theme.dart';
+import 'package:zenglish/core/theme/app_theme.dart';
+
 import '../../providers/home_provider.dart';
-import 'components/home_header.dart';
-import 'components/user_profile_card.dart';
-import 'components/smart_suggestion_card.dart';
 import 'components/ai_interview_quick_start.dart';
+import 'components/home_header.dart';
+import 'components/smart_suggestion_card.dart';
+import 'components/user_profile_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

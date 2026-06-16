@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zenglishapp/core/theme/app_theme.dart';
+import 'package:zenglish/core/theme/app_theme.dart';
 import '../../../providers/home_provider.dart';
 import '../../../../data/models/lesson.dart';
 

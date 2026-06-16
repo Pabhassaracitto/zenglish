@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../models/lesson.dart';
@@ -152,8 +153,7 @@ class LocalJsonContentRepository implements ILessonRepository {
       final lessonPaths = manifest.keys
           .where(
             (key) =>
-                key.startsWith('assets/data/lessons/') &&
-                key.endsWith('.json'),
+                key.startsWith('assets/data/lessons/') && key.endsWith('.json'),
           )
           .toList();
 

@@ -60,7 +60,6 @@ class RepositoryProvider {
   /// Reset về trạng thái ban đầu.
   /// Gọi sau mỗi test case để đảm bảo isolation.
   static void reset() {
-    _instance?.clearCache();
     _instance = null;
   }
 }

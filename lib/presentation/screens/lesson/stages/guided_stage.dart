@@ -1,7 +1,8 @@
-import 'package:zenglishapp/data/models/lesson_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zenglishapp/core/theme/app_theme.dart';
+import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/data/models/lesson_flow.dart';
+
 import '../../../providers/lesson_provider.dart';
 
 class GuidedStage extends ConsumerWidget {

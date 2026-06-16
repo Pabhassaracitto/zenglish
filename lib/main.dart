@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:zenglishapp/core/theme/app_theme.dart';
+import 'package:zenglish/core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/providers/user_profile_provider.dart';
 import 'data/services/user_session_service.dart';
@@ -90,10 +90,10 @@ class ZENGLISHApp extends ConsumerWidget {
       ],
       // -- Các delegate này cho phép app sử dụng các widget được quốc tế hóa sẵn của Flutter
       localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       // ── Builder: Wrap toàn bộ app ──
       builder: (context, child) {
         // Đảm bảo text scale không quá lớn (UX nhất quán)
@@ -106,7 +106,6 @@ class ZENGLISHApp extends ConsumerWidget {
           child: child ?? const SizedBox.shrink(),
         );
       },
-     
     );
   }
 }

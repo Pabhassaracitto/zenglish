@@ -1,3 +1,8 @@
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:zenglish/presentation/providers/audio_provider.dart';
+import 'package:zenglish/presentation/providers/lesson_provider.dart';
+
 class LessonScreen extends ConsumerStatefulWidget {
   const LessonScreen({
     super.key,

@@ -1,4 +1,4 @@
-name: zenglishapp
+name: zenglish
 description: English for Wisdom & Meditation - App học tiếng Anh cho hệ thống Theravāda
 publish_to: 'none'
 version: 1.0.0+1
@@ -33,6 +33,7 @@ dependencies:
   # ── Utils ──
   uuid: ^4.3.3
   cloud_firestore: ^6.5.0
+  just_audio: ^0.10.5
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +44,9 @@ dev_dependencies:
   freezed: ^2.4.6
   json_serializable: ^6.7.1
   riverpod_generator: ^2.3.9
+
+  # Testing
+  mocktail: ^1.0.0
 
   flutter_lints: ^3.0.0
 

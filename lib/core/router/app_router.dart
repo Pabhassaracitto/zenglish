@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:zenglishapp/core/theme/app_theme.dart';
+import 'package:zenglish/core/theme/app_theme.dart';
 import '../../presentation/screens/home/home_screen.dart';
 import '../providers/user_profile_provider.dart';
 import '../../data/models/user_profile.dart';

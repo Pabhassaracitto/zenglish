@@ -2,11 +2,11 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:zenglishapp/data/repositories/local_json_content_repository.dart';
-import 'package:zenglishapp/data/repositories/i_lesson_repository.dart';
+import 'package:zenglish/data/repositories/i_lesson_repository.dart';
+import 'package:zenglish/data/repositories/local_json_content_repository.dart';
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────
 
@@ -98,7 +98,9 @@ void main() {
     setUp(() {
       assetFiles = {
         'AssetManifest.json': json.encode({
-          'assets/data/lessons/A2_CH06_L01.json': ['assets/data/lessons/A2_CH06_L01.json'],
+          'assets/data/lessons/A2_CH06_L01.json': [
+            'assets/data/lessons/A2_CH06_L01.json'
+          ],
         }),
         'assets/data/lessons/A2_CH06_L01.json': _validLessonJson,
       };
@@ -121,8 +123,12 @@ void main() {
 
       test('bỏ qua file JSON sai format, load file khác thành công', () async {
         assetFiles['AssetManifest.json'] = json.encode({
-          'assets/data/lessons/A2_CH06_L01.json': ['assets/data/lessons/A2_CH06_L01.json'],
-          'assets/data/lessons/BROKEN.json': ['assets/data/lessons/BROKEN.json'],
+          'assets/data/lessons/A2_CH06_L01.json': [
+            'assets/data/lessons/A2_CH06_L01.json'
+          ],
+          'assets/data/lessons/BROKEN.json': [
+            'assets/data/lessons/BROKEN.json'
+          ],
         });
         assetFiles['assets/data/lessons/BROKEN.json'] = _invalidJson;
 
@@ -136,7 +142,9 @@ void main() {
 
       test('bỏ qua file có kiểu dữ liệu sai', () async {
         assetFiles['AssetManifest.json'] = json.encode({
-          'assets/data/lessons/WRONG_TYPE.json': ['assets/data/lessons/WRONG_TYPE.json'],
+          'assets/data/lessons/WRONG_TYPE.json': [
+            'assets/data/lessons/WRONG_TYPE.json'
+          ],
         });
         assetFiles['assets/data/lessons/WRONG_TYPE.json'] = _wrongTypeJson;
 

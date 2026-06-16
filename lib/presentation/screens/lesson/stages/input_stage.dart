@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:zenglishapp/core/theme/app_theme.dart';
-import 'package:zenglishapp/presentation/providers/audio_provider.dart';
-import 'package:zenglishapp/presentation/providers/lesson_provider.dart';
+import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/presentation/providers/audio_provider.dart';
+import 'package:zenglish/presentation/providers/lesson_provider.dart';
+import 'package:zenglish/presentation/screens/lesson/lesson_screen.dart';
 
 class _AudioPlayerCard extends ConsumerWidget {
   const _AudioPlayerCard({

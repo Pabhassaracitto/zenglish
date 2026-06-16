@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/lesson.dart';
-import '../models/user_profile.dart';
-import '../repositories/lesson_repository.dart';
+
 import '../../core/enums/cefr_level.dart';
 import '../../core/enums/meditation_stage.dart';
+import '../models/lesson.dart';
+import '../models/user_profile.dart';
+import '../repositories/i_lesson_repository.dart';
 
 /// FirebaseRepository — production implementation
 /// Swap MockDatabase → FirebaseRepository
 /// trong DI layer khi sẵn sàng
-class FirebaseRepository implements LessonRepository {
-
+class FirebaseRepository implements ILessonRepository {
   FirebaseRepository({FirebaseFirestore? firestore})
       : _db = firestore ?? FirebaseFirestore.instance;
 
@@ -23,7 +23,13 @@ class FirebaseRepository implements LessonRepository {
   CollectionReference<Map<String, dynamic>> get _users =>
       _db.collection('users');
 
-  // ─── Lessons ────────────────────────────────
+  // ─── ILessonRepository ──────────────────────
+
+  @override
+  Future<List<Lesson>> loadAllLessons() async {
+    final snap = await _lessons.orderBy('lesson_id').get();
+    return snap.docs.map((doc) => Lesson.fromJson(doc.data())).toList();
+  }
 
   @override
   Future<Lesson?> getLessonById(String lessonId) async {
@@ -33,14 +39,17 @@ class FirebaseRepository implements LessonRepository {
   }
 
   @override
-  Future<List<Lesson>> getLessonsByLevel(CEFRLevel level) async {
+  Future<List<Lesson>> getLessonsByLevel(String level) async {
     final snap = await _lessons
-        .where('level', isEqualTo: level.displayName)
+        .where('level', isEqualTo: level)
         .orderBy('lesson_id')
         .get();
-    return snap.docs
-        .map((doc) => Lesson.fromJson(doc.data()))
-        .toList();
+    return snap.docs.map((doc) => Lesson.fromJson(doc.data())).toList();
+  }
+
+  @override
+  Future<void> clearCache() async {
+    // FirebaseRepository không có cache, đây là no-op
   }
 
   @override
@@ -48,8 +57,7 @@ class FirebaseRepository implements LessonRepository {
     // Lấy tất cả lessons ở level phù hợp
     // Prerequisites check xảy ra ở client
     final snap = await _lessons
-        .where('level',
-            isEqualTo: user.languageLevel.displayName)
+        .where('level', isEqualTo: user.languageLevel.displayName)
         .orderBy('lesson_id')
         .get();
 
@@ -84,9 +92,7 @@ class FirebaseRepository implements LessonRepository {
     }
 
     final snap = await query.orderBy('lesson_id').get();
-    var results = snap.docs
-        .map((doc) => Lesson.fromJson(doc.data()))
-        .toList();
+    var results = snap.docs.map((doc) => Lesson.fromJson(doc.data())).toList();
 
     // Client-side keyword filter
     if (keyword != null && keyword.isNotEmpty) {
@@ -110,9 +116,9 @@ class FirebaseRepository implements LessonRepository {
   @override
   Future<void> upsertLesson(Lesson lesson) async {
     await _lessons.doc(lesson.lessonId).set(
-      lesson.toJson(),
-      SetOptions(merge: true),
-    );
+          lesson.toJson(),
+          SetOptions(merge: true),
+        );
   }
 
   @override
@@ -132,9 +138,9 @@ class FirebaseRepository implements LessonRepository {
   @override
   Future<void> saveUserProfile(UserProfile profile) async {
     await _users.doc(profile.userId).set(
-      profile.toJson(),
-      SetOptions(merge: true),
-    );
+          profile.toJson(),
+          SetOptions(merge: true),
+        );
   }
 
   @override
@@ -166,12 +172,9 @@ class FirebaseRepository implements LessonRepository {
   Future<List<Lesson>> getLessonsNeedingAudio() async {
     // Không thể query nested field trong Firestore trực tiếp
     // → Thêm top-level flag khi upsert lesson
-    final snap = await _lessons
-        .where('has_audio_needed_vocab', isEqualTo: true)
-        .get();
-    return snap.docs
-        .map((doc) => Lesson.fromJson(doc.data()))
-        .toList();
+    final snap =
+        await _lessons.where('has_audio_needed_vocab', isEqualTo: true).get();
+    return snap.docs.map((doc) => Lesson.fromJson(doc.data())).toList();
   }
 
   @override
@@ -222,8 +225,6 @@ class FirebaseRepository implements LessonRepository {
   /// Export tất cả lesson ra List (dùng khi backup)
   Future<List<Lesson>> exportAllLessons() async {
     final snap = await _lessons.orderBy('lesson_id').get();
-    return snap.docs
-        .map((doc) => Lesson.fromJson(doc.data()))
-        .toList();
+    return snap.docs.map((doc) => Lesson.fromJson(doc.data())).toList();
   }
 }
