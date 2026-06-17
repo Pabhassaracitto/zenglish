@@ -1,0 +1,338 @@
+{
+    "lesson_id": "A2_CH07_L01",
+    "title_en": "Five Precepts & Eight Precepts — Reporting Your Practice",
+    "title_vi": "Năm Giới & Tám Giới — Trình Pháp Về Việc Giữ Giới",
+    "level": "A2",
+    "meditation_stage_min": "sīla_preliminary",
+    "situation_types": [
+        "A_preparation",
+        "B_first_appearance",
+        "C_stable_tracking",
+        "D_disappeared_changed",
+        "E_past_future"
+    ],
+    "temporal_contexts": [
+        "future",
+        "present",
+        "past"
+    ],
+    "prerequisites": [
+        "A1_CH01_L01",
+        "A1_CH02_L01",
+        "A1_CH03_L01",
+        "A1_CH04_L01",
+        "A1_CH05_L01"
+    ],
+    "monastery_note": "Trong thiền viện Theravāda quốc tế, cư sĩ thường giữ Năm Giới (pañca-sīla) hoặc Tám Giới (aṭṭha-sīla) trong khóa thiền. Tám Giới thường bao gồm: không ăn sau giờ ngọ (vikāla-bhojana). Ở nhiều thiền viện, nên hỏi 'What time is dana?' thay vì nói breakfast/lunch — nhiều nơi chỉ có 2 bữa/ngày.",
+    "authenticity_reminder": "Người dùng có thể đang ở nhiều giai đoạn: chuẩn bị giữ giới lần đầu, đang giữ giới ổn định, gặp khó khăn, hoặc kể lại kinh nghiệm. App không yêu cầu kinh nghiệm thật. AI Interview phân biệt rõ: kinh nghiệm thật / luyện tập giả định.",
+    "vocabulary": [
+        {
+            "stt": 1,
+            "en": "Five Precepts",
+            "vi": "Năm Giới",
+            "pali": "pañca-sīla",
+            "pali_romanized": "pan-cha sii-la",
+            "example_en": "I am keeping the Five Precepts at home.",
+            "example_context": "Giới thiệu mình đang giữ Năm Giới.",
+            "priority": "High",
+            "note": "[NEEDS AUDIO] — âm 'sīla' dài, không phải ngắn.",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 2,
+            "en": "Eight Precepts",
+            "vi": "Tám Giới",
+            "pali": "aṭṭha-sīla",
+            "pali_romanized": "at-tha sii-la",
+            "example_en": "I would like to keep the Eight Precepts during the retreat.",
+            "example_context": "Đăng ký giữ Tám Giới trong khóa thiền.",
+            "priority": "High",
+            "note": "[NEEDS AUDIO] — 'aṭṭha' có âm ṭṭh kép.",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 3,
+            "en": "undertake the precepts",
+            "vi": "thọ trì giới",
+            "pali": "sīlaṃ samādiyāmi",
+            "pali_romanized": "sii-lam sa-maa-di-yaa-mi",
+            "example_en": "I undertake the Eight Precepts for this retreat.",
+            "example_context": "Ngôn ngữ thường gặp trong lễ thọ giới.",
+            "priority": "High",
+            "note": "[NEEDS AUDIO] — 'samādiyāmi' là câu nguyện chính thức khi thọ giới.",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 4,
+            "en": "abstain from killing",
+            "vi": "từ bỏ sát sinh",
+            "pali": "pāṇātipātā veramaṇī",
+            "pali_romanized": "paa-naa-ti-paa-taa ve-ra-ma-nii",
+            "example_en": "The first precept is to abstain from killing.",
+            "example_context": "Giải thích Năm Giới với người mới.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 5,
+            "en": "abstain from stealing",
+            "vi": "từ bỏ trộm cắp",
+            "pali": "adinnādānā veramaṇī",
+            "pali_romanized": "a-din-naa-daa-naa ve-ra-ma-nii",
+            "example_en": "The second precept is to abstain from taking what is not given.",
+            "example_context": "Giải thích giới thứ hai.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 6,
+            "en": "abstain from sexual misconduct",
+            "vi": "từ bỏ tà dâm",
+            "pali": "kāmesu micchācārā veramaṇī",
+            "pali_romanized": "kaa-me-su mic-chaa-chaa-raa ve-ra-ma-nii",
+            "example_en": "The third precept is to abstain from sexual misconduct.",
+            "example_context": "Dùng trong tình huống giải thích giới với người mới.",
+            "priority": "Medium",
+            "note": "Trong thiền viện, cư sĩ giữ Tám Giới thì abstain from sexual activity hoàn toàn.",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 7,
+            "en": "abstain from false speech",
+            "vi": "từ bỏ nói dối",
+            "pali": "musāvādā veramaṇī",
+            "pali_romanized": "mu-saa-vaa-daa ve-ra-ma-nii",
+            "example_en": "The fourth precept is to abstain from false speech.",
+            "example_context": "Giới thứ tư trong Năm Giới.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 8,
+            "en": "abstain from intoxicants",
+            "vi": "từ bỏ chất say",
+            "pali": "surā-meraya-majja-pamādaṭṭhānā veramaṇī",
+            "pali_romanized": "su-raa me-ra-ya maj-ja pa-maa-da-tthaa-naa ve-ra-ma-nii",
+            "example_en": "The fifth precept is to abstain from alcohol and intoxicants.",
+            "example_context": "Giới thứ năm.",
+            "priority": "High",
+            "note": "[NEEDS AUDIO]",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 9,
+            "en": "afternoon meal / eating after noon",
+            "vi": "ăn sau giờ ngọ",
+            "pali": "vikāla-bhojana",
+            "pali_romanized": "vi-kaa-la bho-ja-na",
+            "example_en": "I am trying not to eat after noon.",
+            "example_context": "Tình huống thường gặp khi giữ Tám Giới.",
+            "priority": "High",
+            "note": "[NEEDS AUDIO] — 'vikāla' = sau giờ ngọ.",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 10,
+            "en": "break a precept",
+            "vi": "phạm giới",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "Bhante, I think I may have broken a precept by mistake. What should I do?",
+            "example_context": "Dùng khi cần báo cáo vi phạm giới không cố ý.",
+            "priority": "High",
+            "note": "Nghe lịch sự và đúng hơn 'I broke a precept' — phù hợp với người mới.",
+            "is_high_priority": true,
+            "needs_audio": false
+        }
+    ],
+    "lesson_flow": {
+        "input": {
+            "title": "Nghe và Nhận Biết",
+            "description": "Người học nghe các đoạn hội thoại thật về việc giữ giới, thọ giới, và xử lý tình huống phạm giới.",
+            "sample_dialogues": [
+                {
+                    "context": "Ngày đầu khóa thiền — hỏi về giới",
+                    "dialogue": [
+                        "Volunteer: Are you keeping the Eight Precepts during the retreat?",
+                        "Retreatant: Yes, I am.",
+                        "Volunteer: Have you kept them before?",
+                        "Retreatant: Yes, a few times. But this is my first time in a monastery."
+                    ]
+                },
+                {
+                    "context": "Báo cáo vi phạm giới",
+                    "dialogue": [
+                        "Retreatant: Bhante, I think I may have broken a precept by mistake.",
+                        "Teacher: What happened?",
+                        "Retreatant: I ate after noon yesterday. I was not sure about the rule.",
+                        "Teacher: No problem. Today, try again. Who should you ask if you are not sure?",
+                        "Retreatant: I should ask the volunteer or you, Bhante."
+                    ]
+                }
+            ]
+        },
+        "pattern": {
+            "title": "Cấu Trúc Câu Cốt Lõi",
+            "description": "5 mẫu câu thiết yếu cho việc nói về giới.",
+            "core_patterns": [
+                {
+                    "pattern_id": "P1",
+                    "function": "Nói mình đang giữ giới",
+                    "template": "I am keeping [the Five / Eight] Precepts.",
+                    "examples": [
+                        "I am keeping the Eight Precepts.",
+                        "I am keeping the Five Precepts at home."
+                    ]
+                },
+                {
+                    "pattern_id": "P2",
+                    "function": "Nói kinh nghiệm quá khứ",
+                    "template": "I have kept [precepts] before.",
+                    "examples": [
+                        "I have kept the Eight Precepts before.",
+                        "I have never kept the Eight Precepts before."
+                    ]
+                },
+                {
+                    "pattern_id": "P3",
+                    "function": "Hỏi về quy định",
+                    "template": "May I ask about [rule / precept]?",
+                    "examples": [
+                        "May I ask about the meal schedule?",
+                        "May I ask about the precepts?"
+                    ]
+                },
+                {
+                    "pattern_id": "P4",
+                    "function": "Báo cáo sự cố + hỏi hướng dẫn",
+                    "template": "I think I may have broken a precept. Who should I speak to about this?",
+                    "examples": [
+                        "I think I may have broken a precept. Who should I speak to about this?",
+                        "I made a mistake and would like guidance."
+                    ]
+                },
+                {
+                    "pattern_id": "P5",
+                    "function": "Xin hướng dẫn",
+                    "template": "What should I do in this situation?",
+                    "examples": [
+                        "What should I do in this situation?",
+                        "Could you please explain the rule?"
+                    ]
+                }
+            ]
+        },
+        "guided": {
+            "title": "Luyện Tập Có Hỗ Trợ",
+            "description": "AI Interview mô phỏng tình huống giữ giới.",
+            "interview_steps": [
+                {
+                    "step": 1,
+                    "ai_prompt": "Are you describing a real experience or practicing English?",
+                    "purpose": "Authenticity check."
+                },
+                {
+                    "step": 2,
+                    "ai_prompt": "Are you keeping the Five Precepts or the Eight Precepts?",
+                    "expected_answer_type": "Simple identification."
+                },
+                {
+                    "step": 3,
+                    "ai_prompt": "Have you kept them before?",
+                    "expected_answer_type": "Past experience."
+                },
+                {
+                    "step": 4,
+                    "ai_prompt": "Do you have any questions about the rules?",
+                    "expected_answer_type": "Question formation."
+                },
+                {
+                    "step": 5,
+                    "ai_prompt": "Imagine you are unsure about a situation. How would you ask for guidance?",
+                    "expected_answer_type": "Use Pattern P4 or P5."
+                }
+            ]
+        },
+        "output": {
+            "title": "Giao Tiếp Độc Lập",
+            "description": "Người dùng tự tạo một đoạn nói về việc giữ giới trong 5-7 câu.",
+            "prompt_for_user": "Introduce your experience with the Five or Eight Precepts in 5–7 sentences. Include whether you are currently keeping them, past experience, and one question you may have.",
+            "sample_output": "I am keeping the Eight Precepts during this retreat. I have kept them once before. The most difficult part for me is not eating after noon. I would like to follow the rules carefully. Sometimes I am not sure about small details. I am not sure about one situation. May I ask, Bhante?",
+            "evaluation_criteria": [
+                "Nói được đang giữ giới nào",
+                "Dùng được thì quá khứ hoặc hiện tại",
+                "Biết cách hỏi khi không chắc",
+                "Không tự suy diễn giới luật"
+            ]
+        }
+    },
+    "situation_variants": {
+        "A_preparation": {
+            "situation_type": "A",
+            "temporal_context": "future",
+            "description": "Chuẩn bị tham gia khóa thiền và muốn tìm hiểu về Năm Giới hoặc Tám Giới.",
+            "sample_sentences": [
+                "I plan to keep the Eight Precepts during the retreat.",
+                "This will be my first time keeping the Eight Precepts.",
+                "Could you explain the precepts to me?"
+            ]
+        },
+        "B_first_appearance": {
+            "situation_type": "B",
+            "temporal_context": "present",
+            "description": "Ngày đầu tiên bắt đầu thọ trì giới trong khóa thiền.",
+            "sample_sentences": [
+                "Today is my first day keeping the Eight Precepts.",
+                "I would like to follow the rules carefully.",
+                "Can you explain the meal times to me?"
+            ]
+        },
+        "C_stable_tracking": {
+            "situation_type": "C",
+            "temporal_context": "present",
+            "description": "Đã giữ giới vài ngày, bắt đầu hiểu rõ quy tắc và tình huống.",
+            "sample_sentences": [
+                "I have been keeping the Eight Precepts for three days now.",
+                "It is becoming easier to understand the rules.",
+                "I have not had any problem so far."
+            ]
+        },
+        "D_disappeared_changed": {
+            "situation_type": "D",
+            "temporal_context": "recent past",
+            "description": "Gặp khó khăn hoặc phạm giới, cần báo cáo và tìm hướng dẫn.",
+            "sample_sentences": [
+                "Bhante, I think I made a mistake yesterday.",
+                "I ate after noon. I was not sure about the time.",
+                "What should I do now?"
+            ]
+        },
+        "E_past_future": {
+            "situation_type": "E",
+            "temporal_context": "past / future",
+            "description": "Sau khóa thiền, kể lại kinh nghiệm. Hoặc hỏi về việc giữ giới ở nhà.",
+            "sample_sentences_past": [
+                "During the retreat, I kept the Eight Precepts for the whole week.",
+                "It was not as difficult as I thought.",
+                "I learned a lot about the rules."
+            ],
+            "sample_sentences_future": [
+                "Can I keep the Eight Precepts at home?",
+                "What time should I stop eating?",
+                "Is it the same as at the monastery?"
+            ]
+        }
+    }
+}

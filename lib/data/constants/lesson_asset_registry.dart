@@ -12,9 +12,17 @@ abstract final class LessonAssetRegistry {
   static const String _basePath = 'assets/data/lessons';
 
   static const List<String> allPaths = [
-    // ── Chapter 06 ─────────────────────────────────────────────
+    // ── Chapter 05 (A1) ────────────────────────────────────────
+    '$_basePath/A1_CH05_L01.json',
+    
+    // ── Chapter 06 (A2) ────────────────────────────────────────
     '$_basePath/A2_CH06_L01.json',
-    // Thêm bài mới tại đây
+    
+    // ── Chapter 07 (A2) ────────────────────────────────────────
+    '$_basePath/A2_CH07_L01.json',
+    
+    // ── Chapter 12 (B1) ────────────────────────────────────────
+    '$_basePath/B1_CH12_L01.json',
   ];
 
   /// Validate tất cả paths đều follow convention

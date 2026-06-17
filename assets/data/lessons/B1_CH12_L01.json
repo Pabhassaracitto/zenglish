@@ -1,0 +1,341 @@
+{
+    "lesson_id": "B1_CH12_L01",
+    "title_en": "The 5-Part Meditation Interview Report (Core)",
+    "title_vi": "Trình Pháp 5 Phần (Cốt Lõi)",
+    "level": "B1",
+    "meditation_stage_min": "samatha_preliminary",
+    "situation_types": [
+        "A_preparation",
+        "B_first_appearance",
+        "C_stable_tracking",
+        "D_disappeared_changed",
+        "E_past_future"
+    ],
+    "temporal_contexts": [
+        "future",
+        "present",
+        "past"
+    ],
+    "prerequisites": [
+        "A1_CH01_L01",
+        "A1_CH02_L01",
+        "A1_CH03_L01",
+        "A1_CH04_L01",
+        "A1_CH05_L01",
+        "A2_CH06_L01",
+        "A2_CH07_L01"
+    ],
+    "monastery_note": "Trong thiền viện quốc tế, 'interview' thường có nghĩa là buổi trình pháp ngắn với thiền sư (không phải phỏng vấn xin việc). Thời lượng có thể rất ngắn (2–10 phút). Thiền sư có thể ngắt lời để hỏi thẳng vào điểm chính — điều đó là bình thường. Một cấu trúc 5 phần giúp người tu học nói rõ, nhanh, và đúng trọng tâm: (1) TÓM TẮT THỜI GIAN, (2) ĐỀ MỤC / CÁCH THỰC HÀNH, (3) CÁI MÌNH BIẾT (KNOWING), (4) KHÓ KHĂN, (5) CÂU HỎI / XIN CHỈ DẠY.",
+    "authenticity_reminder": "Bài này dùng được cho: (1) kinh nghiệm thật, (2) chuẩn bị ngôn ngữ trước khi đi retreat, (3) luyện tình huống giả định. Người dùng không phải tự nhận các mức định/chứng. Nếu không chắc, dùng ngôn ngữ an toàn: 'I'm not sure' / 'I think' / 'Please correct me, Bhante.'",
+    "vocabulary": [
+        {
+            "stt": 1,
+            "en": "meditation subject / meditation work",
+            "vi": "đề mục / công việc thiền",
+            "pali": "kammaṭṭhāna",
+            "pali_romanized": "kam-mat-thaa-na",
+            "example_en": "Bhante, my current kammaṭṭhāna is ānāpāna.",
+            "example_context": "Nêu đề mục ngay đầu buổi trình pháp.",
+            "priority": "High",
+            "note": "[NEEDS AUDIO] — người Việt hay đọc thiếu cụm ṭṭh.",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 2,
+            "en": "meditation object",
+            "vi": "đối tượng thiền / cảnh",
+            "pali": "ārammaṇa",
+            "pali_romanized": "aa-ram-ma-na",
+            "example_en": "Bhante, I try to keep the ārammaṇa at the touching point.",
+            "example_context": "Khi thiền sư hỏi: 'What is your object?'",
+            "priority": "High",
+            "note": "[NEEDS AUDIO] — âm dài ā- ở đầu.",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 3,
+            "en": "instruction / guidance",
+            "vi": "lời hướng dẫn / chỉ dạy",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "Bhante, in my last interview, you told me to stay at the touching point and not control the breath.",
+            "example_context": "Phần (1) và (5): nhắc lại instruction gần nhất để xác nhận mình làm đúng.",
+            "priority": "High",
+            "note": "Dùng English thực tế. 'you told me to…' / 'your instruction was…' / 'you asked me to…'",
+            "is_high_priority": true,
+            "needs_audio": false
+        },
+        {
+            "stt": 4,
+            "en": "mindfulness",
+            "vi": "niệm / chánh niệm",
+            "pali": "sati",
+            "pali_romanized": "sa-ti",
+            "example_en": "Bhante, when I lose sati, my mind goes into thinking quickly.",
+            "example_context": "Mô tả cơ chế 'mất niệm → phóng tâm'.",
+            "priority": "High",
+            "note": "",
+            "is_high_priority": true,
+            "needs_audio": false
+        },
+        {
+            "stt": 5,
+            "en": "concentration",
+            "vi": "định",
+            "pali": "samādhi",
+            "pali_romanized": "sa-maa-di",
+            "example_en": "Bhante, my samādhi is more stable than last week, but it still drops sometimes.",
+            "example_context": "Phần (3): mô tả độ ổn định, không cần khẳng định tầng định.",
+            "priority": "High",
+            "note": "[NEEDS AUDIO] — người Việt hay nói 'sa-ma-di' (âm ngắn).",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 6,
+            "en": "access concentration",
+            "vi": "cận định",
+            "pali": "upacāra-samādhi",
+            "pali_romanized": "u-pa-chaa-ra sa-maa-di",
+            "example_en": "Bhante, I'm not sure, but I think it might be upacāra-samādhi. Please correct me.",
+            "example_context": "Ngôn ngữ an toàn khi muốn hỏi về mức định mà không tự khẳng định.",
+            "priority": "Medium",
+            "note": "[NEEDS AUDIO] — nên dạy kèm câu 'I'm not sure' để tránh over-claiming.",
+            "is_high_priority": false,
+            "needs_audio": true
+        },
+        {
+            "stt": 7,
+            "en": "hindrances",
+            "vi": "ngũ triền cái",
+            "pali": "nīvaraṇa",
+            "pali_romanized": "nii-va-ra-na",
+            "example_en": "Bhante, my main difficulty is nīvaraṇa, especially restlessness and doubt.",
+            "example_context": "Phần (4): gom nhóm vấn đề để nói gọn.",
+            "priority": "High",
+            "note": "[NEEDS AUDIO] — âm dài 'nī-'.",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 8,
+            "en": "sloth and torpor",
+            "vi": "hôn trầm và trụy",
+            "pali": "thina-middha",
+            "pali_romanized": "thi-na mid-dha",
+            "example_en": "Bhante, I have a lot of sloth and torpor in the morning.",
+            "example_context": "Mô tả triền cái thứ hai.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 9,
+            "en": "restlessness and worry",
+            "vi": "phóng dật và lo lắng",
+            "pali": "uddhacca-kukkucca",
+            "pali_romanized": "ud-dhat-cha kuk-kut-cha",
+            "example_en": "Bhante, I have restlessness, especially in the evening.",
+            "example_context": "Mô tả triền cái thứ ba.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 10,
+            "en": "doubt",
+            "vi": "hoài nghi / nghi",
+            "pali": "vicikicchā",
+            "pali_romanized": "vi-chi-kit-cha",
+            "example_en": "Bhante, I have doubt about whether I am doing it correctly.",
+            "example_context": "Mô tả triền cái thứ năm.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        }
+    ],
+    "lesson_flow": {
+        "input": {
+            "title": "Nghe & Nhận Biết",
+            "description": "Nghe đoạn trình pháp 5 phần hoàn chỉnh từ một yogī experienced với thiền sư Pa-Auk.",
+            "sample_dialogues": [
+                {
+                    "context": "5-Part Interview Structure",
+                    "dialogue": [
+                        "Yogi: Bhante, may I report?",
+                        "Teacher: Yes.",
+                        "Yogi: (Part 1) Since last interview, I have sat for about 15 hours. (Part 2) My kammaṭṭhāna is still ānāpāna. I keep the object at the touching point, below the nostrils. (Part 3) I know the in-breath and out-breath. The mind is more stable now. (Part 4) But I still have restlessness sometimes. (Part 5) Bhante, when should I move to the next stage?",
+                        "Teacher: Good. Keep noting the whole breath from beginning to end. Go back and sit."
+                    ]
+                }
+            ]
+        },
+        "pattern": {
+            "title": "Cấu Trúc 5 Phần",
+            "description": "5 phần tạo nên một buổi trình pháp đầy đủ.",
+            "core_patterns": [
+                {
+                    "pattern_id": "Part1",
+                    "function": "Tóm tắt thời gian",
+                    "template": "Since last interview, I have sat for ___ hours/days.",
+                    "examples": [
+                        "Since last interview, I have sat for about 10 hours.",
+                        "Since my last report, I have been practicing for 3 days."
+                    ]
+                },
+                {
+                    "pattern_id": "Part2",
+                    "function": "Nêu đề mục và cách thực hành",
+                    "template": "My kammaṭṭhāna is ___. I keep my attention at ___.",
+                    "examples": [
+                        "My kammaṭṭhāna is ānāpāna. I keep my attention at the touching point.",
+                        "My meditation object is the breath at the nostrils."
+                    ]
+                },
+                {
+                    "pattern_id": "Part3",
+                    "function": "Mô tả cái mình biết",
+                    "template": "I know ___. The ___ is ___.",
+                    "examples": [
+                        "I know the in-breath and out-breath. The mind is more stable.",
+                        "I know the whole breath. The samādhi is better than before."
+                    ]
+                },
+                {
+                    "pattern_id": "Part4",
+                    "function": "Nêu khó khăn",
+                    "template": "My main difficulty is ___.",
+                    "examples": [
+                        "My main difficulty is nīvaraṇa, especially restlessness.",
+                        "I have sloth and torpor in the morning."
+                    ]
+                },
+                {
+                    "pattern_id": "Part5",
+                    "function": "Hỏi hoặc xác nhận",
+                    "template": "Bhante, should I ___? / Please tell me ___.",
+                    "examples": [
+                        "Bhante, when should I move to the next stage?",
+                        "Bhante, is it correct to note like this?"
+                    ]
+                }
+            ]
+        },
+        "guided": {
+            "title": "Luyện Tập Có Hỗ Trợ",
+            "description": "AI Interview mô phỏng thiền sư, hỏi từng phần.",
+            "interview_steps": [
+                {
+                    "step": 1,
+                    "ai_prompt": "How much have you sat since we last met?",
+                    "purpose": "Hỏi Part 1 — thời gian."
+                },
+                {
+                    "step": 2,
+                    "ai_prompt": "What is your meditation subject, and where do you keep your attention?",
+                    "purpose": "Hỏi Part 2 — đề mục và vị trí."
+                },
+                {
+                    "step": 3,
+                    "ai_prompt": "What do you know about your object now? Is it clear?",
+                    "purpose": "Hỏi Part 3 — cái mình biết."
+                },
+                {
+                    "step": 4,
+                    "ai_prompt": "Do you have any hindrances or difficulties?",
+                    "purpose": "Hỏi Part 4 — khó khăn."
+                },
+                {
+                    "step": 5,
+                    "ai_prompt": "What question do you have for me?",
+                    "purpose": "Hỏi Part 5 — câu hỏi hoặc xác nhận."
+                }
+            ]
+        },
+        "output": {
+            "title": "Trình Pháp 5 Phần Độc Lập",
+            "description": "Người dùng tự tạo một buổi trình pháp 5 phần hoàn chỉnh.",
+            "prompt_for_user": "Create a complete 5-part interview report: (1) Time since last report, (2) Your meditation subject and attention point, (3) What you know about your object, (4) Your main difficulty, (5) One question or request for guidance.",
+            "sample_output": "Bhante, since last interview, I have sat for about 12 hours. My kammaṭṭhāna is ānāpāna. I keep my attention at the touching point, below the nostrils. I know the in-breath and out-breath clearly. The mind is more stable than last week. My main difficulty is that the breath sometimes becomes very subtle and I lose it. Bhante, should I try harder to find the breath, or should I just wait?",
+            "evaluation_criteria": [
+                "Có tóm tắt thời gian (Part 1)",
+                "Có nêu đề mục đúng (Part 2)",
+                "Có mô tả cái mình biết (Part 3)",
+                "Có nêu khó khăn thật (Part 4)",
+                "Có câu hỏi hoặc xin chỉ dạy (Part 5)"
+            ]
+        }
+    },
+    "situation_variants": {
+        "A_preparation": {
+            "situation_type": "A",
+            "temporal_context": "future",
+            "description": "Chuẩn bị cấu trúc 5 phần trước khi đi retreat hoặc lần trình pháp đầu tiên.",
+            "sample_sentences": [
+                "I will structure my report in 5 parts.",
+                "I will tell the teacher how much I have sat.",
+                "I will describe my meditation object clearly.",
+                "I will ask one clear question."
+            ]
+        },
+        "B_first_appearance": {
+            "situation_type": "B",
+            "temporal_context": "present",
+            "description": "Lần đầu tiên sử dụng cấu trúc 5 phần trong buổi trình pháp thực tế.",
+            "sample_sentences": [
+                "Bhante, may I report using the 5-part structure?",
+                "Part 1: I have sat for 8 hours since yesterday.",
+                "Part 2: My kammaṭṭhāna is ānāpāna, at the touching point.",
+                "Part 3: I know the breath is rough and short.",
+                "Part 4: My mind wanders a lot.",
+                "Part 5: Please give me guidance."
+            ]
+        },
+        "C_stable_tracking": {
+            "situation_type": "C",
+            "temporal_context": "present",
+            "description": "Đã thành thạo cấu trúc 5 phần, báo cáo một cách tự nhiên và rõ ràng.",
+            "sample_sentences": [
+                "Bhante, since last interview, about 15 hours.",
+                "Kammaṭṭhāna still ānāpāna. Attention at the touching point.",
+                "I know the whole breath now. From the beginning to the end.",
+                "Samādhi is more stable. Less wandering.",
+                "But sometimes restlessness. Especially in the afternoon.",
+                "Bhante, should I move to the next step?"
+            ]
+        },
+        "D_disappeared_changed": {
+            "situation_type": "D",
+            "temporal_context": "present",
+            "description": "Trình pháp về sự thay đổi hoặc mất mát tiến trình.",
+            "sample_sentences": [
+                "Bhante, I have sat for 10 hours since yesterday.",
+                "Kammaṭṭhāna is ānāpāna, but the object is not clear today.",
+                "The breath has become very subtle. I can barely feel it.",
+                "My samādhi was good yesterday, but today the mind is restless again.",
+                "I have a lot of doubt today. What happened, Bhante?"
+            ]
+        },
+        "E_past_future": {
+            "situation_type": "E",
+            "temporal_context": "past / future",
+            "description": "Kể lại trình pháp từ khóa thiền trước hoặc hỏi về tiến trình tương lai.",
+            "sample_sentences_past": [
+                "In my last retreat, I used the 5-part structure every day.",
+                "I reported my progress carefully to the teacher.",
+                "After two weeks, the nimitta appeared.",
+                "The teacher asked me to keep noting the whole breath."
+            ],
+            "sample_sentences_future": [
+                "Bhante, after I can note the whole breath clearly, what is the next step?",
+                "How long should I practice ānāpāna before moving to the next kammaṭṭhāna?",
+                "Is it normal to have doubt in the middle of practice?"
+            ]
+        }
+    }
+}

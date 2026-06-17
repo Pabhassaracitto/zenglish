@@ -1,0 +1,395 @@
+{
+    "lesson_id": "A1_CH05_L01",
+    "title_en": "Health and Personal Needs at the Monastery",
+    "title_vi": "Sức Khỏe & Nhu Cầu Cá Nhân Tại Thiền Viện",
+    "level": "A1",
+    "meditation_stage_min": "pre_retreat",
+    "situation_types": [
+        "A_preparation",
+        "B_first_appearance",
+        "C_stable_tracking",
+        "D_disappeared_changed",
+        "E_past_future"
+    ],
+    "temporal_contexts": [
+        "future",
+        "present",
+        "past"
+    ],
+    "prerequisites": [
+        "A1_CH01_L01",
+        "A1_CH02_L01",
+        "A1_CH03_L01",
+        "A1_CH04_L01"
+    ],
+    "monastery_note": "Sức khỏe tại thiền viện là chủ đề THỰC TẾ và THƯỜNG GẶP. Thiền dài giờ ảnh hưởng thể chất: đau lưng, đau đầu gối, mất ngủ, tiêu hóa thay đổi, mệt mỏi, dị ứng. Một số triệu chứng như tê bì, áp lực ở đầu, nóng trong người — có thể là phản ứng thiền (bhāvanā-mayā pīti) chứ không phải bệnh lý. App KHÔNG phán đoán — chỉ giúp người dùng MÔ TẢ để thiền sư phán đoán.",
+    "authenticity_reminder": "Đây là bài học có tính KHẨN CẤP thực tế cao nhất trong A1. AI cần nhận diện: (1) Người dùng đang mô tả triệu chứng THẬT → Giúp diễn đạt chính xác ngay (2) Người dùng đang luyện tập → Hỗ trợ luyện tập bình thường.",
+    "vocabulary": [
+        {
+            "stt": 1,
+            "en": "pain / ache",
+            "vi": "đau",
+            "pali": "dukkha-vedanā",
+            "pali_romanized": "duk-kha ve-da-naa",
+            "example_en": "I have pain in my lower back.",
+            "example_context": "Mô tả đau thể chất cụ thể. 'Pain' = đau rõ rệt. 'Ache' = đau âm ỉ.",
+            "priority": "High",
+            "note": "[NEEDS AUDIO]",
+            "is_high_priority": true,
+            "needs_audio": true
+        },
+        {
+            "stt": 2,
+            "en": "knee",
+            "vi": "đầu gối",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "My knee hurts during sitting meditation.",
+            "example_context": "Đau đầu gối là vấn đề phổ biến nhất của thiền sinh mới.",
+            "priority": "High",
+            "note": "",
+            "is_high_priority": true,
+            "needs_audio": false
+        },
+        {
+            "stt": 3,
+            "en": "back / lower back",
+            "vi": "lưng / lưng dưới",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "I have lower back pain after long sittings.",
+            "example_context": "Đau lưng dưới — rất phổ biến khi ngồi nhiều giờ.",
+            "priority": "High",
+            "note": "",
+            "is_high_priority": true,
+            "needs_audio": false
+        },
+        {
+            "stt": 4,
+            "en": "headache",
+            "vi": "đau đầu",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "I have had a headache since this morning.",
+            "example_context": "Đau đầu có thể do mất nước, mất ngủ, hoặc phản ứng thiền.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 5,
+            "en": "fever",
+            "vi": "sốt",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "I think I have a fever. My body feels very hot.",
+            "example_context": "Sốt tại thiền viện vùng nhiệt đới — cần báo ngay.",
+            "priority": "High",
+            "note": "",
+            "is_high_priority": true,
+            "needs_audio": false
+        },
+        {
+            "stt": 6,
+            "en": "diarrhea / stomach problem",
+            "vi": "tiêu chảy / vấn đề dạ dày",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "I have a stomach problem. I cannot sit for a long time.",
+            "example_context": "Vấn đề tiêu hóa ảnh hưởng trực tiếp đến khả năng ngồi thiền.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 7,
+            "en": "insomnia / cannot sleep",
+            "vi": "mất ngủ / không ngủ được",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "I cannot sleep well. I wake up many times at night.",
+            "example_context": "Mất ngủ ảnh hưởng nặng đến thiền ban ngày.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 8,
+            "en": "dizziness / feel dizzy",
+            "vi": "chóng mặt",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "I feel dizzy when I stand up after sitting.",
+            "example_context": "Hay xảy ra khi đứng dậy sau khi ngồi thiền dài.",
+            "priority": "Medium",
+            "note": "",
+            "is_high_priority": false,
+            "needs_audio": false
+        },
+        {
+            "stt": 9,
+            "en": "medicine / medication",
+            "vi": "thuốc",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "I need to take medicine twice a day.",
+            "example_context": "Thông báo cho monastery về thuốc đang dùng thường xuyên.",
+            "priority": "High",
+            "note": "",
+            "is_high_priority": true,
+            "needs_audio": false
+        },
+        {
+            "stt": 10,
+            "en": "allergy",
+            "vi": "dị ứng",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "I am allergic to nuts. Is there any in the food?",
+            "example_context": "Dị ứng thực phẩm — cần thông báo trước khi đến.",
+            "priority": "High",
+            "note": "",
+            "is_high_priority": true,
+            "needs_audio": false
+        },
+        {
+            "stt": 11,
+            "en": "rest / to rest",
+            "vi": "nghỉ ngơi",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "May I rest in my kuti instead of sitting today?",
+            "example_context": "Xin phép nghỉ một buổi thiền vì lý do sức khỏe.",
+            "priority": "High",
+            "note": "",
+            "is_high_priority": true,
+            "needs_audio": false
+        },
+        {
+            "stt": 12,
+            "en": "to see a doctor",
+            "vi": "đi khám bác sĩ",
+            "pali": null,
+            "pali_romanized": null,
+            "example_en": "I think I need to see a doctor. Is there a clinic nearby?",
+            "example_context": "Hỏi về cơ sở y tế gần thiền viện.",
+            "priority": "High",
+            "note": "",
+            "is_high_priority": true,
+            "needs_audio": false
+        }
+    ],
+    "lesson_flow": {
+        "input": {
+            "title": "Nghe & Hiểu",
+            "description": "Nghe hai đoạn hội thoại ngắn — một thiền sinh nói chuyện với monastery helper về sức khỏe, và một thiền sinh trình pháp với thiền sư về đau thể chất.",
+            "sample_dialogues": [
+                {
+                    "context": "Với monastery helper — khẩn cấp",
+                    "dialogue": [
+                        "Yogi: Excuse me. I need some help.",
+                        "Helper: Yes — what is wrong?",
+                        "Yogi: I have a fever. My body feels very hot.",
+                        "Helper: Since when?",
+                        "Yogi: Since last night.",
+                        "Helper: Okay. Come with me. There is a nurse here."
+                    ]
+                },
+                {
+                    "context": "Với thiền sư — đau thể chất ảnh hưởng thiền",
+                    "dialogue": [
+                        "Yogi: Bhante, may I report a physical problem?",
+                        "Teacher: Yes. What is it?",
+                        "Yogi: My knee hurts very much during sitting. I cannot sit for more than thirty minutes.",
+                        "Teacher: Which knee?",
+                        "Yogi: The right knee, Bhante.",
+                        "Teacher: Can you sit with your legs stretched out?",
+                        "Yogi: Yes, Bhante. I can try."
+                    ]
+                }
+            ]
+        },
+        "pattern": {
+            "title": "Mẫu Câu Cốt Lõi",
+            "description": "Năm mẫu câu để mô tả sức khỏe và nhu cầu cá nhân tại thiền viện.",
+            "core_patterns": [
+                {
+                    "pattern_id": "P1",
+                    "function": "Mô tả triệu chứng",
+                    "template": "I have ___ (symptom).",
+                    "examples": [
+                        "I have a fever.",
+                        "I have a headache.",
+                        "I have a stomach problem.",
+                        "I have knee pain."
+                    ]
+                },
+                {
+                    "pattern_id": "P2",
+                    "function": "Xác định vị trí đau",
+                    "template": "My ___ hurts / is painful.",
+                    "examples": [
+                        "My knee hurts.",
+                        "My lower back is painful.",
+                        "My right shoulder hurts during walking meditation."
+                    ]
+                },
+                {
+                    "pattern_id": "P3",
+                    "function": "Nói tác động đến thiền",
+                    "template": "I cannot ___ because of ___.",
+                    "examples": [
+                        "I cannot sit for a long time because of knee pain.",
+                        "I cannot walk because of dizziness.",
+                        "I cannot eat because of my stomach."
+                    ]
+                },
+                {
+                    "pattern_id": "P4",
+                    "function": "Nói thời gian của triệu chứng",
+                    "template": "Since ___ / For the past ___.",
+                    "examples": [
+                        "I have had this pain since yesterday.",
+                        "I have had a headache since this morning.",
+                        "For the past two days, I cannot sleep well."
+                    ]
+                },
+                {
+                    "pattern_id": "P5",
+                    "function": "Xin phép thay đổi",
+                    "template": "May I ___ instead of ___?",
+                    "examples": [
+                        "May I rest in my kuti instead of sitting today?",
+                        "May I sit with my legs straight instead of cross-legged?",
+                        "May I do more walking instead of sitting today?"
+                    ]
+                }
+            ]
+        },
+        "guided": {
+            "title": "Luyện Tập Có Hỗ Trợ",
+            "description": "AI giả lập hai tình huống: (1) Nói với monastery helper về triệu chứng (2) Báo cáo với thiền sư về đau thể chất.",
+            "interview_steps": [
+                {
+                    "step": 1,
+                    "ai_prompt": "Something is wrong with your body today. What is it?",
+                    "purpose": "Dùng mẫu P1 — mô tả triệu chứng.",
+                    "expected_pattern": "P1"
+                },
+                {
+                    "step": 2,
+                    "ai_prompt": "Where exactly does it hurt?",
+                    "purpose": "Dùng mẫu P2 — xác định vị trí.",
+                    "expected_pattern": "P2"
+                },
+                {
+                    "step": 3,
+                    "ai_prompt": "How does this affect your meditation?",
+                    "purpose": "Dùng mẫu P3 — nói về tác động.",
+                    "expected_pattern": "P3"
+                },
+                {
+                    "step": 4,
+                    "ai_prompt": "When did this start?",
+                    "purpose": "Dùng mẫu P4 — thời gian.",
+                    "expected_pattern": "P4"
+                },
+                {
+                    "step": 5,
+                    "ai_prompt": "What would you like to do differently today?",
+                    "purpose": "Dùng mẫu P5 — xin phép điều chỉnh.",
+                    "expected_pattern": "P5"
+                }
+            ]
+        },
+        "output": {
+            "title": "Tự Mô Tả — Không Có Gợi Ý",
+            "description": "Người dùng chọn một trong hai tình huống và tự nói: (A) Báo cáo với monastery helper (B) Báo cáo với thiền sư.",
+            "prompt_for_user": "Choose one situation and report it in 4-5 sentences: (A) Health problem to helper, or (B) Pain affecting meditation to teacher.",
+            "sample_output": "Excuse me. I need some help. I have had a fever since yesterday. My body feels very hot. I think I need to see a doctor. Is there a clinic nearby?",
+            "evaluation_criteria": [
+                "Mô tả được triệu chứng (P1 hoặc P2)",
+                "Nói được thời gian bắt đầu (P4)",
+                "Nói được tác động đến thiền (P3)",
+                "Đề xuất được giải pháp (P5) — nếu có"
+            ]
+        }
+    },
+    "situation_variants": {
+        "A_preparation": {
+            "situation_type": "A",
+            "temporal_context": "future",
+            "description": "Người dùng chưa đến thiền viện. Đang chuẩn bị từ vựng cho những tình huống sức khỏe có thể xảy ra.",
+            "context_en": "Before your retreat, think about what health problems you sometimes have. Practice how to describe them in English.",
+            "context_vi": "Trước khi đi khóa thiền, hãy nghĩ về những vấn đề sức khỏe bạn đôi khi gặp phải.",
+            "sample_sentences": [
+                "Do you have any chronic conditions?",
+                "Do you take any regular medication?",
+                "Do you have any food allergies?",
+                "What health problems do you sometimes have?"
+            ]
+        },
+        "B_first_appearance": {
+            "situation_type": "B",
+            "temporal_context": "present",
+            "description": "Ngày đầu hoặc đầu tuần tại thiền viện. Triệu chứng mới xuất hiện.",
+            "context_en": "It is your third day at the monastery. After the morning sitting, your lower back hurts badly.",
+            "context_vi": "Ngày thứ ba tại thiền viện. Sau buổi ngồi sáng, lưng dưới của bạn đau nặng.",
+            "sample_sentences": [
+                "Excuse me. I have a problem.",
+                "My lower back hurts very much.",
+                "It started after the morning sitting.",
+                "I cannot sit straight anymore.",
+                "Do you have a hot water bottle?"
+            ]
+        },
+        "C_stable_tracking": {
+            "situation_type": "C",
+            "temporal_context": "present",
+            "description": "Đau kéo dài vài ngày. Cần báo cáo chính thức với thiền sư trong buổi interview.",
+            "context_en": "You have had knee pain for three days. It is affecting your meditation. Today is your interview day.",
+            "context_vi": "Bạn bị đau đầu gối ba ngày rồi. Nó đang ảnh hưởng đến thiền của bạn.",
+            "sample_sentences": [
+                "Bhante, may I report a physical problem first?",
+                "My right knee has been hurting for three days.",
+                "I cannot sit cross-legged for more than twenty minutes.",
+                "After twenty minutes, the pain is very strong.",
+                "May I sit with my legs stretched out instead?"
+            ]
+        },
+        "D_disappeared_changed": {
+            "situation_type": "D",
+            "temporal_context": "recent past",
+            "description": "Triệu chứng đã thay đổi — tốt hơn hoặc xấu hơn. Cần cập nhật cho thiền sư.",
+            "context_en": "Last week you reported knee pain. This week, the knee is better — but now you have a headache instead.",
+            "context_vi": "Tuần trước bạn báo cáo đau đầu gối. Tuần này, đầu gối đỡ hơn — nhưng bây giờ bạn bị đau đầu.",
+            "sample_sentences": [
+                "Bhante, the knee pain is better now.",
+                "But now I have a headache.",
+                "The headache started two days ago.",
+                "It is worse in the morning.",
+                "I am not sure if it is from the meditation or something else."
+            ]
+        },
+        "E_past_future": {
+            "situation_type": "E",
+            "temporal_context": "past / future",
+            "description": "Sau khóa thiền, kể lại vấn đề sức khỏe đã gặp. Hoặc hỏi trước về cách phòng ngừa cho lần tới.",
+            "context_en": "You are back home. Your doctor asks: 'Did you have any health problems during the retreat?'",
+            "context_vi": "Bạn đã về nhà. Bác sĩ của bạn hỏi.",
+            "sample_sentences_past": [
+                "During the retreat, I had knee pain for about one week.",
+                "I could not sit cross-legged for more than twenty minutes.",
+                "The teacher told me to sit with my legs stretched out.",
+                "After that, it was manageable."
+            ],
+            "sample_sentences_future": [
+                "I always get knee pain when I sit for a long time.",
+                "What exercises can I do before the retreat?"
+            ]
+        }
+    }
+}

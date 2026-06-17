@@ -35,10 +35,9 @@ class RepositoryProvider {
     switch (environment) {
       case RepositoryEnvironment.localJson:
         return LocalJsonContentRepository(
-            // Không truyền lessonAssetPaths → tự động discover từ AssetManifest
-            // Hoặc hardcode để tránh depend vào AssetManifest:
-            // lessonAssetPaths: LessonAssetRegistry.allPaths,
-            );
+          // Hardcode lessonAssetPaths từ registry để đảm bảo lessons được load
+          lessonAssetPaths: LessonAssetRegistry.allPaths,
+        );
 
       case RepositoryEnvironment.firebase:
         return FirebaseRepository();
