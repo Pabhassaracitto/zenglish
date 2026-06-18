@@ -15,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:zenglish/core/theme/app_theme.dart';
 import '../../presentation/screens/home/home_screen.dart';
+import '../../presentation/screens/lesson/lesson_screen.dart';
 import '../providers/user_profile_provider.dart';
 import '../../data/models/user_profile.dart';
 import '../../core/enums/cefr_level.dart';
@@ -351,43 +352,8 @@ class PlacementTestScreen extends StatelessWidget {
   }
 }
 
-class LessonScreen extends StatelessWidget {
-  const LessonScreen({super.key, required this.lessonId});
-
-  final String lessonId;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.creamLight,
-      appBar: AppBar(
-        title: Text('Bài học: $lessonId'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('📖', style: TextStyle(fontSize: 64)),
-            const SizedBox(height: 16),
-            Text(
-              'LessonScreen',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Lesson ID: $lessonId',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// Placeholder đã được xóa vì `LessonScreen` chính thức đã được chuyển qua file `lib/presentation/screens/lesson/lesson_screen.dart`
+// Cần xoá class LessonScreen ở đây để router dùng class LessonScreen import từ file kia.
 
 class AIInterviewScreen extends StatelessWidget {
   const AIInterviewScreen({super.key});

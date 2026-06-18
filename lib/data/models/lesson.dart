@@ -1,11 +1,11 @@
 //lib\data\models\lesson.dart
 import '../../core/enums/cefr_level.dart';
 import '../../core/enums/meditation_stage.dart';
-import '../../core/enums/temporal_context.dart';
 import '../../core/enums/situation_type.dart';
-import 'vocab_item.dart';
+import '../../core/enums/temporal_context.dart';
 import 'lesson_flow.dart';
 import 'situation_variant.dart';
+import 'vocab_item.dart';
 
 /// Model chính cho mỗi bài học
 /// Ánh xạ trực tiếp từ JSON schema đã thiết kế
@@ -79,17 +79,31 @@ class Lesson {
   // ─── Factory ────────────────────────────────
 
   factory Lesson.fromJson(Map<String, dynamic> json) {
+    print(
+        '[Lesson.fromJson] Starting parse for lesson_id: ${json['lesson_id']}');
+
+    // Parse lesson_flow first to catch errors early
+    try {
+      final lessonFlow = LessonFlow.fromJson(
+        json['lesson_flow'] as Map<String, dynamic>,
+      );
+      print('[Lesson.fromJson] ✅ LessonFlow parsed successfully');
+    } catch (e) {
+      print('[Lesson.fromJson] ❌ LessonFlow parse error: $e');
+      rethrow;
+    }
+
     // Parse situation_variants
     final rawVariants =
         json['situation_variants'] as Map<String, dynamic>? ?? {};
     final variantMap = <SituationType, SituationVariant>{};
 
     const keyMap = {
-      'A_preparation':       SituationType.preparation,
-      'B_first_appearance':  SituationType.firstAppearance,
-      'C_stable_tracking':   SituationType.stableTracking,
+      'A_preparation': SituationType.preparation,
+      'B_first_appearance': SituationType.firstAppearance,
+      'C_stable_tracking': SituationType.stableTracking,
       'D_disappeared_changed': SituationType.disappearedChanged,
-      'E_past_future':       SituationType.pastFuture,
+      'E_past_future': SituationType.pastFuture,
     };
 
     keyMap.forEach((jsonKey, situationType) {
@@ -115,8 +129,7 @@ class Lesson {
         json['prerequisites'] as List<dynamic>? ?? [],
       ),
       monasteryNote: json['monastery_note'] as String? ?? '',
-      authenticityReminder:
-          json['authenticity_reminder'] as String? ?? '',
+      authenticityReminder: json['authenticity_reminder'] as String? ?? '',
       vocabulary: (json['vocabulary'] as List<dynamic>? ?? [])
           .map((e) => VocabItem.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -133,11 +146,11 @@ class Lesson {
   Map<String, dynamic> toJson() {
     final variantsJson = <String, dynamic>{};
     const keyMap = {
-      SituationType.preparation:       'A_preparation',
-      SituationType.firstAppearance:   'B_first_appearance',
-      SituationType.stableTracking:    'C_stable_tracking',
+      SituationType.preparation: 'A_preparation',
+      SituationType.firstAppearance: 'B_first_appearance',
+      SituationType.stableTracking: 'C_stable_tracking',
       SituationType.disappearedChanged: 'D_disappeared_changed',
-      SituationType.pastFuture:        'E_past_future',
+      SituationType.pastFuture: 'E_past_future',
     };
     situationVariants.forEach((type, variant) {
       final key = keyMap[type];

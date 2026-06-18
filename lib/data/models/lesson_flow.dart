@@ -56,11 +56,11 @@ class LessonFlow {
   }
 
   Map<String, dynamic> toJson() => {
-    'input': input.toJson(),
-    'pattern': pattern.toJson(),
-    'guided': guided.toJson(),
-    'output': output.toJson(),
-  };
+        'input': input.toJson(),
+        'pattern': pattern.toJson(),
+        'guided': guided.toJson(),
+        'output': output.toJson(),
+      };
 }
 
 // ─────────────────────────────────────────────
@@ -87,6 +87,7 @@ class InputPhase {
       sampleDialogues: (json['sample_dialogues'] as List<dynamic>? ?? [])
           .map((e) => SampleDialogue.fromJson(e as Map<String, dynamic>))
           .toList(),
+      audioUrl: json['audio_url'] as String?,
     );
   }
 
@@ -94,6 +95,7 @@ class InputPhase {
     'title': title,
     'description': description,
     'sample_dialogues': sampleDialogues.map((e) => e.toJson()).toList(),
+    if (audioUrl != null) 'audio_url': audioUrl,
   };
 }
 
@@ -114,9 +116,9 @@ class SampleDialogue {
   }
 
   Map<String, dynamic> toJson() => {
-    'context': context,
-    'dialogue': lines,
-  };
+        'context': context,
+        'dialogue': lines,
+      };
 }
 
 // ─────────────────────────────────────────────
@@ -145,10 +147,10 @@ class PatternPhase {
   }
 
   Map<String, dynamic> toJson() => {
-    'title': title,
-    'description': description,
-    'core_patterns': corePatterns.map((e) => e.toJson()).toList(),
-  };
+        'title': title,
+        'description': description,
+        'core_patterns': corePatterns.map((e) => e.toJson()).toList(),
+      };
 }
 
 class CorePattern {
@@ -177,12 +179,12 @@ class CorePattern {
   }
 
   Map<String, dynamic> toJson() => {
-    'pattern_id': patternId,
-    'function': function,
-    'template': template,
-    'examples': examples,
-    'monastery_english_note': monasteryEnglishNote,
-  };
+        'pattern_id': patternId,
+        'function': function,
+        'template': template,
+        'examples': examples,
+        'monastery_english_note': monasteryEnglishNote,
+      };
 }
 
 // ─────────────────────────────────────────────
@@ -201,22 +203,25 @@ class GuidedPhase {
   final List<InterviewStep> interviewSteps;
 
   factory GuidedPhase.fromJson(Map<String, dynamic> json) {
+    // Support both 'interview_steps' (assets) and 'ai_interview_sequence' (legacy TASK files)
+    final stepsData = (json['interview_steps'] as List<dynamic>?) ??
+        (json['ai_interview_sequence'] as List<dynamic>?) ??
+        [];
+    
     return GuidedPhase(
       title: json['title'] as String,
       description: json['description'] as String,
-      interviewSteps:
-          (json['ai_interview_sequence'] as List<dynamic>? ?? [])
-              .map((e) => InterviewStep.fromJson(e as Map<String, dynamic>))
-              .toList(),
+      interviewSteps: stepsData
+          .map((e) => InterviewStep.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'title': title,
-    'description': description,
-    'ai_interview_sequence':
-        interviewSteps.map((e) => e.toJson()).toList(),
-  };
+        'title': title,
+        'description': description,
+        'interview_steps': interviewSteps.map((e) => e.toJson()).toList(),
+      };
 }
 
 class InterviewStep {
@@ -240,9 +245,9 @@ class InterviewStep {
 
   factory InterviewStep.fromJson(Map<String, dynamic> json) {
     return InterviewStep(
-      step: json['step'] as int,
-      aiPrompt: json['ai_prompt'] as String,
-      purpose: json['purpose'] as String,
+      step: json['step'] as int? ?? 0,
+      aiPrompt: (json['ai_prompt'] as String?) ?? '',
+      purpose: (json['purpose'] as String?) ?? '',
       expectedPattern: json['expected_pattern'] as String?,
       expectedAnswerType: json['expected_answer_type'] as String?,
       ifIncorrect: json['if_incorrect'] as String?,
@@ -251,14 +256,14 @@ class InterviewStep {
   }
 
   Map<String, dynamic> toJson() => {
-    'step': step,
-    'ai_prompt': aiPrompt,
-    'purpose': purpose,
-    'expected_pattern': expectedPattern,
-    'expected_answer_type': expectedAnswerType,
-    'if_incorrect': ifIncorrect,
-    'authenticity_note': authenticityNote,
-  };
+        'step': step,
+        'ai_prompt': aiPrompt,
+        'purpose': purpose,
+        'expected_pattern': expectedPattern,
+        'expected_answer_type': expectedAnswerType,
+        'if_incorrect': ifIncorrect,
+        'authenticity_note': authenticityNote,
+      };
 }
 
 // ─────────────────────────────────────────────
@@ -297,8 +302,8 @@ class OutputPhase {
       title: json['title'] as String,
       description: json['description'] as String,
       promptForUser: json['prompt_for_user'] as String,
-      evaluationCriteria:
-          List<String>.from(json['evaluation_criteria'] as List<dynamic>? ?? []),
+      evaluationCriteria: List<String>.from(
+          json['evaluation_criteria'] as List<dynamic>? ?? []),
       sampleOutputs: outputs.isNotEmpty ? outputs : null,
     );
   }

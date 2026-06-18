@@ -179,6 +179,7 @@ class LocalJsonContentRepository implements ILessonRepository {
     final String rawJson;
     try {
       rawJson = await _assetBundle.loadString(assetPath);
+      debugPrint('[LocalJsonContentRepository] ✅ File loaded: $assetPath (${rawJson.length} bytes)');
     } on FlutterError catch (e) {
       debugPrint(
         '[LocalJsonContentRepository] ❌ File không tồn tại: $assetPath\n'

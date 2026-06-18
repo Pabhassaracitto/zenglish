@@ -1,5 +1,6 @@
 // lib/data/di/repository_provider.dart
 
+import '../constants/lesson_asset_registry.dart';
 import '../repositories/firebase_repository.dart';
 import '../repositories/i_lesson_repository.dart';
 import '../repositories/local_json_content_repository.dart';
