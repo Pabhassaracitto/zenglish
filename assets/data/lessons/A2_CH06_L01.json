@@ -4,9 +4,25 @@
   "title_vi": "Ānāpāna — Trình Pháp Về Thiền Hơi Thở",
   "level": "A2",
   "meditation_stage_min": "samatha_preliminary",
-  "situation_types": ["A_preparation", "B_first_appearance", "C_stable_tracking", "D_disappeared_changed", "E_past_future"],
-  "temporal_contexts": ["future", "present", "past"],
-  "prerequisites": ["A1_CH01_L01", "A1_CH02_L01", "A1_CH03_L01", "A1_CH04_L01", "A1_CH05_L01"],
+  "situation_types": [
+    "A_preparation",
+    "B_first_appearance",
+    "C_stable_tracking",
+    "D_disappeared_changed",
+    "E_past_future"
+  ],
+  "temporal_contexts": [
+    "future",
+    "present",
+    "past"
+  ],
+  "prerequisites": [
+    "A1_CH01_L01",
+    "A1_CH02_L01",
+    "A1_CH03_L01",
+    "A1_CH04_L01",
+    "A1_CH05_L01"
+  ],
   "monastery_note": "Ānāpāna là đối tượng thiền đầu tiên trong hệ thống Pa-Auk. Thiền sinh chú ý đến hơi thở tại vùng xúc chạm dưới mũi / môi trên — không phải theo dõi hơi thở vào bụng (phương pháp Mahasi — KHÔNG trộn lẫn). Trong Pa-Auk: điểm chú ý là vùng xúc chạm tại lỗ mũi / môi trên, không hình dung hơi thở di chuyển vào trong, không phồng xẹp bụng. Thiền sư thường hỏi: 'What do you know about the breath?' — không phải 'How do you feel?'",
   "authenticity_reminder": "Người dùng có thể đang ở nhiều giai đoạn: chưa bắt đầu, mới bắt đầu, đã thực hành vài tuần, hoặc đang hỏi về tương lai. App không yêu cầu phải có kinh nghiệm thật. AI Interview cần phân biệt rõ: kinh nghiệm thật / kỳ vọng / luyện tập giả định.",
   "vocabulary": [
@@ -16,6 +32,7 @@
       "vi": "hơi thở",
       "pali": "ānāpāna",
       "pali_romanized": "aa-naa-paa-na",
+      "english_ipa": "/brɛθ/ /ˈbriːðɪŋ/",
       "example_en": "Bhante, I am practicing ānāpāna. I keep my attention on the breath.",
       "example_context": "Câu mở đầu chuẩn khi trình pháp ānāpāna lần đầu với thiền sư.",
       "priority": "High",
@@ -29,6 +46,7 @@
       "vi": "điểm xúc chạm",
       "pali": "phassa",
       "pali_romanized": "phat-sa",
+      "english_ipa": "/ˈtʌtʃɪŋ pɔɪnt/ /ˈkɒntækt pɔɪnt/",
       "example_en": "Bhante, I keep my mind at the touching point, below the nostrils.",
       "example_context": "Mô tả vị trí chú ý đúng theo Pa-Auk. Dùng khi thiền sư hỏi 'Where do you put your attention?'",
       "priority": "High",
@@ -42,6 +60,7 @@
       "vi": "hơi thở vào",
       "pali": "assāsa",
       "pali_romanized": "at-saa-sa",
+      "english_ipa": "/ˈɪn brɛθ/",
       "example_en": "Bhante, I notice the in-breath touching above the upper lip.",
       "example_context": "Dùng khi mô tả cảm giác hơi thở vào tại điểm xúc chạm.",
       "priority": "High",
@@ -55,6 +74,7 @@
       "vi": "hơi thở ra",
       "pali": "passāsa",
       "pali_romanized": "pat-saa-sa",
+      "english_ipa": "/ˈaʊt brɛθ/",
       "example_en": "Bhante, the out-breath feels longer than the in-breath.",
       "example_context": "Mô tả quan sát đặc điểm hơi thở ra. Hay xuất hiện trong trình pháp tuần đầu.",
       "priority": "High",

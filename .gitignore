@@ -331,3 +331,4 @@ google_sign_in_config.dart
 *.bin
 .roo/
 .roomodes
+flutter_logs_full.txt

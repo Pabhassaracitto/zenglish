@@ -36,7 +36,8 @@
             "priority": "High",
             "note": "[NEEDS AUDIO]",
             "is_high_priority": true,
-            "needs_audio": true
+            "needs_audio": true,
+            "english_ipa": "/peɪn/ /eɪk/"
         },
         {
             "stt": 2,
@@ -49,7 +50,8 @@
             "priority": "High",
             "note": "",
             "is_high_priority": true,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/niː/"
         },
         {
             "stt": 3,
@@ -62,7 +64,8 @@
             "priority": "High",
             "note": "",
             "is_high_priority": true,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/bæk/ /ˈloʊər bæk/"
         },
         {
             "stt": 4,
@@ -75,7 +78,8 @@
             "priority": "Medium",
             "note": "",
             "is_high_priority": false,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/ˈhɛdeɪk/"
         },
         {
             "stt": 5,
@@ -88,7 +92,8 @@
             "priority": "High",
             "note": "",
             "is_high_priority": true,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/ˈfiːvər/"
         },
         {
             "stt": 6,
@@ -101,7 +106,8 @@
             "priority": "Medium",
             "note": "",
             "is_high_priority": false,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/daɪəˈriːə/ /ˈstʌmək ˈprɒbləm/"
         },
         {
             "stt": 7,
@@ -114,7 +120,8 @@
             "priority": "Medium",
             "note": "",
             "is_high_priority": false,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/ɪnˈsɒmniə/ /kænˈnɒt sliːp/"
         },
         {
             "stt": 8,
@@ -127,7 +134,8 @@
             "priority": "Medium",
             "note": "",
             "is_high_priority": false,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/ˈdɪzɪnəs/ /fiːl ˈdɪzi/"
         },
         {
             "stt": 9,
@@ -140,7 +148,8 @@
             "priority": "High",
             "note": "",
             "is_high_priority": true,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/ˈmɛdɪsən/ /ˌmɛdɪˈkeɪʃən/"
         },
         {
             "stt": 10,
@@ -153,7 +162,8 @@
             "priority": "High",
             "note": "",
             "is_high_priority": true,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/ˈælərdʒi/"
         },
         {
             "stt": 11,
@@ -166,7 +176,8 @@
             "priority": "High",
             "note": "",
             "is_high_priority": true,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/rɛst/ /tuː rɛst/"
         },
         {
             "stt": 12,
@@ -179,7 +190,8 @@
             "priority": "High",
             "note": "",
             "is_high_priority": true,
-            "needs_audio": false
+            "needs_audio": false,
+            "english_ipa": "/tuː siː ə ˈdɒktər/"
         }
     ],
     "lesson_flow": {

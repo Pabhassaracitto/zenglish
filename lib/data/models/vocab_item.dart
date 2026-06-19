@@ -1,4 +1,3 @@
-
 /// Tri-lingual vocabulary item
 /// English — Vietnamese — Pāḷi (với diacritics chuẩn)
 class VocabItem {
@@ -13,6 +12,7 @@ class VocabItem {
     required this.priority,
     this.note,
     this.needsAudio = false,
+    this.englishIpa,
   });
 
   /// Số thứ tự trong bài học
@@ -47,6 +47,9 @@ class VocabItem {
   /// Đánh dấu cần thu âm audio
   final bool needsAudio;
 
+  /// English IPA transcription (optional for backward compatibility)
+  final String? englishIpa;
+
   bool get isHighPriority => priority.toLowerCase() == 'high';
 
   factory VocabItem.fromJson(Map<String, dynamic> json) {
@@ -61,6 +64,7 @@ class VocabItem {
       priority: json['priority'] as String,
       note: json['note'] as String?,
       needsAudio: (json['note'] as String? ?? '').contains('[NEEDS AUDIO]'),
+      englishIpa: json['english_ipa'] as String?,
     );
   }
 
@@ -76,6 +80,7 @@ class VocabItem {
       'priority': priority,
       'note': note,
       'needs_audio': needsAudio,
+      'english_ipa': englishIpa,
     };
   }
 
@@ -90,6 +95,7 @@ class VocabItem {
     String? priority,
     String? note,
     bool? needsAudio,
+    String? englishIpa,
   }) {
     return VocabItem(
       stt: stt ?? this.stt,
@@ -102,6 +108,7 @@ class VocabItem {
       priority: priority ?? this.priority,
       note: note ?? this.note,
       needsAudio: needsAudio ?? this.needsAudio,
+      englishIpa: englishIpa ?? this.englishIpa,
     );
   }
 

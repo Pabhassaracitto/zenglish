@@ -11,13 +11,13 @@ class LessonScreen extends ConsumerStatefulWidget {
     super.key,
     required this.lessonId,
   });
-  
+
   final String lessonId;
-  
+
   @override
   ConsumerState<LessonScreen> createState() => _LessonScreenState();
 }
-  
+
 class _LessonScreenState extends ConsumerState<LessonScreen> {
   @override
   void initState() {
@@ -26,14 +26,14 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       ref.read(lessonProvider.notifier).loadLesson(widget.lessonId);
     });
   }
-  
+
   @override
   void dispose() {
     // Stop và cleanup audio khi đóng màn hình
     ref.read(audioProvider.notifier).stop();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(lessonProvider);
@@ -86,7 +86,8 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
                 ),
                 const SizedBox(height: AppTheme.spaceSM),
                 Text(
-                  state.error ?? 'This lesson could not be loaded. Please try again later.',
+                  state.error ??
+                      'This lesson could not be loaded. Please try again later.',
                   style: AppTheme.bodyMedium.copyWith(
                     color: AppTheme.textMuted,
                   ),
@@ -164,7 +165,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
 
     // Success state - render lesson
     final lesson = state.lesson!;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(lesson.titleEn),
@@ -202,14 +203,14 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
               ),
             ),
             const SizedBox(height: AppTheme.spaceLG),
-            
+
             // Lesson flow stages
             Text(
               'Lesson Flow',
               style: AppTheme.headingMedium,
             ),
             const SizedBox(height: AppTheme.spaceMD),
-            
+
             // Input Stage
             _buildStageCard(
               'Input (Nghe & Hiểu)',
@@ -217,7 +218,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
               Icons.hearing,
             ),
             const SizedBox(height: AppTheme.spaceMD),
-            
+
             // Pattern Stage
             _buildStageCard(
               'Pattern (Mẫu Câu)',
@@ -225,7 +226,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
               Icons.abc,
             ),
             const SizedBox(height: AppTheme.spaceMD),
-            
+
             // Guided Stage
             _buildStageCard(
               'Guided (Luyện Tập)',
@@ -233,7 +234,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
               Icons.people,
             ),
             const SizedBox(height: AppTheme.spaceMD),
-            
+
             // Output Stage
             _buildStageCard(
               'Output (Tự Nói)',
@@ -241,7 +242,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
               Icons.mic,
             ),
             const SizedBox(height: AppTheme.spaceLG),
-            
+
             // Vocabulary
             Text(
               'Vocabulary (${lesson.vocabulary.length} words)',
@@ -280,7 +281,8 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
                 children: [
                   Text(title, style: AppTheme.bodyLarge),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                  Text(subtitle,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey)),
                 ],
               ),
             ),
@@ -291,7 +293,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   }
 
   List<Widget> _buildVocabularyList(Lesson lesson) {
-    return lesson.vocabulary.take(5).map((vocab) {
+    return lesson.vocabulary.map((vocab) {
       return Padding(
         padding: const EdgeInsets.only(bottom: AppTheme.spaceSM),
         child: Container(
@@ -306,23 +308,45 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(vocab.english, style: AppTheme.bodyLarge),
+                  Text(
+                    vocab.english,
+                    style: AppTheme.bodyLarge.copyWith(
+                      color: AppTheme.textPrimary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   if (vocab.isHighPriority)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         color: Colors.red.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text('High Priority', style: TextStyle(fontSize: 10, color: Colors.red)),
+                      child: const Text('High Priority',
+                          style: TextStyle(fontSize: 10, color: Colors.red)),
                     ),
                 ],
               ),
+              if (vocab.englishIpa != null)
+                Text(
+                  vocab.englishIpa!,
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: AppTheme.textSecondary,
+                        fontStyle: FontStyle.italic,
+                      ),
+                ),
               const SizedBox(height: 4),
-              Text('Vietnamese: ${vocab.vietnamese}', style: const TextStyle(fontSize: 13)),
+              Text(
+                vocab.vietnamese,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: AppTheme.textSecondary,
+                    ),
+              ),
               if ((vocab.pali?.isNotEmpty ?? false)) ...[
                 const SizedBox(height: 2),
-                Text('Pali: ${vocab.pali}', style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                Text('Pali: ${vocab.pali}',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey)),
               ],
             ],
           ),
