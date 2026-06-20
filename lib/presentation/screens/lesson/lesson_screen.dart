@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zenglish/core/providers/user_profile_provider.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/models/lesson.dart';
 import 'package:zenglish/presentation/providers/audio_provider.dart';
@@ -293,6 +294,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   }
 
   List<Widget> _buildVocabularyList(Lesson lesson) {
+    final profile = ref.watch(userProfileProvider);
+    final showIpa = profile.value?.showIpa ?? true;
+
     return lesson.vocabulary.map((vocab) {
       return Padding(
         padding: const EdgeInsets.only(bottom: AppTheme.spaceSM),
@@ -328,14 +332,19 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
                     ),
                 ],
               ),
-              if (vocab.englishIpa != null)
-                Text(
-                  vocab.englishIpa!,
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: AppTheme.textSecondary,
-                        fontStyle: FontStyle.italic,
-                      ),
-                ),
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 250),
+                opacity: (showIpa && vocab.englishIpa != null) ? 1 : 0,
+                child: (vocab.englishIpa != null)
+                    ? Text(
+                        vocab.englishIpa!,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: AppTheme.textSecondary,
+                              fontStyle: FontStyle.italic,
+                            ),
+                      )
+                    : const SizedBox(),
+              ),
               const SizedBox(height: 4),
               Text(
                 vocab.vietnamese,
