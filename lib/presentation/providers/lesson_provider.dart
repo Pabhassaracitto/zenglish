@@ -1,11 +1,13 @@
+// lib/presentation/providers/lesson_provider.dart
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/lesson.dart';
 import '../../data/models/vocab_item.dart';
 import '../../data/di/repository_provider.dart';
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // ENUMS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 enum LessonStage {
   input,
@@ -22,16 +24,10 @@ enum LessonStage {
     }
   }
 
-  int get index2 {
-    // Dùng index2 để tránh xung đột với enum.index
-    return LessonStage.values.indexOf(this);
-  }
 
   LessonStage? get next {
     final i = LessonStage.values.indexOf(this);
-    if (i < LessonStage.values.length - 1) {
-      return LessonStage.values[i + 1];
-    }
+    if (i < LessonStage.values.length - 1) return LessonStage.values[i + 1];
     return null;
   }
 
@@ -40,11 +36,15 @@ enum LessonStage {
     if (i > 0) return LessonStage.values[i - 1];
     return null;
   }
+
+  bool get isLast => next == null;
 }
 
-// ─────────────────────────────────────────────
+enum OutputRecordingState { idle, recording, recorded, playing }
+
+// ─────────────────────────────────────────────────────────────────────────────
 // STATE
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 class LessonState {
   const LessonState({
@@ -63,6 +63,7 @@ class LessonState {
     this.outputRecordingState = OutputRecordingState.idle,
     this.outputRecordingSeconds = 0,
     this.completedStages = const {},
+    this.isTransitioning = false,
   });
 
   final Lesson? lesson;
@@ -70,57 +71,71 @@ class LessonState {
   final bool isLoading;
   final String? error;
 
-  // ─── Silent Mode ────────────────────────────
+  // ─── Silent Mode ────────────────────────────────────────────────────────
   final bool isSilentMode;
 
-  // ─── Audio (Input Stage) ────────────────────
+  // ─── Audio ──────────────────────────────────────────────────────────────
   final bool isAudioPlaying;
   final int audioPositionSeconds;
   final int audioDurationSeconds;
   final int currentDialogueIndex;
 
-  // ─── Pattern Stage ──────────────────────────
-  /// Key = vocab stt, Value = user's answer (VocabItem selected)
+  // ─── Pattern Stage ──────────────────────────────────────────────────────
   final Map<int, VocabItem?> patternAnswers;
   final Map<int, bool> patternCorrect;
 
-  // ─── Guided Stage ───────────────────────────
-  /// Key = step index, Value = user's text answer
+  // ─── Guided Stage ───────────────────────────────────────────────────────
   final Map<int, String> guidedAnswers;
 
-  // ─── Output Stage ───────────────────────────
+  // ─── Output Stage ───────────────────────────────────────────────────────
   final OutputRecordingState outputRecordingState;
   final int outputRecordingSeconds;
 
-  // ─── Progress ───────────────────────────────
+  // ─── Progress ───────────────────────────────────────────────────────────
   final Set<LessonStage> completedStages;
 
+  /// True while AnimatedSwitcher is mid-transition — prevents double-taps.
+  final bool isTransitioning;
+
+  // ─── Computed ───────────────────────────────────────────────────────────
   bool get hasLesson => lesson != null;
 
-  double get overallProgress {
-    if (lesson == null) return 0;
-    return completedStages.length / LessonStage.values.length;
+  double get overallProgress =>
+      completedStages.length / LessonStage.values.length;
+
+  bool isStageCompleted(LessonStage stage) => completedStages.contains(stage);
+
+  /// Label for the "Continue" button depending on current stage.
+  String get continueLabel {
+    if (currentStage.isLast) return 'Hoàn thành bài học ✓';
+    return 'Tiếp theo: ${currentStage.next!.displayName} →';
   }
 
-  bool isStageCompleted(LessonStage stage) =>
-      completedStages.contains(stage);
-
   bool get canProceedFromPattern {
-    if (lesson == null) return false;
+    if (lesson == null) return true;
     final total = lesson!.vocabulary.length;
     if (total == 0) return true;
     final correct = patternCorrect.values.where((v) => v).length;
-    return correct >= (total * 0.7).ceil(); // 70% correct
+    return correct >= (total * 0.7).ceil();
   }
 
   bool get canProceedFromGuided {
-    if (lesson == null) return false;
-    final steps =
-        lesson!.lessonFlow.guided.interviewSteps.length;
+    if (lesson == null) return true;
+    final steps = lesson!.lessonFlow.guided.interviewSteps.length;
     if (steps == 0) return true;
     final answered =
         guidedAnswers.values.where((v) => v.trim().isNotEmpty).length;
-    return answered >= (steps * 0.6).ceil(); // 60% answered
+    return answered >= (steps * 0.6).ceil();
+  }
+
+  /// Whether the "Continue" button is enabled for the current stage.
+  bool get canContinue {
+    switch (currentStage) {
+      case LessonStage.input:   return true; // always allow
+      case LessonStage.pattern: return canProceedFromPattern;
+      case LessonStage.guided:  return canProceedFromGuided;
+      case LessonStage.output:  return true;
+    }
   }
 
   LessonState copyWith({
@@ -139,6 +154,7 @@ class LessonState {
     OutputRecordingState? outputRecordingState,
     int? outputRecordingSeconds,
     Set<LessonStage>? completedStages,
+    bool? isTransitioning,
     bool clearError = false,
   }) {
     return LessonState(
@@ -148,36 +164,31 @@ class LessonState {
       error: clearError ? null : (error ?? this.error),
       isSilentMode: isSilentMode ?? this.isSilentMode,
       isAudioPlaying: isAudioPlaying ?? this.isAudioPlaying,
-      audioPositionSeconds:
-          audioPositionSeconds ?? this.audioPositionSeconds,
-      audioDurationSeconds:
-          audioDurationSeconds ?? this.audioDurationSeconds,
-      currentDialogueIndex:
-          currentDialogueIndex ?? this.currentDialogueIndex,
+      audioPositionSeconds: audioPositionSeconds ?? this.audioPositionSeconds,
+      audioDurationSeconds: audioDurationSeconds ?? this.audioDurationSeconds,
+      currentDialogueIndex: currentDialogueIndex ?? this.currentDialogueIndex,
       patternAnswers: patternAnswers ?? this.patternAnswers,
       patternCorrect: patternCorrect ?? this.patternCorrect,
       guidedAnswers: guidedAnswers ?? this.guidedAnswers,
-      outputRecordingState:
-          outputRecordingState ?? this.outputRecordingState,
+      outputRecordingState: outputRecordingState ?? this.outputRecordingState,
       outputRecordingSeconds:
           outputRecordingSeconds ?? this.outputRecordingSeconds,
       completedStages: completedStages ?? this.completedStages,
+      isTransitioning: isTransitioning ?? this.isTransitioning,
     );
   }
 }
 
-enum OutputRecordingState { idle, recording, recorded, playing }
-
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // NOTIFIER
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 class LessonNotifier extends StateNotifier<LessonState> {
   LessonNotifier() : super(const LessonState());
 
   final _repo = RepositoryProvider.instance;
 
-  // ─── Load ────────────────────────────────────
+  // ─── Load ──────────────────────────────────────────────────────────────────
 
   Future<void> loadLesson(String lessonId) async {
     state = state.copyWith(isLoading: true, clearError: true);
@@ -198,71 +209,100 @@ class LessonNotifier extends StateNotifier<LessonState> {
         patternAnswers: {},
         patternCorrect: {},
         guidedAnswers: {},
+        outputRecordingState: OutputRecordingState.idle,
+        outputRecordingSeconds: 0,
+        currentDialogueIndex: 0,
+        audioPositionSeconds: 0,
       );
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
-  // ─── Navigation ──────────────────────────────
+  // ─── Navigation ────────────────────────────────────────────────────────────
 
   void goToStage(LessonStage stage) {
-    state = state.copyWith(currentStage: stage);
+    if (state.isTransitioning) return;
+    _beginTransition(stage);
   }
 
-  void nextStage() {
-    // Mark current stage complete
+  /// Advance to the next stage (called by the Continue button).
+  /// Returns true if navigation happened, false if already at last stage.
+  bool nextStage() {
+    if (state.isTransitioning) return false;
     final completed = {...state.completedStages, state.currentStage};
     final next = state.currentStage.next;
-    if (next == null) return; // Already at last stage
+    if (next == null) return false; // already at output
 
-    // Skip output stage if silent mode
-    final target = (next == LessonStage.output && state.isSilentMode)
-        ? null
-        : next;
+    // Skip output stage if silent mode — just mark complete
+    if (next == LessonStage.output && state.isSilentMode) {
+      state = state.copyWith(completedStages: completed);
+      return false; // lesson is "done" without output
+    }
 
-    state = state.copyWith(
-      completedStages: completed,
-      currentStage: target ?? state.currentStage,
-    );
+    _beginTransition(next, completedStages: completed);
+    return true;
   }
 
   void previousStage() {
+    if (state.isTransitioning) return;
     final prev = state.currentStage.previous;
     if (prev == null) return;
-    state = state.copyWith(currentStage: prev);
+    _beginTransition(prev);
   }
 
-  // ─── Silent Mode ─────────────────────────────
-
-  void toggleSilentMode() {
-    final newMode = !state.isSilentMode;
+  /// Internal: starts transition + schedules isTransitioning = false.
+  void _beginTransition(
+    LessonStage target, {
+    Set<LessonStage>? completedStages,
+  }) {
     state = state.copyWith(
-      isSilentMode: newMode,
-      isAudioPlaying: newMode ? false : state.isAudioPlaying,
+      currentStage: target,
+      completedStages: completedStages,
+      isTransitioning: true,
+      // Reset audio state when changing stages
+      isAudioPlaying: false,
+      audioPositionSeconds: 0,
+    );
+    // AnimatedSwitcher default duration is 300 ms; clear lock after that.
+    Future.delayed(const Duration(milliseconds: 400), () {
+      if (mounted) {
+        state = state.copyWith(isTransitioning: false);
+      }
+    });
+  }
+
+  // ─── Silent Mode ───────────────────────────────────────────────────────────
+
+  void setSilentMode(bool value) {
+    state = state.copyWith(
+      isSilentMode: value,
+      isAudioPlaying: value ? false : state.isAudioPlaying,
     );
   }
 
-  // ─── Audio Controls (Input Stage) ────────────
+  void toggleSilentMode() => setSilentMode(!state.isSilentMode);
 
-  void toggleAudio() {
-    if (state.isSilentMode) return;
-    state = state.copyWith(
-      isAudioPlaying: !state.isAudioPlaying,
-    );
-    // TODO: Integrate real audio player (just_audio package)
-    _simulateAudioProgress();
+  // ─── Audio Controls ────────────────────────────────────────────────────────
+
+  void setAudioPlaying(bool playing) {
+    state = state.copyWith(isAudioPlaying: playing);
   }
 
   void seekAudio(int seconds) {
     state = state.copyWith(audioPositionSeconds: seconds);
   }
 
+  void updateAudioProgress(int positionSeconds, int durationSeconds) {
+    state = state.copyWith(
+      audioPositionSeconds: positionSeconds,
+      audioDurationSeconds: durationSeconds,
+    );
+  }
+
   void nextDialogue() {
-    final max = (state.lesson?.lessonFlow.input.sampleDialogues.length ?? 1) - 1;
+    final max =
+        (state.lesson?.lessonFlow.input.sampleDialogues.length ?? 1) - 1;
     if (state.currentDialogueIndex < max) {
       state = state.copyWith(
         currentDialogueIndex: state.currentDialogueIndex + 1,
@@ -282,7 +322,7 @@ class LessonNotifier extends StateNotifier<LessonState> {
     }
   }
 
-  // ─── Pattern Stage ───────────────────────────
+  // ─── Pattern Stage ─────────────────────────────────────────────────────────
 
   void submitPatternAnswer(int vocabStt, VocabItem? answer) {
     final lesson = state.lesson;
@@ -292,7 +332,6 @@ class LessonNotifier extends StateNotifier<LessonState> {
       (v) => v.stt == vocabStt,
       orElse: () => lesson.vocabulary.first,
     );
-
     final isCorrect = answer?.stt == vocab.stt;
 
     state = state.copyWith(
@@ -302,13 +341,10 @@ class LessonNotifier extends StateNotifier<LessonState> {
   }
 
   void resetPatternAnswers() {
-    state = state.copyWith(
-      patternAnswers: {},
-      patternCorrect: {},
-    );
+    state = state.copyWith(patternAnswers: {}, patternCorrect: {});
   }
 
-  // ─── Guided Stage ────────────────────────────
+  // ─── Guided Stage ──────────────────────────────────────────────────────────
 
   void updateGuidedAnswer(int stepIndex, String answer) {
     state = state.copyWith(
@@ -316,7 +352,7 @@ class LessonNotifier extends StateNotifier<LessonState> {
     );
   }
 
-  // ─── Output Stage (Recording simulation) ─────
+  // ─── Output Stage ──────────────────────────────────────────────────────────
 
   void startRecording() {
     if (state.isSilentMode) return;
@@ -328,15 +364,11 @@ class LessonNotifier extends StateNotifier<LessonState> {
   }
 
   void stopRecording() {
-    state = state.copyWith(
-      outputRecordingState: OutputRecordingState.recorded,
-    );
+    state = state.copyWith(outputRecordingState: OutputRecordingState.recorded);
   }
 
   void playRecording() {
-    state = state.copyWith(
-      outputRecordingState: OutputRecordingState.playing,
-    );
+    state = state.copyWith(outputRecordingState: OutputRecordingState.playing);
   }
 
   void clearRecording() {
@@ -346,59 +378,41 @@ class LessonNotifier extends StateNotifier<LessonState> {
     );
   }
 
-  // ─── Mark complete ───────────────────────────
-
   void markCurrentStageComplete() {
     state = state.copyWith(
       completedStages: {...state.completedStages, state.currentStage},
     );
   }
 
-  // ─── Simulations (replace with real impl) ────
-
-  Future<void> _simulateAudioProgress() async {
-    // Placeholder: simulate audio playing
-    for (int i = state.audioPositionSeconds;
-        i <= 120 && state.isAudioPlaying;
-        i++) {
-      await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return;
-      state = state.copyWith(
-        audioPositionSeconds: i,
-        audioDurationSeconds: 120,
-      );
-    }
-  }
+  // ─── Simulations ───────────────────────────────────────────────────────────
 
   Future<void> _simulateRecording() async {
     for (int i = 0; i < 120; i++) {
       await Future.delayed(const Duration(seconds: 1));
       if (!mounted) return;
-      if (state.outputRecordingState != OutputRecordingState.recording) {
-        break;
-      }
+      if (state.outputRecordingState != OutputRecordingState.recording) break;
       state = state.copyWith(outputRecordingSeconds: i + 1);
     }
-    if (state.outputRecordingState == OutputRecordingState.recording) {
+    if (mounted &&
+        state.outputRecordingState == OutputRecordingState.recording) {
       stopRecording();
     }
   }
 }
 
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 // PROVIDERS
-// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
 
 final lessonProvider =
     StateNotifierProvider<LessonNotifier, LessonState>(
   (ref) => LessonNotifier(),
 );
 
-/// Computed: vocabulary shuffled for pattern matching
 final shuffledVocabProvider = Provider<List<VocabItem>>((ref) {
-  final state = ref.watch(lessonProvider);
-  if (state.lesson == null) return [];
-  final vocab = [...state.lesson!.vocabulary];
+  final lesson = ref.watch(lessonProvider.select((s) => s.lesson));
+  if (lesson == null) return [];
+  final vocab = [...lesson.vocabulary];
   vocab.shuffle();
   return vocab;
 });
