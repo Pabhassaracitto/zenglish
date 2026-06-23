@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 
 import '../../../providers/home_provider.dart';
+import '../../../../core/providers/user_profile_provider.dart';
 
 class UserProfileCard extends ConsumerWidget {
   const UserProfileCard({super.key});
@@ -42,6 +43,39 @@ class UserProfileCard extends ConsumerWidget {
               children: axes.map((axis) => _AxisRow(data: axis)).toList(),
             ),
           ),
+
+          // IPA Toggle Setting
+          Consumer(
+            builder: (context, ref, _) {
+              final profile = ref.watch(userProfileProvider);
+              if (profile == null) return const SizedBox();
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppTheme.spaceMD,
+                  vertical: AppTheme.spaceSM,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Show Pronunciation (IPA)',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    Switch(
+                      value: profile.value?.showIpa ?? true,
+                      onChanged: (_) {
+                        ref
+                            .read(userProfileProvider.notifier)
+                            .toggleIpaVisibility();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+
+          const Divider(height: 1),
 
           // Progress footer
           _ProgressFooter(

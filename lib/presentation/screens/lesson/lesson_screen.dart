@@ -3,18 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zenglish/data/models/lesson_flow.dart';
+import 'package:zenglish/core/providers/user_profile_provider.dart';
+import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/data/models/lesson.dart';
+import 'package:zenglish/presentation/providers/audio_provider.dart';
+import 'package:zenglish/presentation/providers/lesson_provider.dart';
 
-import '../../../core/theme/app_theme.dart';
-import '../../../data/models/lesson.dart';
-import '../../../data/services/audio_playback_service.dart';
-import '../../providers/lesson_provider.dart';
-import '../../providers/home_provider.dart';
-import '_lesson_stage_ext.dart';
 // ─────────────────────────────────────────────────────────────────────────────
 // LESSON SCREEN
 // ─────────────────────────────────────────────────────────────────────────────
-
 class LessonScreen extends ConsumerStatefulWidget {
   const LessonScreen({super.key, required this.lessonId});
 
@@ -30,8 +27,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Sync silent mode from home profile into lesson state.
-      final silentMode =
-          ref.read(homeProvider.select((s) => s.silentMode));
+      final silentMode = ref.read(homeProvider.select((s) => s.silentMode));
       ref.read(lessonProvider.notifier).setSilentMode(silentMode);
       ref.read(lessonProvider.notifier).loadLesson(widget.lessonId);
     });
@@ -66,8 +62,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
 
   /// Called by every audio play button in the lesson.
   Future<void> _playAudio(String source) async {
-    final isSilent =
-        ref.read(lessonProvider.select((s) => s.isSilentMode));
+    final isSilent = ref.read(lessonProvider.select((s) => s.isSilentMode));
 
     if (isSilent) {
       _showSnackBar(
@@ -311,7 +306,8 @@ class _StageProgressBar extends StatelessWidget {
                       ),
                       child: Center(
                         child: isDone
-                            ? const Icon(Icons.check, size: 16, color: Colors.white)
+                            ? const Icon(Icons.check,
+                                size: 16, color: Colors.white)
                             : Text(
                                 '${idx + 1}',
                                 style: TextStyle(
@@ -327,12 +323,9 @@ class _StageProgressBar extends StatelessWidget {
                       stage.displayName,
                       style: TextStyle(
                         fontSize: 9,
-                        fontWeight: isActive
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        color: isActive
-                            ? AppTheme.primary
-                            : Colors.grey,
+                        fontWeight:
+                            isActive ? FontWeight.bold : FontWeight.normal,
+                        color: isActive ? AppTheme.primary : Colors.grey,
                       ),
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
@@ -400,8 +393,8 @@ class _ContinueBar extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back, size: 16),
                 label: const Text('Quay lại'),
                 style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                 ),
               ),
               const SizedBox(width: 12),
@@ -576,7 +569,8 @@ class _InputStageView extends StatelessWidget {
                     ),
                     subtitle: Text(v.vietnamese),
                     trailing: v.isHighPriority
-                        ? const Icon(Icons.star, color: Colors.amber, size: 16)
+                        ? const Icon(Icons.star,
+                            color: Colors.amber, size: 16)
                         : null,
                   ),
                 ),
@@ -630,7 +624,7 @@ class _PatternStageView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // ✅ pattern.function = chức năng/ý nghĩa (thay vietnameseMeaning)
+                        // ✅ pattern.function = chức năng/ý nghĩa
                         Text(
                           pattern.function,
                           style: TextStyle(
@@ -641,7 +635,7 @@ class _PatternStageView extends StatelessWidget {
                         ),
                         const SizedBox(height: 6),
 
-                        // ✅ pattern.template = cấu trúc câu (thay structure)
+                        // ✅ pattern.template = cấu trúc câu
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(10),
@@ -705,13 +699,13 @@ class _PatternStageView extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       const Text('• ',
-                                          style: TextStyle(
-                                              color: Colors.grey)),
+                                          style:
+                                              TextStyle(color: Colors.grey)),
                                       Expanded(
                                         child: Text(
                                           ex,
-                                          style: const TextStyle(
-                                              fontSize: 13),
+                                          style:
+                                              const TextStyle(fontSize: 13),
                                         ),
                                       ),
                                     ],
@@ -730,8 +724,8 @@ class _PatternStageView extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'Ôn từ vựng (${lesson.vocabulary.length} từ)',
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 16),
+            style:
+                const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 8),
           ...lesson.vocabulary.map(
@@ -770,8 +764,7 @@ class _PatternStageView extends StatelessWidget {
                       const Icon(Icons.check_circle,
                           color: Colors.green, size: 20)
                     else if (state.patternCorrect[v.stt] == false)
-                      const Icon(Icons.cancel,
-                          color: Colors.red, size: 20),
+                      const Icon(Icons.cancel, color: Colors.red, size: 20),
                   ],
                 ),
               ),
@@ -824,7 +817,7 @@ class _GuidedStageView extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ✅ step.aiPrompt = câu hỏi của AI (thay interviewerPrompt)
+                    // ✅ step.aiPrompt = câu hỏi của AI
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
@@ -849,7 +842,7 @@ class _GuidedStageView extends ConsumerWidget {
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              step.aiPrompt, // ✅ Đúng field
+                              step.aiPrompt,
                               style: const TextStyle(fontSize: 14),
                             ),
                           ),
@@ -889,8 +882,7 @@ class _GuidedStageView extends ConsumerWidget {
                         isDense: true,
                         suffixIcon:
                             (state.guidedAnswers[idx]?.isNotEmpty ?? false)
-                                ? const Icon(Icons.check,
-                                    color: Colors.green)
+                                ? const Icon(Icons.check, color: Colors.green)
                                 : null,
                       ),
                       maxLines: 2,
@@ -1001,7 +993,8 @@ class _OutputStageView extends StatelessWidget {
                   const Icon(Icons.check_circle_outline,
                       size: 16, color: Colors.green),
                   const SizedBox(width: 8),
-                  Expanded(child: Text(c, style: const TextStyle(fontSize: 13))),
+                  Expanded(
+                      child: Text(c, style: const TextStyle(fontSize: 13))),
                 ],
               ),
             ),
@@ -1063,8 +1056,8 @@ class _StageTitleCard extends StatelessWidget {
                         fontWeight: FontWeight.bold, fontSize: 16)),
                 const SizedBox(height: 2),
                 Text(subtitle,
-                    style: const TextStyle(
-                        fontSize: 12, color: Colors.grey)),
+                    style:
+                        const TextStyle(fontSize: 12, color: Colors.grey)),
               ],
             ),
           ),
@@ -1073,8 +1066,9 @@ class _StageTitleCard extends StatelessWidget {
     );
   }
 }
-/// ✅ SampleDialogue.lines là List<String> (mỗi string = 1 dòng thoại)
-/// ✅ SampleDialogue.context = mô tả ngữ cảnh
+
+// ✅ SampleDialogue.lines là List<String> (mỗi string = 1 dòng thoại)
+// ✅ SampleDialogue.context = mô tả ngữ cảnh
 class _DialogueCard extends StatelessWidget {
   const _DialogueCard({required this.dialogue});
 
@@ -1089,7 +1083,7 @@ class _DialogueCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ✅ dialogue.context = mô tả bối cảnh
+            // ✅ dialogue.context = mô tả bối cảnh — GIỮ từ HEAD
             if (dialogue.context.isNotEmpty) ...[
               Container(
                 padding:
@@ -1129,9 +1123,8 @@ class _DialogueCard extends StatelessWidget {
               final hasSpeaker = colonIdx > 0 && colonIdx < 20;
               final speaker =
                   hasSpeaker ? line.substring(0, colonIdx).trim() : null;
-              final text = hasSpeaker
-                  ? line.substring(colonIdx + 1).trim()
-                  : line;
+              final text =
+                  hasSpeaker ? line.substring(colonIdx + 1).trim() : line;
 
               // Xen kẽ màu trái/phải để dễ đọc
               final isEven = lineIndex % 2 == 0;
@@ -1220,6 +1213,7 @@ class _SpeakerBubble extends StatelessWidget {
     );
   }
 }
+
 /// Thanh phát audio đơn giản cho toàn bài (Input Stage)
 class _AudioPlayerBar extends StatelessWidget {
   const _AudioPlayerBar({
@@ -1259,7 +1253,8 @@ class _AudioPlayerBar extends StatelessWidget {
             ),
             label: Text(isPlaying ? 'Dừng' : 'Nghe'),
             style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
           ),
         ],
@@ -1419,13 +1414,14 @@ class _ErrorScaffold extends StatelessWidget {
                   color: Colors.red.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child:
-                    const Icon(Icons.warning_amber_rounded, size: 40, color: Colors.red),
+                child: const Icon(Icons.warning_amber_rounded,
+                    size: 40, color: Colors.red),
               ),
               const SizedBox(height: 16),
               const Text(
                 'Không thể tải bài học',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style:
+                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),

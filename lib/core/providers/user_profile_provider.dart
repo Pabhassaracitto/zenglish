@@ -56,6 +56,15 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
     await saveProfile(updater(current));
   }
 
+  /// Toggle IPA visibility globally
+  Future<void> toggleIpaVisibility() async {
+    final current = state.valueOrNull;
+    if (current == null) return;
+
+    final updated = current.copyWith(showIpa: !current.showIpa);
+    await saveProfile(updated);
+  }
+
   /// Xóa profile (reset app)
   Future<void> clearProfile() async {
     final prefs = ref.read(sharedPreferencesProvider);
