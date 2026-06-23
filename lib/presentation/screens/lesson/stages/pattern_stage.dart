@@ -1,9 +1,13 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/models/vocab_item.dart';
 
 import '../../../providers/lesson_provider.dart';
+
+final _shakingCardProvider = StateProvider<int?>((ref) => null);
 
 class PatternStage extends ConsumerWidget {
   const PatternStage({super.key});
@@ -31,7 +35,10 @@ class PatternStage extends ConsumerWidget {
               Text('Nối Từ Tam Ngữ', style: AppTheme.headingMedium),
               const Spacer(),
               TextButton.icon(
-                onPressed: notifier.resetPatternAnswers,
+                onPressed: () {
+                  notifier.resetPatternAnswers();
+                  ref.read(_shakingCardProvider.notifier).state = null;
+                },
                 icon: const Icon(Icons.refresh, size: 16),
                 label: const Text('Làm lại'),
                 style: TextButton.styleFrom(
@@ -50,7 +57,8 @@ class PatternStage extends ConsumerWidget {
           const SizedBox(height: AppTheme.spaceMD),
 
           // Match cards
-          ...vocab.map((item) => _TrilingualMatchCard(
+          ...vocab.map((item) => _ShakableMatchCard(
+                key: ValueKey('card_${item.stt}'),
                 vocabItem: item,
                 state: state,
                 notifier: notifier,
@@ -115,7 +123,72 @@ class PatternStage extends ConsumerWidget {
   }
 }
 
-// ─────────────────────────────────────────────
+class _ShakableMatchCard extends ConsumerStatefulWidget {
+  const _ShakableMatchCard({
+    super.key,
+    required this.vocabItem,
+    required this.state,
+    required this.notifier,
+    required this.allVocab,
+  });
+
+  final VocabItem vocabItem;
+  final LessonState state;
+  final LessonNotifier notifier;
+  final List<VocabItem> allVocab;
+
+  @override
+  ConsumerState<_ShakableMatchCard> createState() => _ShakableMatchCardState();
+}
+
+class _ShakableMatchCardState extends ConsumerState<_ShakableMatchCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _shakeController;
+  late Animation<double> _shakeAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _shakeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+    _shakeAnim = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _shakeController, curve: Curves.elasticIn),
+    );
+  }
+
+  @override
+  void dispose() {
+    _shakeController.dispose();
+    super.dispose();
+  }
+
+  void _triggerShake() {
+    _shakeController.forward(from: 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _shakeAnim,
+      builder: (context, child) {
+        final offset = math.sin(_shakeAnim.value * math.pi * 4) * 6;
+        return Transform.translate(
+          offset: Offset(offset, 0),
+          child: child,
+        );
+      },
+      child: _TrilingualMatchCard(
+        vocabItem: widget.vocabItem,
+        state: widget.state,
+        notifier: widget.notifier,
+        allVocab: widget.allVocab,
+        onWrongAnswer: _triggerShake,
+      ),
+    );
+  }
+}
 
 class _MatchProgress extends StatelessWidget {
   const _MatchProgress({
@@ -180,12 +253,14 @@ class _TrilingualMatchCard extends StatelessWidget {
     required this.state,
     required this.notifier,
     required this.allVocab,
+    required this.onWrongAnswer,
   });
 
   final VocabItem vocabItem;
   final LessonState state;
   final LessonNotifier notifier;
   final List<VocabItem> allVocab;
+  final VoidCallback onWrongAnswer;
 
   @override
   Widget build(BuildContext context) {
@@ -254,8 +329,12 @@ class _TrilingualMatchCard extends StatelessWidget {
                   options: allVocab,
                   selected: answered,
                   getLabel: (v) => v.vietnamese,
-                  onSelected: (v) =>
-                      notifier.submitPatternAnswer(vocabItem.stt, v),
+                  onSelected: (v) {
+                    notifier.submitPatternAnswer(vocabItem.stt, v);
+                    if (v.stt != vocabItem.stt) {
+                      onWrongAnswer();
+                    }
+                  },
                 ),
               ),
             ],
@@ -401,45 +480,59 @@ class _AnswerDropdown extends StatelessWidget {
           top: Radius.circular(AppTheme.radiusLG),
         ),
       ),
-      builder: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: AppTheme.spaceSM),
-          Container(
-            width: 36,
-            height: 4,
-            decoration: BoxDecoration(
-              color: AppTheme.divider,
-              borderRadius: BorderRadius.circular(2),
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: AppTheme.spaceSM),
+            Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: AppTheme.divider,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(AppTheme.spaceMD),
-            child: Text(
-              'Chọn nghĩa tiếng Việt',
-              style: AppTheme.headingMedium,
+            Padding(
+              padding: const EdgeInsets.all(AppTheme.spaceMD),
+              child: Text(
+                'Chọn nghĩa tiếng Việt',
+                style: AppTheme.headingMedium,
+              ),
             ),
-          ),
-          const Divider(height: 1),
-          ...options.map((opt) => ListTile(
-                title: Text(
-                  getLabel(opt),
-                  style: AppTheme.bodyLarge,
-                ),
-                trailing: selected?.stt == opt.stt
-                    ? const Icon(
-                        Icons.check,
-                        color: AppTheme.secondary,
-                        size: 18,
-                      )
-                    : null,
-                onTap: () {
-                  onSelected(opt);
-                  Navigator.pop(context);
+            const Divider(height: 1),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.5,
+              ),
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: options.length,
+                separatorBuilder: (_, __) =>
+                    const Divider(height: 1, indent: 16),
+                itemBuilder: (context, i) {
+                  final opt = options[i];
+                  final isSelected = selected?.stt == opt.stt;
+                  return ListTile(
+                    title: Text(getLabel(opt), style: AppTheme.bodyLarge),
+                    trailing: isSelected
+                        ? const Icon(Icons.check_circle_rounded,
+                            color: AppTheme.secondary, size: 20)
+                        : null,
+                    tileColor: isSelected
+                        ? AppTheme.secondary.withOpacity(0.06)
+                        : null,
+                    onTap: () {
+                      onSelected(opt);
+                      Navigator.pop(context);
+                    },
+                  );
                 },
-              )),
-          const SizedBox(height: AppTheme.spaceMD),
-        ],
+              ),
+            ),
+            const SizedBox(height: AppTheme.spaceMD),
+          ],
+        ),
       ),
     );
   }

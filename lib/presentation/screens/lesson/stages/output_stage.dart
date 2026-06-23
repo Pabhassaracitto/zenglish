@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
+
+import '../../../../core/providers/user_profile_provider.dart';
 import '../../../providers/lesson_provider.dart';
 
 class OutputStage extends ConsumerWidget {
@@ -63,7 +65,13 @@ class OutputStage extends ConsumerWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () {
+                onPressed: () async {
+                  final lessonId = state.lesson?.lessonId;
+                  if (lessonId != null) {
+                    await ref
+                        .read(userProfileProvider.notifier)
+                        .markLessonCompleted(lessonId);
+                  }
                   notifier.markCurrentStageComplete();
                   _showCompletionDialog(context, state);
                 },

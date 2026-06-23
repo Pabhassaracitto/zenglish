@@ -165,6 +165,7 @@ class _InterviewStepCard extends ConsumerStatefulWidget {
 class _InterviewStepCardState extends ConsumerState<_InterviewStepCard> {
   late final TextEditingController _ctrl;
   bool _isFocused = false;
+  bool _showHint = false;
 
   @override
   void initState() {
@@ -183,7 +184,7 @@ class _InterviewStepCardState extends ConsumerState<_InterviewStepCard> {
   @override
   Widget build(BuildContext context) {
     final hasAnswer =
-        (widget.state.guidedAnswers[widget.index] ?? '').isNotEmpty;
+        (widget.state.guidedAnswers[widget.index] ?? '').trim().isNotEmpty;
 
     return Container(
       margin: const EdgeInsets.only(bottom: AppTheme.spaceMD),
@@ -263,11 +264,40 @@ class _InterviewStepCardState extends ConsumerState<_InterviewStepCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Answer label
-                Text(
-                  'Câu trả lời của bạn:',
-                  style: AppTheme.labelSmall.copyWith(
-                    color: AppTheme.primary,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Câu trả lời của bạn:',
+                      style: AppTheme.labelSmall.copyWith(
+                        color:
+                            hasAnswer ? AppTheme.secondary : AppTheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (widget.step.expectedPattern != null)
+                      GestureDetector(
+                        onTap: () => setState(() => _showHint = !_showHint),
+                        child: Row(
+                          children: [
+                            Icon(
+                              _showHint
+                                  ? Icons.visibility_off_rounded
+                                  : Icons.lightbulb_outline_rounded,
+                              size: 14,
+                              color: AppTheme.paliColor,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              _showHint ? 'Ẩn gợi ý' : 'Xem gợi ý',
+                              style: AppTheme.labelSmall.copyWith(
+                                color: AppTheme.paliColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 4),
                 Focus(
@@ -326,15 +356,31 @@ class _InterviewStepCardState extends ConsumerState<_InterviewStepCard> {
                 ),
 
                 // Pattern hint (if available)
-                if (widget.step.expectedPattern != null) ...[
-                  const SizedBox(height: AppTheme.spaceXS),
-                  Text(
-                    'Mẫu câu: ${widget.step.expectedPattern}',
-                    style: AppTheme.labelSmall.copyWith(
-                      color: AppTheme.paliColor,
-                    ),
-                  ),
-                ],
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOut,
+                  child: _showHint && widget.step.expectedPattern != null
+                      ? Container(
+                          margin: const EdgeInsets.only(top: AppTheme.spaceXS),
+                          padding: const EdgeInsets.all(AppTheme.spaceSM),
+                          decoration: BoxDecoration(
+                            color: AppTheme.paliColor.withOpacity(0.06),
+                            borderRadius:
+                                BorderRadius.circular(AppTheme.radiusSM),
+                            border: Border.all(
+                              color: AppTheme.paliColor.withOpacity(0.25),
+                            ),
+                          ),
+                          child: Text(
+                            widget.step.expectedPattern!,
+                            style: AppTheme.labelSmall.copyWith(
+                              color: AppTheme.paliColor,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ),
               ],
             ),
           ),

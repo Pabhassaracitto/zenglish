@@ -1,9 +1,10 @@
 // ============================================================
 // PROVIDER: UserProfile state - dùng cho router redirect logic
 // ============================================================
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 import '../../data/models/user_profile.dart';
 
@@ -65,6 +66,26 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
     await saveProfile(updated);
   }
 
+  /// ✅ NEW: Mark a lesson as completed — persists to SharedPreferences
+  Future<void> markLessonCompleted(String lessonId) async {
+    final current = state.valueOrNull;
+    if (current == null) return;
+
+    // Guard: skip if already marked to avoid redundant writes
+    if (current.completedLessonIds.contains(lessonId)) return;
+
+    final updatedIds = [...current.completedLessonIds, lessonId];
+    final updated = current.copyWith(completedLessonIds: updatedIds);
+    await saveProfile(updated);
+  }
+
+  /// ✅ NEW: Check if a lesson is completed
+  bool isLessonCompleted(String lessonId) {
+    final current = state.valueOrNull;
+    if (current == null) return false;
+    return current.completedLessonIds.contains(lessonId);
+  }
+
   /// Xóa profile (reset app)
   Future<void> clearProfile() async {
     final prefs = ref.read(sharedPreferencesProvider);
@@ -74,7 +95,8 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
 }
 
 // ── Public Provider ──
-final userProfileProvider = AsyncNotifierProvider<UserProfileNotifier, UserProfile?>(
+final userProfileProvider =
+    AsyncNotifierProvider<UserProfileNotifier, UserProfile?>(
   UserProfileNotifier.new,
 );
 
