@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 
-import '../../../providers/home_provider.dart';
 import '../../../../core/providers/user_profile_provider.dart';
+import '../../../providers/home_provider.dart';
 
 class UserProfileCard extends ConsumerWidget {
   const UserProfileCard({super.key});
@@ -11,9 +11,8 @@ class UserProfileCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final axes = ref.watch(threeAxisProvider);
-    final profile = ref.watch(
-      homeProvider.select((s) => s.userProfile),
-    );
+    final profileAsync = ref.watch(userProfileProvider);
+    final profile = profileAsync.valueOrNull;
 
     if (profile == null) return const SizedBox();
 
@@ -45,34 +44,28 @@ class UserProfileCard extends ConsumerWidget {
           ),
 
           // IPA Toggle Setting
-          Consumer(
-            builder: (context, ref, _) {
-              final profile = ref.watch(userProfileProvider);
-              if (profile == null) return const SizedBox();
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppTheme.spaceMD,
-                  vertical: AppTheme.spaceSM,
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppTheme.spaceMD,
+              vertical: AppTheme.spaceSM,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Show Pronunciation (IPA)',
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Show Pronunciation (IPA)',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    Switch(
-                      value: profile.value?.showIpa ?? true,
-                      onChanged: (_) {
-                        ref
-                            .read(userProfileProvider.notifier)
-                            .toggleIpaVisibility();
-                      },
-                    ),
-                  ],
+                Switch(
+                  value: profile.showIpa,
+                  onChanged: (_) {
+                    ref
+                        .read(userProfileProvider.notifier)
+                        .toggleIpaVisibility();
+                  },
                 ),
-              );
-            },
+              ],
+            ),
           ),
 
           const Divider(height: 1),
@@ -261,7 +254,7 @@ class _ProgressFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     // Total lessons available (approximate based on our 10 tasks)
     const totalAvailable = 10;
-    final progress = completed / totalAvailable;
+    final progress = totalAvailable > 0 ? completed / totalAvailable : 0.0;
 
     return Container(
       padding: const EdgeInsets.all(AppTheme.spaceMD),

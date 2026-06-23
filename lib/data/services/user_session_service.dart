@@ -7,16 +7,17 @@ import '../../core/enums/meditation_stage.dart';
 /// MVP: dùng SharedPreferences
 /// Production: swap sang Firestore
 class UserSessionService {
-  static const _keyHasProfile   = 'has_user_profile';
-  static const _keyUserId       = 'user_id';
-  static const _keyDisplayName  = 'display_name';
-  static const _keyLangLevel    = 'language_level';
-  static const _keyMedStage     = 'meditation_stage';
-  static const _keyPaliLevel    = 'pali_knowledge_level';
-  static const _keyCompleted    = 'completed_lesson_ids';
-  static const _keyInProgress   = 'in_progress_lesson_ids';
-  static const _keyIsMonk       = 'is_monk';
-  static const _keySilentMode   = 'silent_mode';
+  static const _keyHasProfile = 'has_user_profile';
+  static const _keyUserId = 'user_id';
+  static const _keyDisplayName = 'display_name';
+  static const _keyLangLevel = 'language_level';
+  static const _keyMedStage = 'meditation_stage';
+  static const _keyPaliLevel = 'pali_knowledge_level';
+  static const _keyCompleted = 'completed_lesson_ids';
+  static const _keyInProgress = 'in_progress_lesson_ids';
+  static const _keyIsMonk = 'is_monk';
+  static const _keySilentMode = 'silent_mode';
+  static const _keyShowIpa = 'show_ipa';
 
   // ─── Singleton ──────────────────────────────
 
@@ -51,6 +52,7 @@ class UserSessionService {
       _p.setStringList(_keyCompleted, profile.completedLessonIds),
       _p.setStringList(_keyInProgress, profile.inProgressLessonIds),
       _p.setBool(_keyIsMonk, profile.isMonk),
+      _p.setBool(_keyShowIpa, profile.showIpa),
     ]);
   }
 
@@ -69,11 +71,10 @@ class UserSessionService {
         _p.getString(_keyMedStage) ?? 'preRetreat',
       ),
       paliKnowledgeLevel: _p.getInt(_keyPaliLevel) ?? 0,
-      completedLessonIds:
-          _p.getStringList(_keyCompleted) ?? [],
-      inProgressLessonIds:
-          _p.getStringList(_keyInProgress) ?? [],
+      completedLessonIds: _p.getStringList(_keyCompleted) ?? [],
+      inProgressLessonIds: _p.getStringList(_keyInProgress) ?? [],
       isMonk: _p.getBool(_keyIsMonk) ?? false,
+      showIpa: _p.getBool(_keyShowIpa) ?? true,
       createdAt: DateTime.now(),
       lastActiveAt: DateTime.now(),
     );
@@ -106,8 +107,11 @@ class UserSessionService {
 
   bool get silentMode => _p.getBool(_keySilentMode) ?? false;
 
-  Future<void> setSilentMode(bool value) =>
-      _p.setBool(_keySilentMode, value);
+  Future<void> setSilentMode(bool value) => _p.setBool(_keySilentMode, value);
+
+  bool get showIpa => _p.getBool(_keyShowIpa) ?? true;
+
+  Future<void> setShowIpa(bool value) => _p.setBool(_keyShowIpa, value);
 
   // ─── Clear (logout / reset) ──────────────────
 

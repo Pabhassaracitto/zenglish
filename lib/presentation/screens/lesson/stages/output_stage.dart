@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 
 import '../../../../core/providers/user_profile_provider.dart';
+import '../../../providers/home_provider.dart';
 import '../../../providers/lesson_provider.dart';
 
 class OutputStage extends ConsumerWidget {
@@ -73,6 +74,10 @@ class OutputStage extends ConsumerWidget {
                         .markLessonCompleted(lessonId);
                   }
                   notifier.markCurrentStageComplete();
+
+                  // Refresh home provider to update progress immediately
+                  ref.read(homeProvider.notifier).refresh();
+
                   _showCompletionDialog(context, state);
                 },
                 icon: const Icon(Icons.check_circle_outline, size: 20),

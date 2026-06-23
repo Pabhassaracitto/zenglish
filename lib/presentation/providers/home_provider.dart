@@ -1,13 +1,14 @@
 //lib\presentation\providers\home_provider.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/models/user_profile.dart';
-import '../../data/models/lesson.dart';
-import '../../data/services/user_session_service.dart';
-import '../../data/di/repository_provider.dart';
-import '../../logic/content_router.dart';
-import '../../data/models/placement_result.dart';
+
 import '../../core/enums/cefr_level.dart';
 import '../../core/enums/meditation_stage.dart';
+import '../../data/di/repository_provider.dart';
+import '../../data/models/lesson.dart';
+import '../../data/models/placement_result.dart';
+import '../../data/models/user_profile.dart';
+import '../../data/services/user_session_service.dart';
+import '../../logic/content_router.dart';
 
 // ─────────────────────────────────────────────
 // STATE
@@ -60,7 +61,7 @@ class HomeState {
 class HomeNotifier extends StateNotifier<HomeState> {
   HomeNotifier() : super(const HomeState());
 
-  final _repo    = RepositoryProvider.instance;
+  final _repo = RepositoryProvider.instance;
   final _session = UserSessionService.instance;
 
   // ─── Init ────────────────────────────────────
@@ -77,9 +78,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
       // Load next lesson
       final nextLessonId = _resolveNextLessonId(profile);
-      final nextLesson = nextLessonId != null
-          ? await _repo.getLessonById(nextLessonId)
-          : null;
+      final nextLesson =
+          nextLessonId != null ? await _repo.getLessonById(nextLessonId) : null;
 
       state = state.copyWith(
         userProfile: profile,
@@ -117,13 +117,20 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
 
     // Dùng ContentRouter để đề xuất
-    return ContentRouter.getStartLesson(
+    String? nextId = ContentRouter.getStartLesson(
       languageLevel: profile.languageLevel,
       meditationStage: profile.meditationStage,
       paliLevel: profile.paliKnowledgeLevel,
-      meditationExperience:
-          _stageToExperience(profile.meditationStage),
+      meditationExperience: _stageToExperience(profile.meditationStage),
     );
+
+    // Nếu bài gợi ý đã hoàn thành, tìm bài tiếp theo (đơn giản hóa: trả về null nếu đã xong)
+    // Trong tương lai cần logic duyệt danh sách bài học theo thứ tự
+    if (nextId != null && profile.completedLessonIds.contains(nextId)) {
+      return null;
+    }
+
+    return nextId;
   }
 
   MeditationExperience _stageToExperience(MeditationStage stage) {
@@ -164,15 +171,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
 // PROVIDERS
 // ─────────────────────────────────────────────
 
-final homeProvider =
-    StateNotifierProvider<HomeNotifier, HomeState>(
+final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>(
   (ref) => HomeNotifier(),
 );
 
 /// Derived: 3-axis display data
 final threeAxisProvider = Provider<List<AxisData>>((ref) {
-  final profile =
-      ref.watch(homeProvider.select((s) => s.userProfile));
+  final profile = ref.watch(homeProvider.select((s) => s.userProfile));
   if (profile == null) return [];
 
   return [
@@ -223,26 +228,41 @@ class AxisData {
 
 String _langSublabel(CEFRLevel level) {
   switch (level) {
-    case CEFRLevel.a1: return 'Người mới bắt đầu';
-    case CEFRLevel.a2: return 'Sơ cấp';
-    case CEFRLevel.b1: return 'Trung cấp';
-    case CEFRLevel.b2: return 'Trên trung cấp';
-    case CEFRLevel.c1: return 'Nâng cao';
-    case CEFRLevel.c2: return 'Chuyên gia';
+    case CEFRLevel.a1:
+      return 'Người mới bắt đầu';
+    case CEFRLevel.a2:
+      return 'Sơ cấp';
+    case CEFRLevel.b1:
+      return 'Trung cấp';
+    case CEFRLevel.b2:
+      return 'Trên trung cấp';
+    case CEFRLevel.c1:
+      return 'Nâng cao';
+    case CEFRLevel.c2:
+      return 'Chuyên gia';
   }
 }
 
 String _meditationShortLabel(MeditationStage stage) {
   switch (stage) {
-    case MeditationStage.preRetreat:       return 'Khởi đầu';
-    case MeditationStage.silaPreiliminary: return 'Sīla';
-    case MeditationStage.samathaPreiliminary: return 'Samatha';
-    case MeditationStage.samathaUpacara:   return 'Upacāra';
-    case MeditationStage.samathaAppana:    return 'Jhāna';
-    case MeditationStage.vipassanaPreiliminary: return 'Vipassanā';
-    case MeditationStage.vipassanaNamaRupa: return 'Nāma-Rūpa';
-    case MeditationStage.vipassanaInsight: return 'Insight';
-    case MeditationStage.any:              return '—';
+    case MeditationStage.preRetreat:
+      return 'Khởi đầu';
+    case MeditationStage.silaPreiliminary:
+      return 'Sīla';
+    case MeditationStage.samathaPreiliminary:
+      return 'Samatha';
+    case MeditationStage.samathaUpacara:
+      return 'Upacāra';
+    case MeditationStage.samathaAppana:
+      return 'Jhāna';
+    case MeditationStage.vipassanaPreiliminary:
+      return 'Vipassanā';
+    case MeditationStage.vipassanaNamaRupa:
+      return 'Nāma-Rūpa';
+    case MeditationStage.vipassanaInsight:
+      return 'Insight';
+    case MeditationStage.any:
+      return '—';
   }
 }
 

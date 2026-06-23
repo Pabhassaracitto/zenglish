@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
-import '../../../providers/home_provider.dart';
+
 import '../../../../data/models/lesson.dart';
+import '../../../providers/home_provider.dart';
 
 class SmartSuggestionCard extends ConsumerWidget {
   const SmartSuggestionCard({super.key});
@@ -15,6 +16,13 @@ class SmartSuggestionCard extends ConsumerWidget {
     if (!state.hasNextLesson) return const SizedBox();
 
     final lesson = state.nextLesson!;
+    final completedIds = state.userProfile?.completedLessonIds ?? [];
+
+    // Nếu bài học đã hoàn thành, ẩn card
+    if (completedIds.contains(lesson.lessonId)) {
+      return const SizedBox();
+    }
+
     final isInProgress =
         state.userProfile?.inProgressLessonIds.contains(lesson.lessonId) ??
             false;
