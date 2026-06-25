@@ -12,14 +12,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'package:zenglish/core/theme/app_theme.dart';
+
 import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/lesson/lesson_screen.dart';
+import '../../presentation/screens/placement/placement_test_screen.dart';
 import '../providers/user_profile_provider.dart';
-import '../../data/models/user_profile.dart';
-import '../../core/enums/cefr_level.dart';
-import '../../core/enums/meditation_stage.dart';
 
 // ── Tên route (constants để tránh typo) ──
 abstract class AppRoutes {
@@ -291,66 +289,6 @@ class RouterErrorPage extends StatelessWidget {
 // PLACEHOLDER SCREENS - Những screen chưa implement
 // Thay bằng import thực khi code xong
 // ─────────────────────────────────────────────────────────────
-
-class PlacementTestScreen extends StatelessWidget {
-  const PlacementTestScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.creamLight,
-      appBar: AppBar(title: const Text('Bài kiểm tra đầu vào')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(32),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('📝', style: TextStyle(fontSize: 64)),
-              const SizedBox(height: 20),
-              Text(
-                'Placement Test',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'PlacementTestScreen đã được implement\nở file riêng',
-                style: Theme.of(context).textTheme.bodyMedium,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-              // Demo: Simulate complete test
-              Consumer(
-                builder: (context, ref, _) => ElevatedButton(
-                  onPressed: () async {
-                    // Tạo mock profile để test luồng
-                    await ref.read(userProfileProvider.notifier).saveProfile(
-                          UserProfile(
-                            userId: 'user001',
-                            displayName: 'Sư Minh Tuệ',
-                            languageLevel: CEFRLevel.b1,
-                            meditationStage: MeditationStage.samathaPreiliminary,
-                            paliKnowledgeLevel: 2,
-                            completedLessonIds: const [],
-                            inProgressLessonIds: const [],
-                            placementScore: 72,
-                            streakDays: 1,
-                            createdAt: DateTime.now(),
-                            lastStudiedAt: DateTime.now(),
-                          ),
-                        );
-                    if (context.mounted) context.go(AppRoutes.home);
-                  },
-                  child: const Text('Hoàn thành Test (Demo)'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 // Placeholder đã được xóa vì `LessonScreen` chính thức đã được chuyển qua file `lib/presentation/screens/lesson/lesson_screen.dart`
 // Cần xoá class LessonScreen ở đây để router dùng class LessonScreen import từ file kia.

@@ -1,5 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../core/providers/user_profile_provider.dart';
 import '../../data/models/placement_result.dart';
+import '../../data/models/user_profile.dart';
 import '../../logic/placement_logic.dart';
 
 class PlacementState {
@@ -91,9 +94,10 @@ class PlacementNotifier extends StateNotifier<PlacementState> {
     }
   }
 
-  Future<void> calculate() async {
+  Future<void> calculate(WidgetRef ref) async {
     if (state.selectedMeditation == null || state.selectedPali == null) return;
     state = state.copyWith(isCalculating: true);
+
     // Simulate brief calculation delay for UX
     await Future.delayed(const Duration(milliseconds: 800));
     final result = PlacementLogic.calculate(
@@ -101,6 +105,25 @@ class PlacementNotifier extends StateNotifier<PlacementState> {
       pali: state.selectedPali!,
       vocabAnswers: state.vocabAnswers,
     );
+
+    // PERSIST: Cập nhật UserProfile
+    final userProfileNotifier = ref.read(userProfileProvider.notifier);
+
+    // Tạo profile mới từ placement result
+    final newProfile = UserProfile(
+      userId: 'user_${DateTime.now().millisecondsSinceEpoch}',
+      displayName: 'Học viên mới',
+      languageLevel: result.derivedLanguageLevel,
+      meditationStage: result.derivedMeditationStage,
+      paliKnowledgeLevel: result.derivedPaliLevel,
+      completedLessonIds: [],
+      inProgressLessonIds: [],
+      createdAt: DateTime.now(),
+      placementScore: result.vocabScore * 20, // Ví dụ logic điểm
+    );
+
+    await userProfileNotifier.saveProfile(newProfile);
+
     state = state.copyWith(
       result: result,
       isCalculating: false,
@@ -116,7 +139,8 @@ class PlacementNotifier extends StateNotifier<PlacementState> {
 // PROVIDERS
 // ─────────────────────────────────────────────
 
-final placementProvider = StateNotifierProvider<PlacementNotifier, PlacementState>(
+final placementProvider =
+    StateNotifierProvider<PlacementNotifier, PlacementState>(
   (ref) => PlacementNotifier(),
 );
 

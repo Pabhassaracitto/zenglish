@@ -1,8 +1,11 @@
-import 'package:zenglish/core/theme/app_theme.dart';
-import 'package:zenglish/data/models/placement_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:zenglish/core/router/app_router.dart';
+import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/data/models/placement_result.dart';
 import 'package:zenglish/presentation/screens/lesson/lesson_screen.dart';
+
 import '../../providers/placement_provider.dart';
 import 'components/placement_progress_header.dart';
 import 'components/placement_result_card.dart';
@@ -66,7 +69,7 @@ class _PlacementTestScreenState extends ConsumerState<PlacementTestScreen>
 
     // Last step → calculate
     if (state.currentStep == PlacementState.totalSteps - 1) {
-      await notifier.calculate();
+      await notifier.calculate(ref);
       return;
     }
 

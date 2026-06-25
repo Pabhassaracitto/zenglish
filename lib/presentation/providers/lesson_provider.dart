@@ -1,9 +1,10 @@
 // lib/presentation/providers/lesson_provider.dart
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../data/di/repository_provider.dart';
 import '../../data/models/lesson.dart';
 import '../../data/models/vocab_item.dart';
-import '../../data/di/repository_provider.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ENUMS
@@ -12,18 +13,24 @@ import '../../data/di/repository_provider.dart';
 enum LessonStage {
   input,
   pattern,
+  vocab,
   guided,
   output;
 
   String get displayName {
     switch (this) {
-      case LessonStage.input:   return 'Nghe & Hiểu';
-      case LessonStage.pattern: return 'Mẫu Câu';
-      case LessonStage.guided:  return 'Luyện Tập';
-      case LessonStage.output:  return 'Tự Nói';
+      case LessonStage.input:
+        return 'Nghe & Hiểu';
+      case LessonStage.pattern:
+        return 'Mẫu Câu';
+      case LessonStage.vocab:
+        return 'Nối Từ';
+      case LessonStage.guided:
+        return 'Luyện Tập';
+      case LessonStage.output:
+        return 'Tự Nói';
     }
   }
-
 
   LessonStage? get next {
     final i = LessonStage.values.indexOf(this);
@@ -112,29 +119,29 @@ class LessonState {
   }
 
   bool get canProceedFromPattern {
-    if (lesson == null) return true;
-    final total = lesson!.vocabulary.length;
-    if (total == 0) return true;
-    final correct = patternCorrect.values.where((v) => v).length;
-    return correct >= (total * 0.7).ceil();
+    // Tạm thời cho phép tiếp tục nếu đã trả lời hết (để test)
+    return patternAnswers.length >= (lesson?.vocabulary.length ?? 0);
   }
 
   bool get canProceedFromGuided {
-    if (lesson == null) return true;
-    final steps = lesson!.lessonFlow.guided.interviewSteps.length;
-    if (steps == 0) return true;
-    final answered =
-        guidedAnswers.values.where((v) => v.trim().isNotEmpty).length;
-    return answered >= (steps * 0.6).ceil();
+    // Tạm thời cho phép tiếp tục nếu đã trả lời hết (để test)
+    return guidedAnswers.length >=
+        (lesson?.lessonFlow.guided.interviewSteps.length ?? 0);
   }
 
   /// Whether the "Continue" button is enabled for the current stage.
   bool get canContinue {
     switch (currentStage) {
-      case LessonStage.input:   return true; // always allow
-      case LessonStage.pattern: return canProceedFromPattern;
-      case LessonStage.guided:  return canProceedFromGuided;
-      case LessonStage.output:  return true;
+      case LessonStage.input:
+        return true; // always allow
+      case LessonStage.pattern:
+        return true; // always allow for pattern display
+      case LessonStage.vocab:
+        return canProceedFromPattern;
+      case LessonStage.guided:
+        return canProceedFromGuided;
+      case LessonStage.output:
+        return true;
     }
   }
 
@@ -404,8 +411,7 @@ class LessonNotifier extends StateNotifier<LessonState> {
 // PROVIDERS
 // ─────────────────────────────────────────────────────────────────────────────
 
-final lessonProvider =
-    StateNotifierProvider<LessonNotifier, LessonState>(
+final lessonProvider = StateNotifierProvider<LessonNotifier, LessonState>(
   (ref) => LessonNotifier(),
 );
 

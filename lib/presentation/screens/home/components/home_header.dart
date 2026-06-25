@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/data/services/user_session_service.dart';
+
 import '../../../providers/home_provider.dart';
 
 class HomeHeader extends ConsumerWidget {
@@ -65,6 +68,16 @@ class HomeHeader extends ConsumerWidget {
           const SizedBox(width: AppTheme.spaceSM),
 
           // Settings
+          _IconAction(
+            icon: Icons.refresh,
+            onTap: () async {
+              await UserSessionService.instance.clearSession();
+              if (context.mounted) {
+                context.go('/placement');
+              }
+            },
+          ),
+          const SizedBox(width: AppTheme.spaceSM),
           _IconAction(
             icon: Icons.tune,
             onTap: () {

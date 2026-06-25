@@ -3,14 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zenglish/data/models/lesson_flow.dart';
-import 'package:zenglish/core/providers/user_profile_provider.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/models/lesson.dart';
+import 'package:zenglish/data/models/lesson_flow.dart';
 import 'package:zenglish/data/services/audio_playback_service.dart';
-import 'package:zenglish/presentation/providers/audio_provider.dart';
 import 'package:zenglish/presentation/providers/home_provider.dart';
 import 'package:zenglish/presentation/providers/lesson_provider.dart';
+import 'package:zenglish/presentation/screens/lesson/stages/pattern_stage.dart';
+import 'package:zenglish/presentation/screens/lesson/stages/pattern_view_stage.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LESSON SCREEN
@@ -252,7 +252,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
           notifier: ref.read(lessonProvider.notifier),
         );
       case LessonStage.pattern:
-        return _PatternStageView(lesson: lesson, state: state);
+        return const PatternViewStage();
+      case LessonStage.vocab:
+        return const PatternStage();
       case LessonStage.guided:
         return _GuidedStageView(lesson: lesson, state: state);
       case LessonStage.output:
@@ -528,9 +530,8 @@ class _InputStageView extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 IconButton.outlined(
-                  onPressed: idx < dialogues.length - 1
-                      ? notifier.nextDialogue
-                      : null,
+                  onPressed:
+                      idx < dialogues.length - 1 ? notifier.nextDialogue : null,
                   icon: const Icon(Icons.navigate_next),
                   tooltip: 'Hội thoại tiếp theo',
                 ),
@@ -572,8 +573,7 @@ class _InputStageView extends StatelessWidget {
                     ),
                     subtitle: Text(v.vietnamese),
                     trailing: v.isHighPriority
-                        ? const Icon(Icons.star,
-                            color: Colors.amber, size: 16)
+                        ? const Icon(Icons.star, color: Colors.amber, size: 16)
                         : null,
                   ),
                 ),
@@ -702,13 +702,11 @@ class _PatternStageView extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       const Text('• ',
-                                          style:
-                                              TextStyle(color: Colors.grey)),
+                                          style: TextStyle(color: Colors.grey)),
                                       Expanded(
                                         child: Text(
                                           ex,
-                                          style:
-                                              const TextStyle(fontSize: 13),
+                                          style: const TextStyle(fontSize: 13),
                                         ),
                                       ),
                                     ],
@@ -727,16 +725,15 @@ class _PatternStageView extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'Ôn từ vựng (${lesson.vocabulary.length} từ)',
-            style:
-                const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
           const SizedBox(height: 8),
           ...lesson.vocabulary.map(
             (v) => Padding(
               padding: const EdgeInsets.only(bottom: 6),
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
@@ -755,8 +752,8 @@ class _PatternStageView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(v.english,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold)),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
                           Text(v.vietnamese,
                               style: const TextStyle(
                                   fontSize: 12, color: Colors.grey)),
@@ -802,7 +799,6 @@ class _GuidedStageView extends ConsumerWidget {
             subtitle: 'Trả lời các câu hỏi theo hướng dẫn.',
           ),
           const SizedBox(height: 16),
-
           if (steps.isEmpty)
             const Center(child: Text('Chưa có bước luyện tập.'))
           else
@@ -1059,8 +1055,7 @@ class _StageTitleCard extends StatelessWidget {
                         fontWeight: FontWeight.bold, fontSize: 16)),
                 const SizedBox(height: 2),
                 Text(subtitle,
-                    style:
-                        const TextStyle(fontSize: 12, color: Colors.grey)),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey)),
               ],
             ),
           ),
@@ -1136,9 +1131,8 @@ class _DialogueCard extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: isEven
-                      ? MainAxisAlignment.start
-                      : MainAxisAlignment.end,
+                  mainAxisAlignment:
+                      isEven ? MainAxisAlignment.start : MainAxisAlignment.end,
                   children: [
                     if (isEven) ...[
                       _SpeakerBubble(
@@ -1196,8 +1190,7 @@ class _SpeakerBubble extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
               color: isLeft
                   ? AppTheme.primary.withOpacity(0.1)
@@ -1256,8 +1249,7 @@ class _AudioPlayerBar extends StatelessWidget {
             ),
             label: Text(isPlaying ? 'Dừng' : 'Nghe'),
             style: FilledButton.styleFrom(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             ),
           ),
         ],
@@ -1327,13 +1319,9 @@ class _RecordingButton extends StatelessWidget {
                           : AppTheme.primary)
                       .withOpacity(0.4),
                   blurRadius:
-                      recordingState == OutputRecordingState.recording
-                          ? 24
-                          : 8,
+                      recordingState == OutputRecordingState.recording ? 24 : 8,
                   spreadRadius:
-                      recordingState == OutputRecordingState.recording
-                          ? 4
-                          : 0,
+                      recordingState == OutputRecordingState.recording ? 4 : 0,
                 ),
               ],
             ),
@@ -1423,8 +1411,7 @@ class _ErrorScaffold extends StatelessWidget {
               const SizedBox(height: 16),
               const Text(
                 'Không thể tải bài học',
-                style:
-                    TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),

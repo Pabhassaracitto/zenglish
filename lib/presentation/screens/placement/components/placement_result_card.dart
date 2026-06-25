@@ -51,9 +51,9 @@ class PlacementResultCard extends StatelessWidget {
                 ),
                 elevation: 0,
               ),
-              child: const Text(
-                'Bắt đầu học ngay',
-                style: TextStyle(
+              child: Text(
+                'Bắt đầu học ${result.recommendedStartLessonId}',
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),

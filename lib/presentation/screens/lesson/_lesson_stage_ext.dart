@@ -4,6 +4,7 @@
 // liên quan đến UI - tách riêng để giữ lesson_provider.dart sạch.
 
 import 'package:flutter/material.dart';
+
 import '../../providers/lesson_provider.dart';
 
 /// Extension thêm icon hiển thị cho từng giai đoạn bài học.
@@ -12,13 +13,15 @@ extension LessonStageIconExt on LessonStage {
   IconData get icon {
     switch (this) {
       case LessonStage.input:
-        return Icons.hearing_rounded;     // Tai nghe → Giai đoạn nghe
+        return Icons.hearing_rounded; // Tai nghe → Giai đoạn nghe
       case LessonStage.pattern:
-        return Icons.abc_rounded;         // Chữ cái → Giai đoạn mẫu câu
+        return Icons.abc_rounded; // Chữ cái → Giai đoạn mẫu câu
+      case LessonStage.vocab:
+        return Icons.link_rounded; // Link → Giai đoạn nối từ
       case LessonStage.guided:
-        return Icons.people_rounded;      // Người → Giai đoạn luyện tập
+        return Icons.people_rounded; // Người → Giai đoạn luyện tập
       case LessonStage.output:
-        return Icons.mic_rounded;         // Micro → Giai đoạn tự nói
+        return Icons.mic_rounded; // Micro → Giai đoạn tự nói
     }
   }
 }

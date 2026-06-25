@@ -313,6 +313,16 @@ class _TrilingualMatchCard extends StatelessWidget {
                 ),
             ],
           ),
+          if (vocabItem.englishIpa != null) ...[
+            const SizedBox(height: AppTheme.spaceXS),
+            Text(
+              vocabItem.englishIpa!,
+              style: AppTheme.labelSmall.copyWith(
+                color: AppTheme.textMuted,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
           const SizedBox(height: AppTheme.spaceSM),
 
           // Vietnamese answer (dropdown)
