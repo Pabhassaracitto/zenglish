@@ -58,6 +58,14 @@ static void my_application_activate(GApplication* application) {
   fl_dart_project_set_dart_entrypoint_arguments(
       project, self->dart_entrypoint_arguments);
 
+  g_autoptr(GError) error = nullptr;
+  g_autofree gchar* icon_path = g_build_filename(
+      fl_dart_project_get_assets_path(project), "assets", "icons", "zenglish.png", nullptr);
+  gtk_window_set_icon_from_file(window, icon_path, &error);
+  if (error != nullptr) {
+    g_warning("Failed to load icon: %s", error->message);
+  }
+
   FlView* view = fl_view_new(project);
   GdkRGBA background_color;
   // Background defaults to black, override it here if necessary, e.g. #00000000
