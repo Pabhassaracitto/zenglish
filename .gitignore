@@ -64,7 +64,8 @@ ios/Flutter/Flutter.framework/
 ios/Flutter/Generated.xcconfig
 ios/Flutter/ephemeral/
 ios/Pods/
-ios/Runner/
+# Keep iOS source files tracked. GitHub Actions needs storyboards, plist, Swift files, and assets.
+# Only generated/sensitive Runner files are ignored below.
 ios/Runner/GoogleService-Info.plist
 GeneratedPluginRegistrant.h
 ios/Runner/GeneratedPluginRegistrant.m
