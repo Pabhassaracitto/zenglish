@@ -1,0 +1,233 @@
+name: Flutter Full Build - Android, iOS, Windows, Linux
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: # Mở tính năng kích hoạt thủ công từ giao diện GitHub
+    inputs:
+      build_android:
+        description: 'Build Android?'
+        type: boolean
+        default: false
+      build_ios:
+        description: 'Build iOS?'
+        type: boolean
+        default: true
+      build_windows:
+        description: 'Build Windows?'
+        type: boolean
+        default: false
+      build_linux:
+        description: 'Build Linux?'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-android:
+    name: Build Android APK
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.build_android == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Create empty asset directories if missing
+        run: mkdir -p assets/animations assets/audio assets/data
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate Launcher Icons (Ensure logo is set)
+        run: flutter pub run flutter_launcher_icons || true
+
+      - name: Build APK (ARM64 only)
+        run: |
+          flutter build apk --release --target-platform android-arm64 -v
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/zenglish-Android-ARM64-${{ github.ref_name }}.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: build/app/outputs/flutter-apk/zenglish-Android-ARM64-*.apk
+
+  build-windows:
+    name: Build Windows App
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.build_windows == 'true'
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: false
+
+      - name: Enable Windows Desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Create empty asset directories if missing
+        shell: bash
+        run: mkdir -p assets/animations assets/audio assets/data
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Windows
+        shell: bash
+        run: flutter build windows --release
+
+      - name: Zip Windows build
+        shell: powershell
+        run: |
+          $absolutePath = "$env:GITHUB_WORKSPACE\build\windows\x64\runner\Release\*"
+          Compress-Archive -Path $absolutePath -DestinationPath zenglish-Windows-${{ github.ref_name }}.zip
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-zip
+          path: zenglish-Windows-*.zip
+
+  build-ios:
+    name: Build iOS IPA (sideload)
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.build_ios == 'true'
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Create empty asset directories if missing
+        run: mkdir -p assets/animations assets/audio assets/data
+
+      - name: Disable Swift Package Manager
+        run: flutter config --no-enable-swift-package-manager
+
+      - name: Precache iOS artifacts
+        run: flutter precache --ios
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate Launcher Icons (Ensure logo is set)
+        run: dart run flutter_launcher_icons || true
+
+      - name: Install Pods
+        run: |
+          cd ios
+          pod repo update
+          pod install
+
+      - name: Build iOS (no codesign)
+        # Sử dụng --no-pub vì chúng ta đã get dependencies và install pods ở bước trên
+        run: flutter build ios --release --no-codesign --no-pub
+
+      - name: Create IPA
+        run: |
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r zenglish-iOS-${{ github.ref_name }}.ipa Payload
+          rm -rf Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa
+          path: zenglish-iOS-*.ipa
+
+  build-linux:
+    name: Build Linux App
+    if: startsWith(github.ref, 'refs/tags/v') || github.event.inputs.build_linux == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Enable Linux Desktop
+        run: flutter config --enable-linux-desktop
+
+      - name: Create empty asset directories if missing
+        run: mkdir -p assets/animations assets/audio assets/data
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Linux
+        run: flutter build linux --release
+
+      - name: Zip Linux build
+        run: |
+          cd build/linux/x64/release/bundle
+          zip -r ../../../../../zenglish-Linux-${{ github.ref_name }}.zip .
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-zip
+          path: zenglish-Linux-*.zip
+
+  create-release:
+    name: Create Release
+    needs: [build-android, build-windows, build-ios, build-linux]
+    # Chỉ tạo Release thật sự khi push Tag, không tạo khi build thủ công để debug
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ github.ref_name }}
+          files: |
+            artifacts/android-apk/*.apk
+            artifacts/windows-zip/*.zip
+            artifacts/ios-ipa/*.ipa
+            artifacts/linux-zip/*.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
