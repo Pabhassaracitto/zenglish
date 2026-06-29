@@ -1,0 +1,19 @@
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/zenglish.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/icons/zenglish.png"
+    background_color: "#FFFFFF"
+    theme_color: "#FFFFFF"
+  macos:
+    generate: true
+    image_path: "assets/icons/zenglish.png"
+  windows:
+    generate: true
+    image_path: "assets/icons/zenglish.png"
+  linux:
+    generate: true
+    image_path: "assets/icons/zenglish.png"
