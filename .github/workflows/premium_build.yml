@@ -1,0 +1,405 @@
+name: Flutter Full Build - Android, iOS, Windows, Linux, Web
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Nhập version release (vd: 1.0.0, 1.0.0-rc1). Để trống = build thường, dùng ref_name nếu push tag'
+        required: false
+        default: ''
+        type: string
+      force_package:
+        description: 'Tick để force đóng gói/upload artifact kể cả khi không phải stable release'
+        required: false
+        default: false
+        type: boolean
+      build_android:
+        description: 'Build Android?'
+        type: boolean
+        default: false
+      build_ios:
+        description: 'Build iOS?'
+        type: boolean
+        default: true
+      build_windows:
+        description: 'Build Windows?'
+        type: boolean
+        default: false
+      build_linux:
+        description: 'Build Linux?'
+        type: boolean
+        default: false
+      build_web:
+        description: 'Build Web?'
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  # Job trung tâm tính điều kiện phân nhánh
+  prepare:
+    name: Prepare version conditions
+    runs-on: ubuntu-latest
+    outputs:
+      is_stable_release: ${{ steps.check.outputs.is_stable_release }}
+      should_package: ${{ steps.check.outputs.should_package }}
+      version: ${{ steps.check.outputs.version }}
+      version_tag: ${{ steps.check.outputs.version_tag }}
+      ref_name: ${{ github.ref_name }}
+    steps:
+      - id: check
+        run: |
+          # 1. Xác định effective version
+          INPUT_VER="${{ inputs.version }}"
+          TAG_VER="${{ github.ref_name }}"
+          EFFECTIVE_VER=""
+
+          if [[ -n "$INPUT_VER" ]]; then
+            EFFECTIVE_VER="$INPUT_VER"
+            EFFECTIVE_VER="${EFFECTIVE_VER#v}"
+          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            EFFECTIVE_VER="$TAG_VER"
+            EFFECTIVE_VER="${EFFECTIVE_VER#v}"
+          else
+            EFFECTIVE_VER=""
+          fi
+
+          echo "INPUT_VER='$INPUT_VER'"
+          echo "TAG_VER='$TAG_VER'"
+          echo "EFFECTIVE_VER='$EFFECTIVE_VER'"
+
+          # 2. is_stable_release: true khi version có giá trị VÀ không chứa "-"
+          IS_STABLE="false"
+          if [[ -n "$EFFECTIVE_VER" && "$EFFECTIVE_VER" != *"-"* ]]; then
+            IS_STABLE="true"
+          fi
+
+          # 3. should_package: true khi is_stable_release=true HOẶC force_package=true
+          FORCE="${{ inputs.force_package }}"
+          SHOULD_PACKAGE="false"
+          if [[ "$IS_STABLE" == "true" || "$FORCE" == "true" ]]; then
+            SHOULD_PACKAGE="true"
+          fi
+
+          echo "is_stable_release=$IS_STABLE"
+          echo "should_package=$SHOULD_PACKAGE"
+          echo "is_stable_release=$IS_STABLE" >> $GITHUB_OUTPUT
+          echo "should_package=$SHOULD_PACKAGE" >> $GITHUB_OUTPUT
+          echo "version=$EFFECTIVE_VER" >> $GITHUB_OUTPUT
+
+          if [[ -n "$EFFECTIVE_VER" ]]; then
+            echo "version_tag=v$EFFECTIVE_VER" >> $GITHUB_OUTPUT
+          else
+            echo "version_tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Summary
+        run: |
+          echo "### Version Conditions" >> $GITHUB_STEP_SUMMARY
+          echo "- Input version: ${{ inputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Effective version: ${{ steps.check.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- is_stable_release: ${{ steps.check.outputs.is_stable_release }} (true khi version có giá trị VÀ không chứa '-')" >> $GITHUB_STEP_SUMMARY
+          echo "- should_package: ${{ steps.check.outputs.should_package }} (true khi is_stable=true OR force_package=true)" >> $GITHUB_STEP_SUMMARY
+          echo "- force_package: ${{ inputs.force_package }}" >> $GITHUB_STEP_SUMMARY
+
+  build-android:
+    name: Build Android APK & AppBundle
+    needs: prepare
+    timeout-minutes: 30
+    if: |
+      always() &&
+      (needs.prepare.outputs.should_package == 'true' || inputs.build_android == true || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Create empty asset directories if missing
+        run: mkdir -p assets/animations assets/audio assets/data assets/branding assets/icons assets/images
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate Launcher Icons
+        run: dart run flutter_launcher_icons || true
+
+      - name: Build APK (ARM64 only)
+        run: |
+          VER="${{ needs.prepare.outputs.version }}"
+          [ -z "$VER" ] && VER="${{ github.ref_name }}"
+          [ -z "$VER" ] && VER="dev-${{ github.run_number }}"
+          echo "Building Android with version: $VER"
+          flutter build apk --release --target-platform android-arm64 -v --build-name=$VER
+          mv build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/zenglish-Android-ARM64-${VER}.apk
+          ls -lh build/app/outputs/flutter-apk/
+
+      - name: Build AppBundle (Google Play)
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        run: |
+          VER="${{ needs.prepare.outputs.version }}"
+          [ -z "$VER" ] && VER="0.0.0-dev"
+          flutter build appbundle --release --build-name=$VER
+
+      - name: Upload APK Artifact
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: build/app/outputs/flutter-apk/zenglish-Android-ARM64-*.apk
+
+      - name: Upload AppBundle Artifact
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-appbundle
+          path: build/app/outputs/bundle/release/app-release.aab
+
+  build-ios:
+    name: Build iOS IPA (sideload)
+    needs: prepare
+    timeout-minutes: 45
+    if: |
+      always() &&
+      (needs.prepare.outputs.should_package == 'true' || inputs.build_ios == true || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Create empty asset directories if missing
+        run: mkdir -p assets/animations assets/audio assets/data assets/branding assets/icons assets/images
+
+      - name: Precache iOS artifacts
+        run: flutter precache --ios
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate Launcher Icons
+        run: dart run flutter_launcher_icons || true
+
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install
+
+      - name: Build iOS (no codesign)
+        run: |
+          VER="${{ needs.prepare.outputs.version }}"
+          [ -z "$VER" ] && VER="0.0.0-dev"
+          flutter build ios --release --no-codesign --build-name=$VER
+
+      - name: Create IPA
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        run: |
+          VER="${{ needs.prepare.outputs.version }}"
+          [ -z "$VER" ] && VER="${{ github.ref_name }}"
+          [ -z "$VER" ] && VER="dev-${{ github.run_number }}"
+          mkdir -p Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
+          zip -r zenglish-iOS-${VER}.ipa Payload
+          rm -rf Payload
+          ls -lh *.ipa
+
+      - name: Upload IPA artifact
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-ipa
+          path: zenglish-iOS-*.ipa
+
+  build-windows:
+    name: Build Windows App
+    needs: prepare
+    timeout-minutes: 30
+    if: |
+      always() &&
+      (needs.prepare.outputs.should_package == 'true' || inputs.build_windows == true || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Enable Windows Desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Create empty asset directories if missing
+        shell: bash
+        run: mkdir -p assets/animations assets/audio assets/data assets/branding assets/icons assets/images
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Windows
+        shell: bash
+        run: flutter build windows --release
+
+      - name: Zip Windows build
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        shell: powershell
+        run: |
+          $ver="${{ needs.prepare.outputs.version }}"
+          if ([string]::IsNullOrEmpty($ver)) { $ver = "${{ github.ref_name }}"; if ([string]::IsNullOrEmpty($ver)) { $ver = "dev-${{ github.run_number }}" } }
+          $absolutePath = "$env:GITHUB_WORKSPACE\build\windows\x64\runner\Release\*"
+          Compress-Archive -Path $absolutePath -DestinationPath zenglish-Windows-${ver}.zip
+          Get-ChildItem zenglish-Windows-*.zip
+
+      - name: Upload Windows artifact
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-zip
+          path: zenglish-Windows-*.zip
+
+  build-linux:
+    name: Build Linux App
+    needs: prepare
+    timeout-minutes: 20
+    if: |
+      always() &&
+      (needs.prepare.outputs.should_package == 'true' || inputs.build_linux == true || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Enable Linux Desktop
+        run: flutter config --enable-linux-desktop
+
+      - name: Create empty asset directories if missing
+        run: mkdir -p assets/animations assets/audio assets/data assets/branding assets/icons assets/images
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Linux
+        run: flutter build linux --release
+
+      - name: Zip Linux build
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        run: |
+          VER="${{ needs.prepare.outputs.version }}"
+          [ -z "$VER" ] && VER="${{ github.ref_name }}"
+          [ -z "$VER" ] && VER="dev-${{ github.run_number }}"
+          cd build/linux/x64/release/bundle
+          zip -r ../../../../../zenglish-Linux-${VER}.zip .
+          ls -lh ../../../../../zenglish-Linux-*.zip
+
+      - name: Upload Linux artifact
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-zip
+          path: zenglish-Linux-*.zip
+
+  build-web:
+    name: Build Web App
+    needs: prepare
+    timeout-minutes: 15
+    if: |
+      always() &&
+      (needs.prepare.outputs.should_package == 'true' || inputs.build_web == true || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build Web
+        run: flutter build web --release
+
+      - name: Upload Web artifact
+        if: ${{ needs.prepare.outputs.should_package == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/web
+
+  create-release:
+    name: Create GitHub Release
+    needs: [prepare, build-android, build-windows, build-ios, build-linux, build-web]
+    timeout-minutes: 15
+    if: |
+      always() &&
+      needs.prepare.outputs.is_stable_release == 'true' &&
+      !cancelled()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: ls -R artifacts
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare.outputs.version_tag }}
+          name: Release ${{ needs.prepare.outputs.version_tag }}
+          files: |
+            artifacts/android-apk/*.apk
+            artifacts/android-appbundle/*.aab
+            artifacts/windows-zip/*.zip
+            artifacts/ios-ipa/*.ipa
+            artifacts/linux-zip/*.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
