@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/models/vocab_item.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
 
 import '../../../providers/lesson_provider.dart';
 
@@ -32,7 +33,7 @@ class PatternStage extends ConsumerWidget {
           // Header
           Row(
             children: [
-              Text('Nối Từ Tam Ngữ', style: AppTheme.headingMedium),
+              Text(context.l10n.matchWords, style: AppTheme.headingMedium),
               const Spacer(),
               TextButton.icon(
                 onPressed: () {
@@ -40,7 +41,7 @@ class PatternStage extends ConsumerWidget {
                   ref.read(_shakingCardProvider.notifier).state = null;
                 },
                 icon: const Icon(Icons.refresh, size: 16),
-                label: const Text('Làm lại'),
+                label: Text(context.l10n.retry),
                 style: TextButton.styleFrom(
                   foregroundColor: AppTheme.textSecondary,
                   textStyle: AppTheme.bodyMedium,

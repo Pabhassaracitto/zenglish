@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
 
 import '../../../../core/providers/user_profile_provider.dart';
 import '../../../providers/home_provider.dart';
@@ -53,7 +54,7 @@ class UserProfileCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Show Pronunciation (IPA)',
+                  profile.showIpa ? context.l10n.showIpa : context.l10n.hideIpa,
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 Switch(

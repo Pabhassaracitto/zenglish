@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/services/user_session_service.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
+import 'package:zenglish/presentation/widgets/language_selector_sheet.dart';
 
 import '../../../providers/home_provider.dart';
 
@@ -67,7 +69,15 @@ class HomeHeader extends ConsumerWidget {
 
           const SizedBox(width: AppTheme.spaceSM),
 
-          // Settings
+          // Language Selector Action
+          _IconAction(
+            icon: Icons.language_rounded,
+            onTap: () => LanguageSelectorSheet.show(context),
+          ),
+
+          const SizedBox(width: AppTheme.spaceSM),
+
+          // Reset Session / Settings
           _IconAction(
             icon: Icons.refresh,
             onTap: () async {
@@ -75,13 +85,6 @@ class HomeHeader extends ConsumerWidget {
               if (context.mounted) {
                 context.go('/placement');
               }
-            },
-          ),
-          const SizedBox(width: AppTheme.spaceSM),
-          _IconAction(
-            icon: Icons.tune,
-            onTap: () {
-              // TODO: Settings screen
             },
           ),
         ],
@@ -129,6 +132,7 @@ class _SilentToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -154,7 +158,7 @@ class _SilentToggle extends StatelessWidget {
             ),
             const SizedBox(width: 4),
             Text(
-              isSilent ? 'Im lặng' : 'Âm thanh',
+              isSilent ? l10n.silentMode : 'Audio',
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,

@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
 
 import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/lesson/lesson_screen.dart';
@@ -250,6 +251,7 @@ class RouterErrorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: AppColors.creamLight,
       body: Center(
@@ -261,7 +263,7 @@ class RouterErrorPage extends StatelessWidget {
               const Text('🙏', style: TextStyle(fontSize: 48)),
               const SizedBox(height: 16),
               Text(
-                'Lỗi điều hướng',
+                l10n.navigationError,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: AppColors.earthBrown,
                     ),
@@ -275,7 +277,7 @@ class RouterErrorPage extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () => context.go(AppRoutes.home),
-                child: const Text('Về trang chủ'),
+                child: Text(l10n.backToHome),
               ),
             ],
           ),

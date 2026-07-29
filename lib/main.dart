@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/providers/user_profile_provider.dart';
 import 'data/services/user_session_service.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
+import 'package:zenglish/core/providers/locale_provider.dart';
 
 Future<void> main() async {
   // ── 1. Đảm bảo Flutter binding sẵn sàng ──
@@ -68,6 +70,7 @@ class ZENGLISHApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Lấy router (đã được cung cấp bởi appRouterProvider)
     final router = ref.watch(appRouterProvider);
+    final userLocale = ref.watch(localeProvider);
 
     return MaterialApp.router(
       // ── App Info ──
@@ -79,17 +82,13 @@ class ZENGLISHApp extends ConsumerWidget {
 
       // ── Theme ──
       theme: AppTheme.light,
-      // darkTheme: AppTheme.dark, // TODO: Implement dark theme
       themeMode: ThemeMode.light,
 
-      // ── Localization (cơ bản) ──
-      locale: const Locale('vi', 'VN'),
-      supportedLocales: const [
-        Locale('vi', 'VN'),
-        Locale('en', 'US'),
-      ],
-      // -- Các delegate này cho phép app sử dụng các widget được quốc tế hóa sẵn của Flutter
+      // ── Localization ──
+      locale: userLocale,
+      supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
 
 import '../../../../data/models/lesson.dart';
 import '../../../providers/home_provider.dart';
@@ -299,7 +300,7 @@ class _SuggestionActions extends StatelessWidget {
                 size: 18,
               ),
               label: Text(
-                isInProgress ? 'Tiếp tục' : 'Bắt đầu học',
+                isInProgress ? context.l10n.continueText : context.l10n.startLearning,
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primary,
