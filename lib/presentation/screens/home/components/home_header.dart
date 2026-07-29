@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zenglish/core/providers/locale_provider.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/services/user_session_service.dart';
 import 'package:zenglish/l10n/app_localizations.dart';
@@ -69,17 +70,14 @@ class HomeHeader extends ConsumerWidget {
 
           const SizedBox(width: AppTheme.spaceSM),
 
-          // Language Selector Action
-          _IconAction(
-            icon: Icons.language_rounded,
-            onTap: () => LanguageSelectorSheet.show(context),
-          ),
+          // Globe Button with Tap & Emergency 3s Long Press (Point 3 & 5)
+          const _LanguageGlobeAction(),
 
           const SizedBox(width: AppTheme.spaceSM),
 
-          // Reset Session / Settings
+          // Reset Session / Settings (Gear/Refresh)
           _IconAction(
-            icon: Icons.refresh,
+            icon: Icons.settings_outlined,
             onTap: () async {
               await UserSessionService.instance.clearSession();
               if (context.mounted) {
@@ -94,6 +92,53 @@ class HomeHeader extends ConsumerWidget {
 }
 
 // ─────────────────────────────────────────────
+
+class _LanguageGlobeAction extends ConsumerWidget {
+  const _LanguageGlobeAction();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Tooltip(
+      message: 'Chạm để chọn ngôn ngữ · Nhấn giữ 3 giây để khôi phục về hệ thống\nTap to change language · Long press 3s to restore system default',
+      child: GestureDetector(
+        onTap: () => LanguageSelectorSheet.show(context),
+        onLongPress: () {
+          // Emergency restore (Point 5)
+          ref.read(localeProvider.notifier).resetToSystem();
+
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text(
+                '✓ Đã khôi phục về Ngôn ngữ hệ thống / Restored to System Default',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              backgroundColor: AppTheme.earthDark,
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              margin: const EdgeInsets.all(16),
+            ),
+          );
+        },
+        child: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppTheme.surfaceVariant,
+            border: Border.all(color: AppTheme.divider),
+          ),
+          child: const Center(
+            child: Text('🌐', style: TextStyle(fontSize: 18)),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class _UserAvatar extends StatelessWidget {
   const _UserAvatar({required this.isMonk});

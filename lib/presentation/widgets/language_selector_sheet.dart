@@ -24,17 +24,134 @@ class LanguageSelectorSheet extends ConsumerStatefulWidget {
 class _LanguageSelectorSheetState extends ConsumerState<LanguageSelectorSheet> {
   String _searchQuery = '';
 
+  void _confirmAndApplyLanguage(BuildContext context, SupportedLanguage? targetLang) {
+    final currentLocale = ref.read(localeProvider);
+    final targetName = targetLang != null ? targetLang.formattedName : 'Theo ngôn ngữ hệ thống · System Default (SYS)';
+
+    showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: AppColors.creamLight,
+          title: Row(
+            children: [
+              const Icon(Icons.language_rounded, color: AppColors.earthBrown, size: 24),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'Xác nhận / Confirm',
+                  style: GoogleFonts.merriweather(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.earthBrown,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Chuyển giao diện sang $targetName?',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                'Switch interface to $targetName?',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontStyle: FontStyle.italic,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          actions: [
+            OutlinedButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.textSecondary,
+                side: const BorderSide(color: AppTheme.divider),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('← Hủy / Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.earthBrown,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('✓ Áp dụng / Apply'),
+            ),
+          ],
+        );
+      },
+    ).then((confirmed) {
+      if (confirmed == true && mounted) {
+        // Execute confirmed change (Point 7)
+        final targetLocale = targetLang?.locale;
+        ref.read(localeProvider.notifier).setLocaleConfirmed(targetLocale);
+
+        // Close sheet
+        Navigator.of(context).pop();
+
+        // Post-switch Undo SnackBar (Point 4)
+        _showPostSwitchSnackBar(context, targetLang);
+      }
+    });
+  }
+
+  void _showPostSwitchSnackBar(BuildContext context, SupportedLanguage? targetLang) {
+    final langName = targetLang != null ? targetLang.formattedName : 'System Default';
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.clearSnackBars();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          '✓ Language changed to $langName',
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+        ),
+        action: SnackBarAction(
+          label: '↶ Hoàn tác / Undo',
+          textColor: AppTheme.saffronLight,
+          onPressed: () {
+            ref.read(localeProvider.notifier).undoLocaleChange();
+          },
+        ),
+        backgroundColor: AppTheme.earthDark,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 4),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        margin: const EdgeInsets.all(16),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentLocale = ref.watch(localeProvider);
     final l10n = context.l10n;
 
     final filteredLanguages = appSupportedLanguages.where((lang) {
-      if (_searchQuery.isEmpty) return true;
-      final q = _searchQuery.toLowerCase();
-      return lang.nativeName.toLowerCase().contains(q) ||
-          lang.englishName.toLowerCase().contains(q) ||
-          lang.code.toLowerCase().contains(q);
+      return lang.matchesQuery(_searchQuery);
     }).toList();
 
     return Container(
@@ -68,7 +185,7 @@ class _LanguageSelectorSheetState extends ConsumerState<LanguageSelectorSheet> {
                 const Icon(Icons.language_rounded, color: AppColors.earthBrown, size: 24),
                 const SizedBox(width: 10),
                 Text(
-                  l10n.selectLanguage,
+                  'Ngôn ngữ · Language',
                   style: GoogleFonts.merriweather(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -84,13 +201,13 @@ class _LanguageSelectorSheetState extends ConsumerState<LanguageSelectorSheet> {
             ),
           ),
 
-          // Search Box
+          // Search Box (Multi-alias, Point 6)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: TextField(
               onChanged: (val) => setState(() => _searchQuery = val),
               decoration: InputDecoration(
-                hintText: '${l10n.selectLanguage}...',
+                hintText: 'Tìm kiếm / Search (vi, English, မြန်မာ...)...',
                 prefixIcon: const Icon(Icons.search_rounded, size: 20),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 filled: true,
@@ -105,57 +222,53 @@ class _LanguageSelectorSheetState extends ConsumerState<LanguageSelectorSheet> {
 
           const Divider(height: 1),
 
-          // Language List
+          // Language List with 3 components (Point 2: No flag emojis)
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
                 // System Default Option
                 ListTile(
-                  leading: const Text('📱', style: TextStyle(fontSize: 22)),
-                  title: Text(
-                    l10n.systemDefault,
+                  leading: const Icon(Icons.phonelink_setup_rounded, color: AppColors.earthBrown),
+                  title: const Text(
+                    'Theo ngôn ngữ hệ thống · System Default (SYS)',
                     style: TextStyle(
-                      fontWeight: currentLocale == null ? FontWeight.bold : FontWeight.normal,
-                      color: currentLocale == null ? AppColors.earthBrown : AppColors.textPrimary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                   trailing: currentLocale == null
                       ? const Icon(Icons.check_circle_rounded, color: AppColors.earthBrown)
                       : null,
-                  onTap: () {
-                    ref.read(localeProvider.notifier).resetToSystem();
-                    Navigator.of(context).pop();
-                  },
+                  onTap: () => _confirmAndApplyLanguage(context, null),
                 ),
                 const Divider(height: 1, indent: 20, endIndent: 20),
 
-                // Supported Languages
+                // Supported Languages (Formatted as: Native · English (TAG))
                 ...filteredLanguages.map((lang) {
                   final isSelected = currentLocale != null &&
                       currentLocale.languageCode == lang.code &&
                       (lang.countryCode == null || currentLocale.countryCode == lang.countryCode);
 
                   return ListTile(
-                    leading: Text(lang.flagEmoji, style: const TextStyle(fontSize: 22)),
+                    leading: Icon(
+                      Icons.translate_rounded,
+                      size: 20,
+                      color: isSelected ? AppColors.earthBrown : AppColors.textSecondary,
+                    ),
                     title: Text(
-                      lang.nativeName,
+                      lang.formattedName,
                       style: TextStyle(
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                        fontSize: 14,
                         color: isSelected ? AppColors.earthBrown : AppColors.textPrimary,
                       ),
-                    ),
-                    subtitle: Text(
-                      lang.englishName,
-                      style: TextStyle(fontSize: 12, color: AppColors.textSecondary.withOpacity(0.8)),
                     ),
                     trailing: isSelected
                         ? const Icon(Icons.check_circle_rounded, color: AppColors.earthBrown)
                         : null,
-                    onTap: () {
-                      ref.read(localeProvider.notifier).setLocale(lang.locale);
-                      Navigator.of(context).pop();
-                    },
+                    onTap: () => _confirmAndApplyLanguage(context, lang),
                   );
                 }),
               ],
