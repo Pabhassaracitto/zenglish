@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/models/lesson.dart';
 import 'package:zenglish/data/models/lesson_flow.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
 
 import '../../../providers/lesson_provider.dart';
 
@@ -70,7 +71,7 @@ class PatternViewStage extends ConsumerWidget {
                 notifier.nextStage();
               },
               icon: const Icon(Icons.arrow_forward, size: 18),
-              label: const Text('Tiếp theo: Nối Từ →'),
+              label: Text(context.l10n.nextPatternPractice),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primary,
                 foregroundColor: Colors.white,

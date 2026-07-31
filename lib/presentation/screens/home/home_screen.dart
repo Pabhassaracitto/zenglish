@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
 
 import '../../providers/home_provider.dart';
 import 'components/ai_interview_quick_start.dart';
@@ -148,11 +149,11 @@ class _SectionLabel extends StatelessWidget {
 class _LoadingBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
+          const SizedBox(
             width: 28,
             height: 28,
             child: CircularProgressIndicator(
@@ -160,9 +161,9 @@ class _LoadingBody extends StatelessWidget {
               color: AppTheme.primary,
             ),
           ),
-          SizedBox(height: AppTheme.spaceMD),
+          const SizedBox(height: AppTheme.spaceMD),
           Text(
-            'Đang tải...',
+            context.l10n.loading,
             style: AppTheme.bodyMedium,
           ),
         ],
@@ -189,7 +190,7 @@ class _ErrorBody extends StatelessWidget {
               color: AppTheme.errorSoft,
             ),
             const SizedBox(height: AppTheme.spaceMD),
-            const Text('Có lỗi xảy ra', style: AppTheme.headingMedium),
+            Text(context.l10n.errorOccurred, style: AppTheme.headingMedium),
             const SizedBox(height: AppTheme.spaceSM),
             Text(
               error,

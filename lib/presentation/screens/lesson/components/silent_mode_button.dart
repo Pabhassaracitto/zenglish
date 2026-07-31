@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
 
 import '../../../providers/lesson_provider.dart';
 
@@ -43,7 +44,7 @@ class SilentModeButton extends ConsumerWidget {
             ),
             const SizedBox(width: 4),
             Text(
-              isSilent ? 'Im Lặng' : 'Âm Thanh',
+              isSilent ? context.l10n.silentMode : 'Audio',
               style: AppTheme.labelSmall.copyWith(
                 color: isSilent ? Colors.white : AppTheme.textSecondary,
                 fontWeight: FontWeight.w600,
@@ -56,13 +57,14 @@ class SilentModeButton extends ConsumerWidget {
   }
 
   void _showSilentModeSnackbar(BuildContext context, bool nowSilent) {
+    final l10n = context.l10n;
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           nowSilent
-              ? 'Chế độ im lặng bật. Audio và ghi âm đã tắt.'
-              : 'Chế độ im lặng tắt.',
+              ? l10n.silentModeOn
+              : l10n.silentModeOff,
           style: AppTheme.bodyMedium.copyWith(color: Colors.white),
         ),
         backgroundColor: AppTheme.primary,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
 
 import '../models/interview_feedback.dart';
 import 'feedback_section.dart';
@@ -675,7 +676,7 @@ class _ActionButtons extends StatelessWidget {
               onRetry();
             },
             icon: const Icon(Icons.refresh, size: 16),
-            label: const Text('Thử lại'),
+            label: Text(context.l10n.retry),
             style: OutlinedButton.styleFrom(
               foregroundColor: AppTheme.textSecondary,
               side: const BorderSide(color: AppTheme.divider),
@@ -700,7 +701,7 @@ class _ActionButtons extends StatelessWidget {
             },
             icon: const Icon(Icons.check, size: 16),
             label: Text(
-              feedback.isGoodReport ? 'Hoàn thành bài học' : 'Tiếp tục anyway',
+              feedback.isGoodReport ? context.l10n.finishLesson : context.l10n.continueText,
             ),
             style: ElevatedButton.styleFrom(
               backgroundColor:

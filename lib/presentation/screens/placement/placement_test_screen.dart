@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:zenglish/core/router/app_router.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/models/placement_result.dart';
+import 'package:zenglish/l10n/app_localizations.dart';
 import 'package:zenglish/presentation/screens/lesson/lesson_screen.dart';
 
 import '../../providers/placement_provider.dart';
@@ -227,7 +228,7 @@ class BottomNavBar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppTheme.radiusMD),
                 ),
               ),
-              child: const Text('Quay lại'),
+              child: Text(context.l10n.back),
             )
           else
             const SizedBox(width: 90),
@@ -255,7 +256,7 @@ class BottomNavBar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      isLastStep ? 'Xem kết quả' : 'Tiếp theo',
+                      isLastStep ? context.l10n.viewDetails : context.l10n.continueText,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
