@@ -8,6 +8,10 @@ Trạng thái từng việc ở [Kanban](KANBAN.md); điểm tiếp tục ở [H
 
 Người dùng yêu cầu ưu tiên push code/tests/docs; ba workflow do chủ repository tự cập nhật. Các checkbox về CI bên dưới chỉ xác nhận bản cấu hình đã được soạn ở workspace, **không được đưa vào commit ứng dụng**. Xem WORKFLOW_MANUAL.md. Không bật build/tag tự động khi workflow mới chưa được cập nhật và kiểm tra.
 
+### Cập nhật khi mở PR
+
+G0 đã hoàn tất với main `ce01f0a`: hợp nhất theme/localization và giữ sửa AppColors, Python checks đạt. Người dùng đã yêu cầu create PR; PR được chuẩn bị dạng draft vì Flutter checks/build chưa được chạy. Workflow không nằm trong PR. Các gate G2–G4 và xác minh trên main sau merge vẫn chưa hoàn tất.
+
 ### Cửa kiểm tra trước PR và sau merge
 
 1. **G0 — Đồng bộ (ZEN-015):** fetch main mới, hợp nhất code ứng dụng với sửa theme trên main. Lần đối chiếu 13/09/2026 thấy main `ce01f0a` và hai nhánh phân kỳ; kết quả “Already up to date” cũ không còn áp dụng. Không khôi phục AppTheme.earthDark/saffronLight đã được sửa sang AppColors.

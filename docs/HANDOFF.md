@@ -8,7 +8,15 @@ Offline-first, Android beta trước, Việt–Anh ưu tiên. Người dùng đ�
 
 Không cần hỏi lại hướng offline hay có cần beta không. Chỉ hỏi khi cần quyết định mới (quyền GitHub, giọng thu âm, signing/store hoặc duyệt chuyên môn).
 
-## 2. Trạng thái đã đối chiếu — trước PR
+## 2. Trạng thái đã đối chiếu — chuẩn bị PR
+
+### Cập nhật mới nhất khi người dùng yêu cầu create PR
+
+Đã nhập main `ce01f0a` vào nhánh ứng dụng. Hai conflict được giải quyết: giữ font offline trong `app_theme.dart` (không thêm self-import) và giữ localization facade generated thay lớp dịch viết tay. Ba tham chiếu màu đã giữ đúng `AppColors` như bản sửa trên main. Validator 8 bài và 7/7 Python tests đạt sau merge; Flutter SDK chưa sẵn sàng nên chưa chạy analyzer/tests/build. Không có thay đổi workflow trong PR; bộ workflow thủ công vẫn giữ riêng ở workspace. Đang mở PR dạng draft để review, không tự merge khi kiểm tra Flutter chưa đạt.
+
+Các ghi chú “chưa nhập main” bên dưới là lịch sử trước bước này, không phải việc còn cần làm cho cùng SHA. Luôn fetch và đối chiếu lại nếu main tiếp tục thay đổi.
+
+### Lịch sử đối chiếu trước khi đồng bộ
 
 Mốc kiểm tra **13/09/2026** (không phải khẳng định main luôn ở các SHA này):
 
