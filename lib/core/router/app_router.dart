@@ -11,7 +11,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/l10n/app_localizations.dart';
 
@@ -217,7 +216,8 @@ class SplashScreen extends ConsumerWidget {
             const SizedBox(height: 20),
             Text(
               'English for Wisdom & Meditation',
-              style: GoogleFonts.merriweather(
+              style: TextStyle(
+                fontFamily: 'Merriweather',
                 color: AppTheme.textPrimary,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

@@ -464,8 +464,8 @@ class _InputStageView extends StatelessWidget {
           // Stage header
           _StageTitleCard(
             icon: Icons.hearing_rounded,
-            title: 'Nghe & Hiểu',
-            subtitle: 'Nghe đoạn hội thoại và hiểu ngữ cảnh.',
+            title: inputPhase.title,
+            subtitle: inputPhase.description,
           ),
           const SizedBox(height: 16),
 
@@ -492,7 +492,7 @@ class _InputStageView extends StatelessWidget {
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Audio chưa có trong MVP. Sẽ cập nhật sớm!',
+                      'Chưa có bản thu âm. Bạn vẫn có thể đọc nội dung và hoàn thành bài. / No recording yet. Read the text to continue.',
                       style: TextStyle(fontSize: 12, color: Colors.amber),
                     ),
                   ),
@@ -502,6 +502,18 @@ class _InputStageView extends StatelessWidget {
             const SizedBox(height: 16),
           ],
 
+          if (inputPhase.readingTextEn != null) ...[
+            SelectableText(inputPhase.readingTextEn!),
+            if (inputPhase.readingNote != null) ...[
+              const SizedBox(height: 12),
+              Text(inputPhase.readingNote!),
+            ],
+            const SizedBox(height: 16),
+          ],
+          if (lesson.needsReview) ...[
+            const Text('Nội dung beta — đang chờ duyệt chuyên môn. / Beta content — editorial review pending.'),
+            const SizedBox(height: 12),
+          ],
           // ── Dialogues ──────────────────────────────────────────────────
           if (hasDialogues) ...[
             Text(
@@ -537,7 +549,7 @@ class _InputStageView extends StatelessWidget {
                 ),
               ],
             ),
-          ] else
+          ] else if (inputPhase.readingTextEn == null)
             const Center(child: Text('Chưa có hội thoại cho bài học này.')),
 
           const SizedBox(height: 24),

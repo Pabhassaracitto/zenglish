@@ -63,7 +63,8 @@ class VocabItem {
       exampleContext: json['example_context'] as String,
       priority: json['priority'] as String,
       note: json['note'] as String?,
-      needsAudio: (json['note'] as String? ?? '').contains('[NEEDS AUDIO]'),
+      needsAudio: json['needs_audio'] as bool? ??
+          (json['note'] as String? ?? '').contains('[NEEDS AUDIO]'),
       englishIpa: json['english_ipa'] as String?,
     );
   }

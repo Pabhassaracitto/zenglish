@@ -1,10 +1,10 @@
 /// lib/ai/engine/ai_interview_engine.dart
 ///
-/// AIInterviewEngine — Production Version with Mock Fallback
+/// AIInterviewEngine — Offline beta with injectable service for tests
 ///
 /// Strategy:
-///   PRIMARY   → OpenAIService (nếu API Key hợp lệ)
-///   FALLBACK  → 5 Analyzers + MockResponseBuilder (nếu key trống hoặc lỗi)
+///   DEFAULT   → Local analyzers (no network)
+///   TESTS     → Injected OpenAIService with local fallback
 ///
 /// UI layer KHÔNG biết đang chạy nhánh nào.
 /// LessonNotifier.analyzeInterview() chỉ cần await kết quả.
@@ -16,7 +16,6 @@
 library;
 
 import '../../core/constants/dhamma_keywords.dart';
-import '../../core/env/env.dart';
 import '../../data/models/lesson.dart';
 import '../models/interview_feedback.dart';
 import '../services/openai_service.dart';
@@ -38,11 +37,11 @@ class AIInterviewEngine {
   /// Cho phép inject dependencies để viết unit test dễ dàng.
   /// Production dùng singleton [instance].
   AIInterviewEngine({OpenAIService? openAIService})
-      : _openAIService = openAIService ?? OpenAIService();
+      : _openAIService = openAIService;
 
   static final AIInterviewEngine instance = AIInterviewEngine();
 
-  final OpenAIService _openAIService;
+  final OpenAIService? _openAIService;
 
   // ─────────────────────────────────────────────
   // MAIN ENTRY POINT
@@ -51,8 +50,8 @@ class AIInterviewEngine {
   /// Phân tích transcript → InterviewFeedback.
   ///
   /// Tự động chọn nhánh:
-  ///   • API Key hợp lệ → OpenAI
-  ///   • API Key trống  → Mock (không cần log warning, đây là expected)
+  ///   • Service được inject trong tests → service
+  ///   • Mặc định → phân tích cục bộ, không gửi dữ liệu
   ///   • OpenAI lỗi    → Mock (fallback tự động, UI không bị crash)
   ///
   /// KHÔNG bao giờ throw exception ra ngoài.
@@ -68,15 +67,15 @@ class AIInterviewEngine {
 
     // ─── Chọn nhánh ──────────────────────────
 
-    if (Env.isConfigured) {
+    if (_openAIService != null) {
       return _analyzeWithOpenAI(
         transcript: transcript,
         currentLesson: currentLesson,
       );
     }
 
-    // Key trống → chạy Mock ngay, không cần thử OpenAI
-    _log('API Key not configured → running Mock analyzers');
+    // Offline beta: không khởi tạo service từ xa khi không được inject.
+    _log('Offline beta → running local analyzers');
     return _analyzeWithMock(
       transcript: transcript,
       currentLesson: currentLesson,
@@ -94,7 +93,7 @@ class AIInterviewEngine {
     try {
       _log('Calling OpenAI API...');
 
-      final jsonString = await _openAIService.analyzeReport(
+      final jsonString = await _openAIService!.analyzeReport(
         userTranscript: transcript,
         currentLesson: currentLesson,
       );
@@ -239,6 +238,10 @@ class AIInterviewEngine {
       hasPaliTerms: hasPaliTerms,
       wordCount: wordCount,
     );
+
+    langFeedback = 'Offline practice feedback / Phản hồi luyện tập cục bộ. '
+        'Not an assessment of meditation attainment / '
+        'Không đánh giá chứng đắc.\n\n$langFeedback';
 
     // Append fallback note nếu có (do lỗi OpenAI)
     if (fallbackNote != null) {

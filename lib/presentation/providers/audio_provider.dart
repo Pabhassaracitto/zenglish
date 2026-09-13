@@ -136,7 +136,13 @@ class AudioNotifier extends StateNotifier<AudioState> {
         clearError: true,
       );
 
-      await _service.play(source);
+      final result = await _service.play(source);
+      if (result != AudioLoadResult.success) {
+        state = state.copyWith(
+          playbackState: AudioPlaybackState.error,
+          error: result.name,
+        );
+      }
     } catch (e) {
       state = state.copyWith(
         playbackState: AudioPlaybackState.error,

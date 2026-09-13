@@ -72,13 +72,17 @@ class InputPhase {
     required this.title,
     required this.description,
     required this.sampleDialogues,
-    this.audioUrl, // ← THÊM FIELD NÀY
+    this.audioUrl,
+    this.readingTextEn,
+    this.readingNote,
   });
 
   final String title;
   final String description;
   final List<SampleDialogue> sampleDialogues;
   final String? audioUrl;
+  final String? readingTextEn;
+  final String? readingNote;
 
   factory InputPhase.fromJson(Map<String, dynamic> json) {
     return InputPhase(
@@ -87,7 +91,10 @@ class InputPhase {
       sampleDialogues: (json['sample_dialogues'] as List<dynamic>? ?? [])
           .map((e) => SampleDialogue.fromJson(e as Map<String, dynamic>))
           .toList(),
-      audioUrl: json['audio_url'] as String?,
+      audioUrl: (json['audio_url'] as String?)?.trim().isNotEmpty == true
+          ? (json['audio_url'] as String).trim() : null,
+      readingTextEn: json['reading_text_en'] as String?,
+      readingNote: json['email_structure_note'] as String?,
     );
   }
 
@@ -96,6 +103,8 @@ class InputPhase {
     'description': description,
     'sample_dialogues': sampleDialogues.map((e) => e.toJson()).toList(),
     if (audioUrl != null) 'audio_url': audioUrl,
+    if (readingTextEn != null) 'reading_text_en': readingTextEn,
+    if (readingNote != null) 'email_structure_note': readingNote,
   };
 }
 

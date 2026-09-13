@@ -137,6 +137,8 @@ class Lesson {
         json['lesson_flow'] as Map<String, dynamic>,
       ),
       situationVariants: variantMap,
+      needsReview: json['needs_review'] as bool? ?? false,
+      needsReviewNote: json['needs_review_note'] as String?,
       patchesApplied: List<String>.from(
         json['patches_applied'] as List<dynamic>? ?? [],
       ),

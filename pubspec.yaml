@@ -1,11 +1,11 @@
 name: zenglish
 description: English for Wisdom & Meditation - App học tiếng Anh cho hệ thống Theravāda
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.1-beta.1+2
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
-  flutter: '>=3.10.0'
+  sdk: '>=3.12.0 <4.0.0'
+  flutter: '>=3.44.0'
 
 dependencies:
   flutter:
@@ -31,6 +31,8 @@ dependencies:
   google_fonts: ^6.1.0
 
   # ── Utils ──
+  http: ^1.2.0
+  intl: ^0.20.2
   uuid: ^4.3.3
   cloud_firestore: ^6.5.0
   just_audio: ^0.10.5
