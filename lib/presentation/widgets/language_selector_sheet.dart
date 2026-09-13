@@ -129,12 +129,12 @@ class _LanguageSelectorSheetState extends ConsumerState<LanguageSelectorSheet> {
         ),
         action: SnackBarAction(
           label: '↶ Hoàn tác / Undo',
-          textColor: AppTheme.saffronLight,
+          textColor: AppColors.saffronLight,
           onPressed: () {
             ref.read(localeProvider.notifier).undoLocaleChange();
           },
         ),
-        backgroundColor: AppTheme.earthDark,
+        backgroundColor: AppColors.earthDark,
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 4),
         shape: RoundedRectangleBorder(

@@ -113,7 +113,7 @@ class _LanguageGlobeAction extends ConsumerWidget {
                 '✓ Đã khôi phục về Ngôn ngữ hệ thống / Restored to System Default',
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
-              backgroundColor: AppTheme.earthDark,
+              backgroundColor: AppColors.earthDark,
               behavior: SnackBarBehavior.floating,
               duration: const Duration(seconds: 3),
               shape: RoundedRectangleBorder(
