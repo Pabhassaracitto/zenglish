@@ -10,6 +10,10 @@ Không cần hỏi lại hướng offline hay có cần beta không. Chỉ hỏi
 
 ## 2. Trạng thái đã đối chiếu — chuẩn bị PR
 
+### PR đã mở
+
+[PR #2 — Prepare offline Android beta and durable agent handoff](https://github.com/Pabhassaracitto/zenglish/pull/2) đã mở vào main, trạng thái **Draft**. Chưa merge; chờ Flutter checks/build. Tiếp tục ZEN-002/003/016, sau đó review và xác minh ZEN-004/013 trên main.
+
 ### Cập nhật mới nhất khi người dùng yêu cầu create PR
 
 Đã nhập main `ce01f0a` vào nhánh ứng dụng. Hai conflict được giải quyết: giữ font offline trong `app_theme.dart` (không thêm self-import) và giữ localization facade generated thay lớp dịch viết tay. Ba tham chiếu màu đã giữ đúng `AppColors` như bản sửa trên main. Validator 8 bài và 7/7 Python tests đạt sau merge; Flutter SDK chưa sẵn sàng nên chưa chạy analyzer/tests/build. Không có thay đổi workflow trong PR; bộ workflow thủ công vẫn giữ riêng ở workspace. Đang mở PR dạng draft để review, không tự merge khi kiểm tra Flutter chưa đạt.
