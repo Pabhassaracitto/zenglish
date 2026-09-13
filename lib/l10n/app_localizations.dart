@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-
+import 'package:intl/intl.dart' as intl;
 abstract class AppLocalizations {
   AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale);
 
