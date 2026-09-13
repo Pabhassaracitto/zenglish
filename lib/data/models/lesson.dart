@@ -83,8 +83,9 @@ class Lesson {
         '[Lesson.fromJson] Starting parse for lesson_id: ${json['lesson_id']}');
 
     // Parse lesson_flow first to catch errors early
+    final LessonFlow parsedLessonFlow;
     try {
-      final lessonFlow = LessonFlow.fromJson(
+      parsedLessonFlow = LessonFlow.fromJson(
         json['lesson_flow'] as Map<String, dynamic>,
       );
       print('[Lesson.fromJson] ✅ LessonFlow parsed successfully');
@@ -133,9 +134,7 @@ class Lesson {
       vocabulary: (json['vocabulary'] as List<dynamic>? ?? [])
           .map((e) => VocabItem.fromJson(e as Map<String, dynamic>))
           .toList(),
-      lessonFlow: LessonFlow.fromJson(
-        json['lesson_flow'] as Map<String, dynamic>,
-      ),
+      lessonFlow: parsedLessonFlow,
       situationVariants: variantMap,
       needsReview: json['needs_review'] as bool? ?? false,
       needsReviewNote: json['needs_review_note'] as String?,

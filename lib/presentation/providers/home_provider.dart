@@ -117,7 +117,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
 
     // Dùng ContentRouter để đề xuất
-    String? nextId = ContentRouter.getStartLesson(
+    final nextId = ContentRouter.getStartLesson(
       languageLevel: profile.languageLevel,
       meditationStage: profile.meditationStage,
       paliLevel: profile.paliKnowledgeLevel,
@@ -126,7 +126,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
     // Nếu bài gợi ý đã hoàn thành, tìm bài tiếp theo (đơn giản hóa: trả về null nếu đã xong)
     // Trong tương lai cần logic duyệt danh sách bài học theo thứ tự
-    if (nextId != null && profile.completedLessonIds.contains(nextId)) {
+    if (profile.completedLessonIds.contains(nextId)) {
       return null;
     }
 

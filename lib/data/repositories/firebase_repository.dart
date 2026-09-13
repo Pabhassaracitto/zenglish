@@ -52,7 +52,6 @@ class FirebaseRepository implements ILessonRepository {
     // FirebaseRepository không có cache, đây là no-op
   }
 
-  @override
   Future<List<Lesson>> getLessonsForUser(UserProfile user) async {
     // Lấy tất cả lessons ở level phù hợp
     // Prerequisites check xảy ra ở client
@@ -71,7 +70,6 @@ class FirebaseRepository implements ILessonRepository {
         .toList();
   }
 
-  @override
   Future<List<Lesson>> searchLessons({
     String? keyword,
     CEFRLevel? level,
@@ -113,7 +111,6 @@ class FirebaseRepository implements ILessonRepository {
     return results;
   }
 
-  @override
   Future<void> upsertLesson(Lesson lesson) async {
     await _lessons.doc(lesson.lessonId).set(
           lesson.toJson(),
@@ -121,21 +118,18 @@ class FirebaseRepository implements ILessonRepository {
         );
   }
 
-  @override
   Future<void> deleteLesson(String lessonId) async {
     await _lessons.doc(lessonId).delete();
   }
 
   // ─── User Progress ───────────────────────────
 
-  @override
   Future<UserProfile?> getUserProfile(String userId) async {
     final doc = await _users.doc(userId).get();
     if (!doc.exists || doc.data() == null) return null;
     return UserProfile.fromJson(doc.data()!);
   }
 
-  @override
   Future<void> saveUserProfile(UserProfile profile) async {
     await _users.doc(profile.userId).set(
           profile.toJson(),
@@ -143,7 +137,6 @@ class FirebaseRepository implements ILessonRepository {
         );
   }
 
-  @override
   Future<void> markLessonCompleted({
     required String userId,
     required String lessonId,
@@ -155,7 +148,6 @@ class FirebaseRepository implements ILessonRepository {
     });
   }
 
-  @override
   Future<void> markLessonInProgress({
     required String userId,
     required String lessonId,
@@ -168,7 +160,6 @@ class FirebaseRepository implements ILessonRepository {
 
   // ─── Vocabulary ─────────────────────────────
 
-  @override
   Future<List<Lesson>> getLessonsNeedingAudio() async {
     // Không thể query nested field trong Firestore trực tiếp
     // → Thêm top-level flag khi upsert lesson
@@ -177,7 +168,6 @@ class FirebaseRepository implements ILessonRepository {
     return snap.docs.map((doc) => Lesson.fromJson(doc.data())).toList();
   }
 
-  @override
   Future<List<String>> getAllPaliTerms() async {
     // Query tất cả lesson và extract Pāḷi terms ở client
     final snap = await _lessons.get();
