@@ -12,6 +12,8 @@ Bắt đầu từ [AGENTS.md](AGENTS.md). Tài liệu nằm trong repository, kh
 - [Content audit](docs/CONTENT_AUDIT.md): nguồn bài học, nội dung cần duyệt và backlog audio.
 - [PR / release / dọn nhánh](docs/DELIVERY.md): đồng bộ main, build và phát hành APK có thể tải lâu dài.
 
+Agent đọc trên main: xác minh checklist ZEN-013 trong Kanban, sau đó bắt đầu các thẻ kỹ thuật ZEN-001/002/003/016; không checkout nhánh cũ. Trước PR, còn bước ZEN-015 hợp nhất main mới và giữ bản sửa theme.
+
 Các tài liệu và code phải được merge vào main trước khi xóa nhánh chứa thay đổi. Phiên bản `1.0.1-beta.1+2` trong pubspec là bản dự kiến, chưa phải bằng chứng đã có APK/release.
 
 ## Hướng triển khai hiện tại

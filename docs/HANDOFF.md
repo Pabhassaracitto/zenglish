@@ -8,17 +8,29 @@ Offline-first, Android beta trước, Việt–Anh ưu tiên. Người dùng đ�
 
 Không cần hỏi lại hướng offline hay có cần beta không. Chỉ hỏi khi cần quyết định mới (quyền GitHub, giọng thu âm, signing/store hoặc duyệt chuyên môn).
 
-## 2. Trạng thái thực tế tại lần bàn giao này
+## 2. Trạng thái đã đối chiếu — trước PR
 
-- **Push phần ứng dụng đã thành công:** commit `c38778fab8c5c58844c52ad788d2429eb8ee0458` trên remote chứa code/tests/docs, không sửa `.github/workflows/`. Đã đối chiếu remote SHA bằng `git ls-remote`. Commit này là mốc kiểm chứng, không phải yêu cầu agent sau phải checkout nhánh cũ.
-- Chưa merge main, chưa tạo beta release, chưa có quality workflow mới trên remote; bước tiếp theo là review/PR và chủ repository cập nhật workflow thủ công.
+Mốc kiểm tra **13/09/2026** (không phải khẳng định main luôn ở các SHA này):
 
-- `git fetch origin main` thành công; `git merge --no-edit origin/main` trả về `Already up to date.`. Base main quan sát được: `fb8125d`.
-- Không thấy PR mở khi kiểm tra GitHub. Release hiển thị là `v1.0` cũ (29/06/2026), không phải beta mới.
-- Quyết định mới nhất của người dùng: **push code/tests/docs trước, không push thay đổi workflow; chủ repository tự cập nhật workflow**. Không tiếp tục coi quyền workflow là blocker của việc push phần ứng dụng.
-- Bộ thay đổi `.github/workflows/` chỉ giữ ở workspace và được bàn giao riêng, không nằm trong commit ứng dụng này. Bản trên GitHub vẫn là workflow cũ cho tới khi chủ repository cập nhật. Xem WORKFLOW_MANUAL.md.
-- `pubspec.yaml` đã đặt `1.0.1-beta.1+2`; đây mới là version dự kiến. **Chưa xác nhận có tag `v1.0.1-beta.1`, APK beta, hoặc beta release.**
-- Tài liệu này mô tả bộ thay đổi để merge, không khẳng định main đã chứa nó. Sau khi merge, agent tiếp theo cập nhật mục trạng thái này bằng commit/run/PR URL thực.
+- Đã fetch remote. Main quan sát được là `ce01f0a` (`add premium build`), có `3a7cc22` sửa tham chiếu màu sang `AppColors`.
+- Nhánh ứng dụng đã push tới `dee0455` trước lần cập nhật tài liệu này. GitHub compare báo hai nhánh phân kỳ: ứng dụng có 4 commit riêng, main có 2 commit riêng. Nội dung main chưa có bốn bài A1 mới và bộ tài liệu bàn giao.
+- **Không dùng kết quả “Already up to date / main fb8125d” ở phiên trước làm tình trạng hiện tại.** Chưa nhập main `ce01f0a` vào nhánh ứng dụng trong lượt cập nhật tài liệu này. Phải đồng bộ và giữ sửa lỗi theme trước PR (ZEN-015).
+- Không thấy PR cho nhánh ứng dụng khi kiểm tra. Người dùng sẽ yêu cầu **create PR** sau khi cập nhật tài liệu; chưa được coi là đã mở/merge PR.
+- `v1.0` là release cũ quan sát được. `pubspec.yaml` đặt `1.0.1-beta.1+2`, nhưng chưa có bằng chứng APK/tag/beta release mới.
+- Chủ repository nhận cập nhật workflow thủ công. Code/tests/docs đã push riêng; thay đổi `.github/workflows/` mới chưa được push. Đặc tả ở WORKFLOW_MANUAL.md, không phụ thuộc ZIP hay workspace của agent trước.
+
+### Nếu bạn đang đọc tài liệu này trên main sau merge
+
+Không checkout nhánh cũ và không dừng lại chỉ vì ghi chú lịch sử trên nói “chưa merge”. Kiểm tra nội dung main hiện tại, điền SHA/PR/run thực vào bảng dưới rồi chuyển sang ZEN-001/002/003 và ZEN-008. Nếu còn thiếu nội dung hoặc lỗi compile, giữ thẻ ở Verify/Blocked, không tự đánh dấu Done.
+
+| Bằng chứng cần cập nhật sau merge | Trạng thái tại lần bàn giao này |
+|---|---|
+| PR URL + merge commit trên main | Chưa có; chờ yêu cầu create PR |
+| Main có AGENTS, Kanban, handoff, plan và 8 bài | Chưa có ở main được kiểm tra; bộ này đang ở nhánh ứng dụng |
+| Ba tham chiếu màu dùng `AppColors` sau hợp nhất | Đã thấy đúng trên main `3a7cc22`; phải bảo toàn trong kết quả merge |
+| Commit workflow do chủ repository cập nhật | Chưa xác nhận |
+| CI / Flutter tests / APK đúng SHA main | Chưa xác nhận |
+| Beta release URL + APK checksum | Chưa có |
 
 ## 3. Những gì đã làm trong mã
 
@@ -38,13 +50,21 @@ Chưa chạy thành công: `flutter pub get`, `gen-l10n`, analyzer, Flutter test
 
 Bốn bài mới là draft chờ duyệt. Tất cả tám bài thiếu audio Input. Không gọi beta này là hoàn thiện, production-ready hay đã duyệt giáo trình.
 
-## 5. Điểm tiếp tục ưu tiên
+## 5. Điểm tiếp tục theo thứ tự
 
-1. **ZEN-001:** chủ repository cập nhật ba workflow theo WORKFLOW_MANUAL.md. Agent chỉ push code/tests/docs theo yêu cầu; không đưa các workflow pending vào commit sau ngoài ý muốn.
-2. **ZEN-002/003:** có SDK hoặc CI thì resolve, sinh bản dịch, analyzer/tests/build. Lưu lockfile từ kết quả resolve thực. Nếu fail, sửa và chạy lại; không skip tests để lấy APK.
-3. **ZEN-004/013:** đồng bộ main, mở PR kèm toàn bộ code/tài liệu/tests; xác minh sau merge. Đường dẫn tài liệu phải tương đối, không trỏ nhánh tạm.
-4. **ZEN-005:** build thành công → beta release chứa APK và checksum. Xem DELIVERY.md vì workflow hiện **không tự tạo beta release**.
-5. **ZEN-008/011:** xác minh chu trình học, tiến độ và gợi ý bài tiếp theo; người dùng sẽ tải APK test.
+### Trước PR (khi người dùng yêu cầu create PR)
+
+1. **ZEN-015:** fetch main mới nhất, bảo toàn pending workflow ngoài commit, merge main vào nhánh phiên. Giữ `AppColors.earthDark`/`AppColors.saffronLight` trong `home_header.dart` và `language_selector_sheet.dart`. Không dùng chọn toàn bộ ours/theirs làm mất sửa lỗi hay nội dung beta.
+2. **ZEN-016:** người dùng báo `_lastVoiceText` undefined nhưng tên này chưa được tìm thấy trong mã đã kiểm tra. Xin đường dẫn/dòng hoặc tái hiện bằng analyzer trên kết quả hợp nhất; không khai báo biến rỗng chỉ để im lỗi. Ba lỗi màu đã có bản sửa trên main, cần xác minh lại sau merge.
+3. **ZEN-004/013:** chạy kiểm tra có thể chạy, ghi lệnh chưa chạy; tạo PR khi được yêu cầu, không đưa workflow thủ công vào commit. PR mô tả rõ chưa đạt build nếu còn chặn. Không merge chỉ vì Python tests đạt.
+
+### Sau khi code và tài liệu đã có trên main
+
+1. **ZEN-001/003:** chủ repository cập nhật workflow theo WORKFLOW_MANUAL.md; agent kiểm tra trigger, pin SDK và run thực. Nếu chưa có CI, vẫn có thể làm ZEN-002 local khi có SDK.
+2. **ZEN-002/016:** resolve dependencies/lockfile, gen-l10n, analyzer, Flutter tests và APK. Ưu tiên lỗi compile; không skip test để lấy artifact.
+3. **ZEN-008/007:** test placement → home → bài đọc CH04 → hoàn thành → restart → đề xuất bài tiếp theo; chú ý hai nguồn lưu profile.
+4. **ZEN-005:** khi build/checks đạt, tạo pre-release kèm APK/checksum đúng SHA và giới hạn thử nghiệm. Người dùng đã yêu cầu tải test; không cần hỏi lại hướng phát hành beta. Chưa tự phát hành stable/store.
+5. **ZEN-011/009/010:** thu lỗi thiết bị từ người dùng; tiếp tục duyệt nội dung và audio. Bản tải thử không đồng nghĩa hoàn tất giáo trình.
 
 ## 6. Vùng mã cần chú ý khi debug
 

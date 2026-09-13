@@ -2,14 +2,16 @@
 
 Cập nhật: **13/09/2026**. Bảng công việc chính nằm trong repository; cập nhật cùng PR thay đổi mã nguồn.
 
+**Điểm bắt đầu:** trước PR làm ZEN-015 → ZEN-016/004. Sau khi đọc bộ tài liệu này trên main, xác minh ZEN-013 rồi làm ZEN-001/002/003 → ZEN-008/007 → ZEN-005 → ZEN-011. Không cần nhánh cũ hay lịch sử chat. Các trạng thái dưới đây là mốc trước PR, phải cập nhật theo bằng chứng mới.
+
 **Quy ước:** Ready = có thể bắt đầu; Blocked = phụ thuộc bên ngoài; Verify = đã có mã nhưng chưa đạt kiểm tra cần thiết; Done = đạt tiêu chí của riêng thẻ, không đồng nghĩa sản phẩm đã phát hành.
 
 | ID | Trạng thái | Ưu tiên / vai trò tiếp nhận | Công việc và điều kiện hoàn thành | Bằng chứng / phụ thuộc |
 |---|---|---|---|---|
 | ZEN-001 | Ready | P0 · chủ repository | Cập nhật ba workflow thủ công theo WORKFLOW_MANUAL.md | Người dùng nhận phần workflow; không còn chặn push riêng code/tests/docs |
-| ZEN-002 | Blocked | P0 · agent Flutter | Resolve trên Flutter 3.44.0, cập nhật lockfile; gen-l10n, analyzer, Flutter tests và APK đạt | SDK download trước lỗi SSL; CI mới chưa được xác nhận. Có thể chạy local khi SDK sẵn sàng, hoặc CI sau ZEN-001 |
-| ZEN-003 | Verify | P0 · agent CI | Quality gate chạy trên PR/main, không đóng gói khi gate thất bại | Ba workflow mới chỉ có ở workspace, không push; chờ chủ repository cập nhật và run thành công |
-| ZEN-004 | Ready | P0 · agent + chủ repository | Merge PR sau review/checks; xác nhận tài liệu, tests và nội dung đều có trên main | Xem DELIVERY.md; phụ thuộc ZEN-001/002/003 để hoàn tất |
+| ZEN-002 | Ready | P0 · agent Flutter | Resolve trên Flutter 3.44.0, cập nhật lockfile; gen-l10n, analyzer, Flutter tests và APK đạt | Môi trường trước tải SDK lỗi SSL; agent mới cần kiểm tra lại môi trường. Chưa xác nhận Flutter checks; có thể làm local độc lập ZEN-001 |
+| ZEN-003 | Blocked | P0 · agent CI | Quality gate chạy trên PR/main, không đóng gói khi gate thất bại | Ba workflow mới chỉ có ở workspace, không push; chờ chủ repository cập nhật và run thành công |
+| ZEN-004 | Ready | P0 · agent + chủ repository | Merge PR sau review/checks; xác nhận tài liệu, tests và nội dung đều có trên main | Chờ người dùng yêu cầu create PR; cần ZEN-015 và checks trước merge. Có thể mở PR mô tả blockers, không tự merge khi checks chưa đạt |
 | ZEN-005 | Blocked | P0 · agent release | Xuất bản `v1.0.1-beta.1` dạng pre-release có APK + SHA-256 + hướng dẫn cài | Người dùng đã yêu cầu bản tải thử. Chưa có tag/release/APK beta; cần build đạt. Không dùng pipeline stable cho beta |
 | ZEN-006 | Done | P1 · agent nội dung | Đủ 8 bài trong registry, prerequisite không thiếu/vòng lặp, ID routing có trong assets | `validate_content.py` đạt; 7/7 Python tests đạt. Chỉ xác minh tĩnh, chưa nghiệm thu mở khóa trên UI |
 | ZEN-007 | Verify | P1 · agent Flutter | Bài đọc email CH04, cờ review/audio và thông báo thiếu audio hiển thị đúng | Model/UI/tests đã bổ sung; chưa chạy Flutter tests/thiết bị |
@@ -19,6 +21,8 @@ Cập nhật: **13/09/2026**. Bảng công việc chính nằm trong repository;
 | ZEN-011 | Ready | P1 · agent + người dùng | Nghiệm thu APK: máy bay, Việt–Anh, lưu tiến độ, CH04, màn hình nhỏ, cỡ chữ lớn; triage lỗi | Phụ thuộc APK của ZEN-005; người dùng dự định tải về thử |
 | ZEN-012 | Ready | P2 · agent Flutter | Ẩn/thay AI placeholder; kiểm định locale ngoài Việt–Anh và hỗ trợ accessibility | Không mở rộng phạm vi ngôn ngữ trước khi luồng chính ổn định |
 | ZEN-013 | Verify | P1 · agent kế tiếp | Bàn giao không phụ thuộc nhánh: AGENTS, Kanban, plan, handoff và quy trình merge/release đều có trên main | Đợt bàn giao tách workflow khỏi code/tests/docs. Chỉ hoàn tất sau khi merge và kiểm tra main |
+| ZEN-015 | Ready | P0 · agent trước PR | Đồng bộ main mới và giữ cả sửa theme trên main lẫn code/nội dung beta | Main quan sát `ce01f0a`, theme fix `3a7cc22`; hai nhánh phân kỳ. Done khi main được nhập, không conflict, ba tham chiếu màu dùng AppColors và kiểm tra lại |
+| ZEN-016 | Ready | P0 · agent Flutter | Tái hiện và xử lý báo lỗi `_lastVoiceText` undefined; xác minh lỗi theme không quay lại | Chưa tìm thấy `_lastVoiceText` trong mã đã kiểm tra. Cần file/dòng hoặc log analyzer mới; không tuyên bố đã sửa. Done khi có kết quả analyzer và kiểm tra luồng liên quan |
 | ZEN-014 | Backlog | P2 · chủ dự án + backend | Backend AI có xác thực/hạn mức/consent; cloud sync, store signing và vận hành | Ngoài beta offline; chưa triển khai |
 
 ## Cách tiếp nhận một thẻ
@@ -27,3 +31,13 @@ Cập nhật: **13/09/2026**. Bảng công việc chính nằm trong repository;
 2. Ghi bằng chứng (lệnh + kết quả, commit/run/release URL thực nếu có).
 3. Chỉ chuyển Done khi đạt điều kiện hoàn thành của thẻ. Nếu mới viết mã, chuyển Verify.
 4. Cập nhật HANDOFF khi điểm tiếp tục/blocker thay đổi; giữ ID ổn định để agent khác theo dõi được qua lịch sử Git.
+
+## Checklist tiếp nhận từ main — ZEN-013
+
+- [ ] Có AGENTS.md và tất cả tài liệu được README dẫn tới; mở được các liên kết tương đối.
+- [ ] Có đủ 8 bài trong registry; validator và 7 Python tests đạt trên checkout main.
+- [ ] Đã xác minh merge commit/PR thật, bảo toàn sửa màu AppColors từ main.
+- [ ] HANDOFF ghi đúng trạng thái workflow thủ công, Flutter checks, lockfile và APK; không đánh đồng “đã viết” với “đã chạy”.
+- [ ] Có thể chọn thẻ tiếp theo không cần chat, ZIP hoặc checkout nhánh cũ.
+
+Chỉ chuyển ZEN-013 Done sau khi kiểm tra trên main thực tế. Việc commit hoặc push tài liệu lên nhánh PR chưa đủ.

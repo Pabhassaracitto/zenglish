@@ -8,11 +8,15 @@ Trạng thái từng việc ở [Kanban](KANBAN.md); điểm tiếp tục ở [H
 
 Người dùng yêu cầu ưu tiên push code/tests/docs; ba workflow do chủ repository tự cập nhật. Các checkbox về CI bên dưới chỉ xác nhận bản cấu hình đã được soạn ở workspace, **không được đưa vào commit ứng dụng**. Xem WORKFLOW_MANUAL.md. Không bật build/tag tự động khi workflow mới chưa được cập nhật và kiểm tra.
 
-### Yêu cầu mới nhất: bản tải thử và bàn giao
+### Cửa kiểm tra trước PR và sau merge
 
-Người dùng đã yêu cầu `v1.0.1-beta.1` để tải APK test. Được phép xuất bản **pre-release thử nghiệm** sau khi build/checks đạt, ghi rõ nội dung chờ duyệt, chưa có audio và chưa test thiết bị; không tuyên bố bản ổn định. Push trước bị chặn bởi quyền GitHub App `workflows`, chưa có beta release được xác nhận.
+1. **G0 — Đồng bộ (ZEN-015):** fetch main mới, hợp nhất code ứng dụng với sửa theme trên main. Lần đối chiếu 13/09/2026 thấy main `ce01f0a` và hai nhánh phân kỳ; kết quả “Already up to date” cũ không còn áp dụng. Không khôi phục AppTheme.earthDark/saffronLight đã được sửa sang AppColors.
+2. **G1 — PR/bàn giao (ZEN-004/013):** cập nhật bộ tài liệu này trước. Người dùng sẽ yêu cầu create PR ở lượt tiếp theo; chưa mở/merge PR trong lượt cập nhật tài liệu. Sau merge, agent xác minh tài liệu và 8 bài trên main, ghi SHA/PR thực, rồi chọn thẻ kế tiếp theo Kanban.
+3. **G2 — Kỹ thuật (ZEN-001/002/003/016):** chủ repository cập nhật workflow; agent resolve lockfile, chạy analyzer/tests/build. Báo lỗi `_lastVoiceText` cần tái hiện bằng file/dòng hoặc analyzer; không đoán cách sửa. Python checks không thay Flutter checks.
+4. **G3 — Beta (ZEN-007/008/005):** xác minh luồng học và lưu tiến độ, tạo APK đúng SHA + checksum + pre-release khi checks đạt. Người dùng đã yêu cầu bản tải thử, không cần xin lại quyết định offline-first. Không tạo release rỗng.
+5. **G4 — Nghiệm thu (ZEN-011/009/010):** nhận phản hồi thiết bị, duyệt nội dung và audio. Chỉ nâng thành stable/store sau các điều kiện riêng bên dưới.
 
-Trước PR: fetch + merge origin/main vào nhánh làm việc; giữ toàn bộ tài liệu trong Git. Sau merge: kiểm tra code/docs trên main trước dọn nhánh; không phụ thuộc lịch sử chat hoặc artifacts CI hết hạn.
+Sau merge, không yêu cầu agent mới đọc chat hay tìm nhánh cũ. AGENTS → HANDOFF → KANBAN là đường tiếp nhận; cập nhật bằng chứng mới thay cho mốc lịch sử trước PR.
 
 ## Phạm vi beta
 
