@@ -11,7 +11,6 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../../core/env/env.dart';
 import '../../data/models/lesson.dart';
@@ -91,8 +90,7 @@ class OpenAIService {
     // Guard: API Key
     if (!Env.isConfigured) {
       throw const OpenAIConfigError(
-        'OpenAI API Key chưa được cấu hình. '
-        'Xem lib/core/env/env.dart để biết cách thiết lập.',
+        'Remote AI is disabled in the offline beta.',
       );
     }
 
@@ -121,7 +119,7 @@ class OpenAIService {
     } on OpenAIException {
       // Re-throw các exception của chúng ta
       rethrow;
-    } on SocketException catch (e) {
+    } on http.ClientException catch (e) {
       throw OpenAINetworkError(e.message);
     } on TimeoutException {
       throw const OpenAITimeoutError();

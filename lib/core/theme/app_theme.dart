@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:zenglish/core/theme/app_theme.dart';
 
 class AppColors {
   AppColors._();
@@ -205,60 +203,65 @@ class AppTheme {
         scrolledUnderElevation: 1,
         shadowColor: AppColors.earthDark.withOpacity(0.1),
         centerTitle: true,
-        titleTextStyle: GoogleFonts.merriweather(
+        titleTextStyle: TextStyle(
+          fontFamily: 'Merriweather',
           color: AppColors.earthBrown,
           fontSize: 18,
           fontWeight: FontWeight.w600,
         ),
         iconTheme: const IconThemeData(color: AppColors.earthBrown),
       ),
-      textTheme: GoogleFonts.latoTextTheme(base.textTheme).copyWith(
-        displayLarge: GoogleFonts.merriweather(
+      textTheme: base.textTheme.copyWith(
+        displayLarge: TextStyle(
+          fontFamily: 'Merriweather',
           color: AppColors.textPrimary,
           fontSize: 32,
           fontWeight: FontWeight.w700,
         ),
-        displayMedium: GoogleFonts.merriweather(
+        displayMedium: TextStyle(
+          fontFamily: 'Merriweather',
           color: AppColors.textPrimary,
           fontSize: 26,
           fontWeight: FontWeight.w600,
         ),
-        headlineLarge: GoogleFonts.merriweather(
+        headlineLarge: TextStyle(
+          fontFamily: 'Merriweather',
           color: AppColors.textPrimary,
           fontSize: 22,
           fontWeight: FontWeight.w600,
         ),
-        headlineMedium: GoogleFonts.merriweather(
+        headlineMedium: TextStyle(
+          fontFamily: 'Merriweather',
           color: AppColors.textPrimary,
           fontSize: 18,
           fontWeight: FontWeight.w600,
         ),
-        titleLarge: GoogleFonts.lato(
+        titleLarge: TextStyle(
           color: AppColors.textPrimary,
           fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
-        titleMedium: GoogleFonts.lato(
+        titleMedium: TextStyle(
           color: AppColors.textPrimary,
           fontSize: 14,
           fontWeight: FontWeight.w600,
         ),
-        bodyLarge: GoogleFonts.lato(
+        bodyLarge: TextStyle(
           color: AppColors.textPrimary,
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
-        bodyMedium: GoogleFonts.lato(
+        bodyMedium: TextStyle(
           color: AppColors.textSecond,
           fontSize: 14,
           fontWeight: FontWeight.w400,
         ),
-        bodySmall: GoogleFonts.lato(
+        bodySmall: TextStyle(
           color: AppColors.textHint,
           fontSize: 12,
           fontWeight: FontWeight.w400,
         ),
-        labelLarge: GoogleFonts.lato(
+        labelLarge: TextStyle(
           color: AppColors.earthBrown,
           fontSize: 14,
           fontWeight: FontWeight.w600,
@@ -284,7 +287,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
           ),
-          textStyle: GoogleFonts.lato(
+          textStyle: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w600,
             letterSpacing: 0.3,
@@ -308,7 +311,7 @@ class AppTheme {
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.earthDark,
-        contentTextStyle: GoogleFonts.lato(
+        contentTextStyle: TextStyle(
           color: AppColors.creamLight,
           fontSize: 14,
         ),

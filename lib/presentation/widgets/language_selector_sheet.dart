@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:zenglish/core/providers/locale_provider.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/l10n/app_localizations.dart';
@@ -43,7 +42,8 @@ class _LanguageSelectorSheetState extends ConsumerState<LanguageSelectorSheet> {
               Expanded(
                 child: Text(
                   'Xác nhận / Confirm',
-                  style: GoogleFonts.merriweather(
+                  style: TextStyle(
+                    fontFamily: 'Merriweather',
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: AppColors.earthBrown,
@@ -186,7 +186,8 @@ class _LanguageSelectorSheetState extends ConsumerState<LanguageSelectorSheet> {
                 const SizedBox(width: 10),
                 Text(
                   'Ngôn ngữ · Language',
-                  style: GoogleFonts.merriweather(
+                  style: TextStyle(
+                    fontFamily: 'Merriweather',
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: AppColors.earthBrown,

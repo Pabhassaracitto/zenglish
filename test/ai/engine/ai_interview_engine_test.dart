@@ -8,13 +8,10 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:zenglish/ai/engine/ai_interview_engine.dart';
 import 'package:zenglish/ai/services/openai_service.dart';
-import 'package:zenglish/ai/models/interview_feedback.dart';
 import 'package:zenglish/data/models/lesson.dart';
 import 'package:zenglish/data/models/lesson_flow.dart';
 import 'package:zenglish/core/enums/cefr_level.dart';
 import 'package:zenglish/core/enums/meditation_stage.dart';
-import 'package:zenglish/core/enums/situation_type.dart';
-import 'package:zenglish/core/enums/temporal_context.dart';
 
 // ─── Mock ────────────────────────────────────
 
@@ -85,11 +82,35 @@ void main() {
   late AIInterviewEngine engine;
   late Lesson testLesson;
 
+  setUpAll(() {
+    registerFallbackValue(_buildTestLesson());
+  });
+
   setUp(() {
     mockService = MockOpenAIService();
     engine = AIInterviewEngine(openAIService: mockService);
 
     testLesson = _buildTestLesson();
+  });
+
+  test('bundled remote service rejects requests in offline beta', () async {
+    await expectLater(
+      OpenAIService().analyzeReport(
+        userTranscript: 'Private practice report',
+        currentLesson: testLesson,
+      ),
+      throwsA(isA<OpenAIConfigError>()),
+    );
+  });
+
+  test('default engine returns explicitly labeled offline feedback', () async {
+    final result = await AIInterviewEngine.instance.analyzeReport(
+      userTranscript: 'Bhante, my mind wanders while watching the breath.',
+      currentLesson: testLesson,
+    );
+    expect(result.checkResults, hasLength(5));
+    expect(result.languageFeedback, contains('Offline practice feedback'));
+    verifyZeroInteractions(mockService);
   });
 
   group('analyzeReport — success', () {
@@ -166,7 +187,8 @@ void main() {
       );
 
       expect(result.isAuthentic, isFalse);
-      expect(result.overallScore, equals(0));
+      expect(result.checkResults, hasLength(5));
+      expect(result.languageFeedback, contains('Offline practice feedback'));
     });
 
     test('returns specific feedback on rate limit (429)', () async {

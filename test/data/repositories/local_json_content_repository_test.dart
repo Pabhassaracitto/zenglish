@@ -22,39 +22,10 @@ const _validLessonJson = '''
   "authenticity_reminder": "Reminder",
   "vocabulary": [],
   "lesson_flow": {
-    "warm_up": {
-      "duration_minutes": 5,
-      "activity_type": "reflection",
-      "prompt_en": "Test",
-      "prompt_vi": "Test",
-      "teacher_note": "Note"
-    },
-    "presentation": {
-      "duration_minutes": 10,
-      "grammar_focus": "Present Simple",
-      "grammar_explanation_en": "Test",
-      "grammar_explanation_vi": "Test",
-      "key_structures": []
-    },
-    "practice": {
-      "duration_minutes": 15,
-      "activity_type": "guided",
-      "steps": []
-    },
-    "production": {
-      "duration_minutes": 10,
-      "activity_type": "free",
-      "prompt_en": "Test",
-      "prompt_vi": "Test",
-      "success_criteria": []
-    },
-    "closing": {
-      "duration_minutes": 5,
-      "activity_type": "reflection",
-      "prompt_en": "Test",
-      "prompt_vi": "Test",
-      "homework": "Homework"
-    }
+    "input": {"title": "Input", "description": "Test", "sample_dialogues": []},
+    "pattern": {"title": "Pattern", "description": "Test", "core_patterns": []},
+    "guided": {"title": "Guided", "description": "Test", "interview_steps": []},
+    "output": {"title": "Output", "description": "Test", "prompt_for_user": "Report", "evaluation_criteria": []}
   },
   "situation_variants": {},
   "patches_applied": [],

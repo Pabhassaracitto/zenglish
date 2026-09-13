@@ -114,7 +114,7 @@ class CuriousStrategy extends RoutingStrategy {
     required int paliLevel,
   }) {
     // Luôn bắt đầu từ CH01 — "Cơ Duyên Đến Với Đạo Phật"
-    return 'A1CH01_L01';
+    return 'A1_CH01_L01';
   }
 }
 
