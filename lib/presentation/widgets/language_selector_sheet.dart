@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:zenglish/core/providers/locale_provider.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
-import 'package:zenglish/l10n/app_localizations.dart';
 
 class LanguageSelectorSheet extends ConsumerStatefulWidget {
   const LanguageSelectorSheet({super.key});
@@ -24,7 +23,6 @@ class _LanguageSelectorSheetState extends ConsumerState<LanguageSelectorSheet> {
   String _searchQuery = '';
 
   void _confirmAndApplyLanguage(BuildContext context, SupportedLanguage? targetLang) {
-    final currentLocale = ref.read(localeProvider);
     final targetName = targetLang != null ? targetLang.formattedName : 'Theo ngôn ngữ hệ thống · System Default (SYS)';
 
     showDialog<bool>(
@@ -148,7 +146,6 @@ class _LanguageSelectorSheetState extends ConsumerState<LanguageSelectorSheet> {
   @override
   Widget build(BuildContext context) {
     final currentLocale = ref.watch(localeProvider);
-    final l10n = context.l10n;
 
     final filteredLanguages = appSupportedLanguages.where((lang) {
       return lang.matchesQuery(_searchQuery);
