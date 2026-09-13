@@ -10,6 +10,9 @@ Không cần hỏi lại hướng offline hay có cần beta không. Chỉ hỏi
 
 ## 2. Trạng thái thực tế tại lần bàn giao này
 
+- **Push phần ứng dụng đã thành công:** commit `c38778fab8c5c58844c52ad788d2429eb8ee0458` trên remote chứa code/tests/docs, không sửa `.github/workflows/`. Đã đối chiếu remote SHA bằng `git ls-remote`. Commit này là mốc kiểm chứng, không phải yêu cầu agent sau phải checkout nhánh cũ.
+- Chưa merge main, chưa tạo beta release, chưa có quality workflow mới trên remote; bước tiếp theo là review/PR và chủ repository cập nhật workflow thủ công.
+
 - `git fetch origin main` thành công; `git merge --no-edit origin/main` trả về `Already up to date.`. Base main quan sát được: `fb8125d`.
 - Không thấy PR mở khi kiểm tra GitHub. Release hiển thị là `v1.0` cũ (29/06/2026), không phải beta mới.
 - Quyết định mới nhất của người dùng: **push code/tests/docs trước, không push thay đổi workflow; chủ repository tự cập nhật workflow**. Không tiếp tục coi quyền workflow là blocker của việc push phần ứng dụng.
