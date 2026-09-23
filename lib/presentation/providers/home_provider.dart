@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/enums/cefr_level.dart';
 import '../../core/enums/meditation_stage.dart';
+import '../../core/providers/user_profile_provider.dart';
+import '../../data/constants/lesson_asset_registry.dart';
 import '../../data/di/repository_provider.dart';
 import '../../data/models/lesson.dart';
 import '../../data/models/placement_result.dart';
@@ -59,7 +61,18 @@ class HomeState {
 // ─────────────────────────────────────────────
 
 class HomeNotifier extends StateNotifier<HomeState> {
-  HomeNotifier() : super(const HomeState());
+  HomeNotifier(this._ref) : super(const HomeState());
+
+  /// Nguồn sự thật DUY NHẤT cho hồ sơ và tiến độ học: [userProfileProvider]
+  /// (một key JSON `userprofile` trong SharedPreferences).
+  ///
+  /// Trước đây Home đọc `UserSessionService.loadUserProfile()`, trong khi
+  /// placement và màn hoàn thành bài lại ghi `userProfileProvider`. Service
+  /// cũ chỉ được ghi bởi `saveUserProfile()` — hàm không ai gọi — nên
+  /// `has_user_profile` luôn false và Home luôn thấy `profile == null`
+  /// (không lời chào, không gợi ý bài kế tiếp). Đường đọc đã nhập về một mối.
+  /// `UserSessionService` nay chỉ còn giữ cờ thiết bị (silent mode).
+  final Ref _ref;
 
   final _repo = RepositoryProvider.instance;
   final _session = UserSessionService.instance;
@@ -70,18 +83,19 @@ class HomeNotifier extends StateNotifier<HomeState> {
     state = state.copyWith(isLoading: true, clearError: true);
 
     try {
-      final profile = _session.loadUserProfile();
+      final profile =
+          await _ref.read(userProfileProvider.notifier).loadFromStorage();
       if (profile == null) {
-        state = state.copyWith(isLoading: false);
+        // constructing (not copyWith) so a previous next lesson is not kept
+        state = HomeState(isLoading: false, silentMode: _session.silentMode);
         return;
       }
 
-      // Load next lesson
-      final nextLessonId = _resolveNextLessonId(profile);
+      final nextLessonId = await _resolveNextLessonId(profile);
       final nextLesson =
           nextLessonId != null ? await _repo.getLessonById(nextLessonId) : null;
 
-      state = state.copyWith(
+      state = HomeState(
         userProfile: profile,
         nextLesson: nextLesson,
         isLoading: false,
@@ -110,27 +124,55 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
   // ─── Private helpers ─────────────────────────
 
-  String? _resolveNextLessonId(UserProfile profile) {
-    // Nếu có bài đang học dở → tiếp tục
+  Future<String?> _resolveNextLessonId(UserProfile profile) async {
+    final completed = profile.completedLessonIds.toSet();
+
+    // 1. Còn bài học dở → tiếp tục đúng bài đó
     if (profile.inProgressLessonIds.isNotEmpty) {
       return profile.inProgressLessonIds.first;
     }
 
-    // Dùng ContentRouter để đề xuất
-    final nextId = ContentRouter.getStartLesson(
+    // Catalog đã sort theo thứ tự registry (thứ tự học chuẩn của beta)
+    final lessons = await _repo.loadAllLessons();
+    final byId = {for (final lesson in lessons) lesson.lessonId: lesson};
+    final ordered = <Lesson>[...lessons]
+      ..sort((a, b) =>
+          _catalogIndex(a.lessonId).compareTo(_catalogIndex(b.lessonId)));
+
+    bool unlocked(Lesson lesson) =>
+        lesson.prerequisites.every(completed.contains);
+
+    // 2. Bài ContentRouter gợi ý, nếu chưa xong và đã đủ prerequisite
+    final startId = ContentRouter.getStartLesson(
       languageLevel: profile.languageLevel,
       meditationStage: profile.meditationStage,
       paliLevel: profile.paliKnowledgeLevel,
       meditationExperience: _stageToExperience(profile.meditationStage),
     );
-
-    // Nếu bài gợi ý đã hoàn thành, tìm bài tiếp theo (đơn giản hóa: trả về null nếu đã xong)
-    // Trong tương lai cần logic duyệt danh sách bài học theo thứ tự
-    if (profile.completedLessonIds.contains(nextId)) {
-      return null;
+    final suggested = byId[startId];
+    if (suggested != null &&
+        !completed.contains(startId) &&
+        unlocked(suggested)) {
+      return startId;
     }
 
-    return nextId;
+    // 3. Gợi ý đã hoàn thành hoặc bị khoá → đi tiếp theo thứ tự catalog
+    for (final lesson in ordered) {
+      if (completed.contains(lesson.lessonId)) continue;
+      if (unlocked(lesson)) return lesson.lessonId;
+    }
+
+    // 4. Hết catalog
+    return null;
+  }
+
+  /// Thứ tự học cố định lấy từ [LessonAssetRegistry.allPaths]; bài không có
+  /// trong registry xếp ra sau cùng để không bao giờ chen vào giữa chuỗi.
+  int _catalogIndex(String lessonId) {
+    final paths = LessonAssetRegistry.allPaths;
+    final suffix = '$lessonId.json';
+    final index = paths.indexWhere((path) => path.endsWith(suffix));
+    return index >= 0 ? index : paths.length;
   }
 
   MeditationExperience _stageToExperience(MeditationStage stage) {
@@ -172,7 +214,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
 // ─────────────────────────────────────────────
 
 final homeProvider = StateNotifierProvider<HomeNotifier, HomeState>(
-  (ref) => HomeNotifier(),
+  (ref) => HomeNotifier(ref),
 );
 
 /// Derived: 3-axis display data

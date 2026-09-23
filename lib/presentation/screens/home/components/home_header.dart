@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zenglish/core/providers/locale_provider.dart';
+import 'package:zenglish/core/providers/user_profile_provider.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/services/user_session_service.dart';
 import 'package:zenglish/l10n/app_localizations.dart';
@@ -79,8 +80,14 @@ class HomeHeader extends ConsumerWidget {
           _IconAction(
             icon: Icons.settings_outlined,
             onTap: () async {
+              // 1. Xoá cờ thiết bị + toàn bộ prefs
+              // 2. Xoá profile trong state để router thấy "chưa có profile"
+              //    ngay, không phải chờ restart app (ZEN-008)
+              final profileNotifier = ref.read(userProfileProvider.notifier);
               await UserSessionService.instance.clearSession();
+              await profileNotifier.clearProfile();
               if (context.mounted) {
+                ref.invalidate(homeProvider);
                 context.go('/placement');
               }
             },
