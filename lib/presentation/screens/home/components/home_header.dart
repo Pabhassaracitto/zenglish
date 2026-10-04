@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zenglish/core/providers/locale_provider.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
-import 'package:zenglish/data/services/user_session_service.dart';
 import 'package:zenglish/l10n/app_localizations.dart';
 import 'package:zenglish/presentation/widgets/language_selector_sheet.dart';
 
 import '../../../providers/home_provider.dart';
+import '../../../../core/router/app_router.dart';
 
 class HomeHeader extends ConsumerWidget {
   const HomeHeader({super.key});
@@ -75,15 +75,10 @@ class HomeHeader extends ConsumerWidget {
 
           const SizedBox(width: AppTheme.spaceSM),
 
-          // Reset Session / Settings (Gear/Refresh)
+          // Settings opens settings; resetting progress is an explicit action there.
           _IconAction(
             icon: Icons.settings_outlined,
-            onTap: () async {
-              await UserSessionService.instance.clearSession();
-              if (context.mounted) {
-                context.go('/placement');
-              }
-            },
+            onTap: () => context.push(AppRoutes.settings),
           ),
         ],
       ),

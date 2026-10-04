@@ -19,6 +19,7 @@ import '../../presentation/screens/catalog/lesson_catalog_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/lesson/lesson_screen.dart';
 import '../../presentation/screens/placement/placement_test_screen.dart';
+import '../../presentation/screens/settings/settings_screen.dart';
 import '../providers/user_profile_provider.dart';
 
 // ── Tên route (constants để tránh typo) ──
@@ -29,6 +30,7 @@ abstract class AppRoutes {
   static const String lesson = '/lesson';
   static const String catalog = '/lessons';
   static const String aiInterview = '/ai-interview';
+  static const String settings = '/settings';
 }
 
 // ── Router Provider ──
@@ -124,6 +126,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             transitionsBuilder: slideUpTransition,
           );
         },
+      ),
+
+      // Settings
+      GoRoute(
+        path: AppRoutes.settings,
+        name: 'settings',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const SettingsScreen(),
+          transitionsBuilder: slideUpTransition,
+        ),
       ),
 
       // AI Interview

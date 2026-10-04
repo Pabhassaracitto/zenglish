@@ -67,6 +67,13 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   /// Called by every audio play button in the lesson.
   ///
   /// Ưu tiên bản thu thật; nếu bài chưa có bản thu thì đọc bằng giọng tổng hợp.
+  Future<void> _stopInputAudio() async {
+    await AudioPlaybackService.instance.stop();
+    if (mounted) {
+      ref.read(lessonProvider.notifier).setAudioPlaying(false);
+    }
+  }
+
   Future<void> _playInputAudio(InputAudioPlan plan) async {
     final isSilent = ref.read(lessonProvider.select((s) => s.isSilentMode));
 
@@ -274,6 +281,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
           lesson: lesson,
           state: state,
           onPlayAudio: _playInputAudio,
+          onStopAudio: _stopInputAudio,
           notifier: ref.read(lessonProvider.notifier),
         );
       case LessonStage.pattern:
@@ -463,12 +471,14 @@ class _InputStageView extends StatelessWidget {
     required this.lesson,
     required this.state,
     required this.onPlayAudio,
+    required this.onStopAudio,
     required this.notifier,
   });
 
   final Lesson lesson;
   final LessonState state;
   final Future<void> Function(InputAudioPlan) onPlayAudio;
+  final Future<void> Function() onStopAudio;
   final LessonNotifier notifier;
 
   @override
@@ -500,6 +510,7 @@ class _InputStageView extends StatelessWidget {
               isPlaying: state.isAudioPlaying,
               isSilentMode: state.isSilentMode,
               onPlay: () => onPlayAudio(audioPlan),
+              onStop: onStopAudio,
             ),
             if (audioPlan.isSynthesized) ...[
               const SizedBox(height: 8),
@@ -1108,11 +1119,13 @@ class _AudioPlayerBar extends StatelessWidget {
     required this.isPlaying,
     required this.isSilentMode,
     required this.onPlay,
+    required this.onStop,
   });
 
   final bool isPlaying;
   final bool isSilentMode;
   final VoidCallback onPlay;
+  final Future<void> Function() onStop;
 
   @override
   Widget build(BuildContext context) {
@@ -1134,9 +1147,11 @@ class _AudioPlayerBar extends StatelessWidget {
             ),
           ),
           FilledButton.tonalIcon(
-            onPressed: isSilentMode ? null : onPlay,
+            onPressed: isSilentMode
+                ? null
+                : (isPlaying ? () { onStop(); } : onPlay),
             icon: Icon(
-              isPlaying ? Icons.pause : Icons.play_arrow,
+              isPlaying ? Icons.stop_rounded : Icons.play_arrow,
               size: 18,
             ),
             label: Text(isPlaying ? 'Dừng' : 'Nghe'),
