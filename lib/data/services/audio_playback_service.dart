@@ -3,8 +3,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 
+import 'input_audio_resolver.dart';
+import 'speech_service.dart';
+
 /// Result of an audio play attempt — avoids throwing across widget boundaries.
-enum AudioLoadResult { success, missingAsset, networkError, silentMode, unknown }
+enum AudioLoadResult {
+  success,
+  missingAsset,
+  networkError,
+  silentMode,
+  unknown,
+
+  /// Chưa có bản thu và engine TTS của thiết bị không đọc được ngôn ngữ này.
+  ttsUnavailable,
+
+  /// Không có bản thu lẫn văn bản để đọc.
+  noContent,
+}
 
 /// Singleton Service quản lý việc phát audio trong app.
 /// Đảm bảo chỉ có 1 instance AudioPlayer để tránh đè âm thanh.
@@ -59,15 +74,74 @@ class AudioPlaybackService {
     }
   }
 
+  /// Phát phần Input của bài học theo thứ tự ưu tiên đã thống nhất:
+  ///
+  ///   1. Bản thu thật (`audio_url`) nếu có — không bao giờ bị TTS thay thế.
+  ///   2. Giọng tổng hợp đọc văn bản tiếng Anh của bài.
+  ///   3. Không có gì để phát → [AudioLoadResult.noContent].
+  ///
+  /// Việc chọn nguồn nằm ở [resolveInputAudio] để kiểm thử được độc lập.
+  Future<AudioLoadResult> playInput(
+    InputAudioPlan plan, {
+    bool isSilentMode = false,
+  }) async {
+    if (isSilentMode) {
+      debugPrint('🔇 AudioPlaybackService: silent mode — rejecting playInput()');
+      return AudioLoadResult.silentMode;
+    }
+
+    switch (plan.mode) {
+      case InputAudioMode.recording:
+        // Bản thu thật luôn được ưu tiên.
+        await _stopSpeech();
+        return play(plan.source!, isSilentMode: isSilentMode);
+
+      case InputAudioMode.synthesized:
+        // Dừng player file trước để không chồng tiếng.
+        await stop();
+        final result = await SpeechService.instance.speak(
+          plan.text!,
+          language: plan.language,
+        );
+        switch (result) {
+          case SpeechResult.success:
+          case SpeechResult.stopped:
+            return AudioLoadResult.success;
+          case SpeechResult.unsupported:
+            return AudioLoadResult.ttsUnavailable;
+          case SpeechResult.silentMode:
+            return AudioLoadResult.silentMode;
+          case SpeechResult.emptyText:
+            return AudioLoadResult.noContent;
+          case SpeechResult.error:
+            return AudioLoadResult.unknown;
+        }
+
+      case InputAudioMode.none:
+        return AudioLoadResult.noContent;
+    }
+  }
+
   /// Pause the current playback.
   Future<void> pause() async {
     await _player?.pause();
   }
 
-  /// Stop + forget source.
+  /// Stop + forget source. Dừng cả bản thu lẫn giọng tổng hợp.
   Future<void> stop() async {
     await _player?.stop();
     _currentSource = null;
+    await _stopSpeech();
+  }
+
+  Future<void> _stopSpeech() async {
+    try {
+      if (SpeechService.instance.isSpeaking) {
+        await SpeechService.instance.stop();
+      }
+    } catch (e) {
+      debugPrint('⚠️ AudioPlaybackService: lỗi khi dừng TTS: $e');
+    }
   }
 
   Future<void> seek(Duration position) async {

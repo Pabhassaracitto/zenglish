@@ -1,6 +1,30 @@
 # ZenGlish — bàn giao cho phiên/agent tiếp theo
 
-Cập nhật: **04/10/2026** (mục 0). Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+Cập nhật: **04/10/2026** (mục 0-bis). Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+
+## 0-bis. Thư viện bài học + TTS fallback — 04/10/2026, sau khi PR #4 merge
+
+**Bối cảnh:** PR #4 đã MERGED (04/10 17:41 UTC); `main` ở `8680240`; Flutter pin **3.44.0** đã được chứng minh đạt. Nhánh phiên này được đồng bộ bằng `git reset --hard origin/main` (nhánh chưa có commit riêng; `c3c5b25` đã nằm trong lịch sử squash của main nên `git rebase origin/main` báo conflict giả — không dùng rebase trong tình huống này).
+
+**Chủ dự án báo:** trong app chỉ thấy 4 mục (Ānāpāna, Giới, 5 Phần, Sức khoẻ).
+
+**Chẩn đoán (xác minh bằng mã nguồn, không phải phỏng đoán):**
+
+- `assets/data/lessons/` vẫn đủ 8 bài; `validate_content.py` đạt → **không mất nội dung**.
+- 4 mục đó là `_QuickCardGrid` **hardcode** trong `lib/presentation/screens/home/components/ai_interview_quick_start.dart`.
+- Trước bản sửa này **không màn hình nào liệt kê bài học**: Home chỉ render một bài đề xuất (`home_provider._resolveNextLessonId`), và hàm đó trả `null` nếu bài gợi ý đã hoàn thành.
+- Hệ quả: A1 CH01–04 nằm trong assets nhưng không có đường vào từ UI.
+
+**Đã làm trong lượt này:**
+
+1. **ZEN-017 — thư viện bài học.** `lib/presentation/providers/catalog_provider.dart` (hàm thuần `buildCatalog` + `lessonCatalogProvider`), `lib/presentation/screens/catalog/lesson_catalog_screen.dart`, route `/lessons` trong `app_router.dart`, thẻ `LessonLibraryCard` trên Home. Danh sách đọc thẳng từ `ILessonRepository` nên thêm bài vào registry là bài tự xuất hiện. Nhãn: hoàn thành/đang học, `needs_review`, "giọng tổng hợp", bài tiên quyết còn thiếu. **Không chặn** mở bài vì chính sách mở khoá chưa được nghiệm thu.
+2. **ZEN-010/018 — TTS fallback.** `lib/data/services/speech_service.dart` (interface `SpeechSynthesizer`, impl `FlutterTtsSynthesizer`, điểm đổi engine `SpeechService.overrideWith`), `lib/data/services/input_audio_resolver.dart` (quy tắc ưu tiên, tách khỏi UI để test được), `AudioPlaybackService.playInput()`, nhãn minh bạch "giọng tổng hợp" ở Input stage. Thêm dependency `flutter_tts: ^4.2.0`.
+3. **ZEN-016 — đóng do không tái hiện.** `grep -rn "_lastVoiceText" lib` không có kết quả; analyzer xanh trên PR #4.
+4. Tests mới: `test/data/services/input_audio_resolver_test.dart` (3 test), `test/presentation/providers/catalog_provider_test.dart` (4 test).
+
+**Giới hạn kiểm chứng của lượt này:** sandbox vẫn **không có Flutter/Dart/Java** (`storage.googleapis.com` lỗi `SSL_ERROR_SYSCALL`, giống mục 4). Đã chạy local: `python3 scripts/validate_content.py` → `PASS: 8 lessons`; 7/7 Python tests OK; `git diff --check` sạch. **`flutter pub get` / `gen-l10n` / `analyze` / `test` / `build apk` chỉ được chứng minh qua Actions trên PR của nhánh này** — đọc run thật trước khi coi là đạt. Có dependency mới nên `pubspec.lock` sẽ đổi: lấy lockfile từ CI hoặc máy có SDK rồi commit, **không sửa tay**.
+
+**Điểm tiếp tục:** chờ gate xanh → merge → ZEN-005 (pre-release APK + SHA-256) → ZEN-011 (nghiệm thu thiết bị: thấy đủ 8 bài trong `/lessons`, nghe thử TTS, chế độ máy bay) → ZEN-008 (hai nguồn tiến độ `user_profile_provider` vs `user_session_service`).
 
 ## 0. Bản cập nhật workflow cho quality gate trên PR — 18/09, chốt phương án 04/10/2026
 

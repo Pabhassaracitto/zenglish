@@ -2,13 +2,13 @@
 
 Cập nhật: **04/10/2026**. Bảng công việc chính nằm trong repository; cập nhật cùng PR thay đổi mã nguồn.
 
-**Điểm bắt đầu:** trước PR làm ZEN-015 → ZEN-016/004. Sau khi đọc bộ tài liệu này trên main, xác minh ZEN-013 rồi làm ZEN-001/002/003 → ZEN-008/007 → ZEN-005 → ZEN-011. Không cần nhánh cũ hay lịch sử chat. Các trạng thái dưới đây là mốc trước PR, phải cập nhật theo bằng chứng mới.
+**Điểm bắt đầu (04/10/2026, sau khi PR #4 merge, main `8680240`):** ZEN-017/018 đang ở Verify — chờ gate xanh rồi merge. Kế tiếp theo thứ tự: **ZEN-005** (pre-release APK) → **ZEN-011** (nghiệm thu thiết bị) → **ZEN-008** (hợp nhất nguồn tiến độ) → ZEN-009/010 (duyệt nội dung và giọng đọc). Không cần nhánh cũ hay lịch sử chat; cập nhật trạng thái theo bằng chứng mới.
 
 **Quy ước:** Ready = có thể bắt đầu; Blocked = phụ thuộc bên ngoài; Verify = đã có mã nhưng chưa đạt kiểm tra cần thiết; Done = đạt tiêu chí của riêng thẻ, không đồng nghĩa sản phẩm đã phát hành.
 
 | ID | Trạng thái | Ưu tiên / vai trò tiếp nhận | Công việc và điều kiện hoàn thành | Bằng chứng / phụ thuộc |
 |---|---|---|---|---|
-| ZEN-001 | Verify | P0 · chủ repository | Cập nhật ba workflow, review và merge qua PR | Đã push, [PR #4](https://github.com/Pabhassaracitto/zenglish/pull/4) draft; gate chạy xanh trên PR (run `37219148852`, 6m48s). Done khi PR được merge và `Quality checks` xanh trên commit merge ở main |
+| ZEN-001 | Done | P0 · chủ repository | Cập nhật ba workflow, review và merge qua PR | **PR #4 đã MERGED 04/10/2026 17:41 UTC**; main hiện ở `8680240`. Gate xanh trên PR (run `37219148852`, 6m48s). Còn lại: xác nhận `Quality checks` xanh trên chính commit merge ở main |
 | ZEN-002 | Verify | P0 · agent Flutter | Resolve trên Flutter 3.44.0, cập nhật lockfile; gen-l10n, analyzer, Flutter tests và APK đạt | CI trên PR #4 chạy Flutter 3.44.0: `pub get` **không** sửa `pubspec.lock` (không có annotation `pubspec.lock lệch`), gen-l10n + analyze + tests + `build apk --debug` đều xanh (run `37219148852`). Chưa có test thiết bị; chưa verify trên máy local/môi trường khác |
 | ZEN-003 | Verify | P0 · agent CI | Quality gate chạy trên PR/main, không đóng gói khi gate thất bại | Gate đạt trên PR #4 (content 8s · Flutter 2m08s · APK debug 4m21s · artifact 55.67 MB). `full_build`/`premium_build` đã nối `uses: ./.github/workflows/quality.yml`; chưa chạy đường đóng gói thật (không tag) |
 | ZEN-004 | Ready | P0 · agent + chủ repository | Merge PR sau review/checks; xác nhận tài liệu, tests và nội dung đều có trên main | Người dùng đã yêu cầu create PR; ZEN-015 hoàn tất. Mở draft PR để review, chờ Flutter checks trước merge |
@@ -16,13 +16,15 @@ Cập nhật: **04/10/2026**. Bảng công việc chính nằm trong repository;
 | ZEN-006 | Done | P1 · agent nội dung | Đủ 8 bài trong registry, prerequisite không thiếu/vòng lặp, ID routing có trong assets | `validate_content.py` đạt; 7/7 Python tests đạt. Chỉ xác minh tĩnh, chưa nghiệm thu mở khóa trên UI |
 | ZEN-007 | Verify | P1 · agent Flutter | Bài đọc email CH04, cờ review/audio và thông báo thiếu audio hiển thị đúng | Model/UI/tests đã bổ sung; chưa chạy Flutter tests/thiết bị |
 | ZEN-008 | Ready | P1 · agent Flutter | Một nguồn tiến độ nhất quán: placement → home → hoàn thành → restart → gợi ý bài kế tiếp | Rà soát cả `user_profile_provider.dart` và `user_session_service.dart`; Home có đường đọc session riêng |
-| ZEN-009 | Ready | P1 · người duyệt nội dung | Duyệt 4 bản nháp A1, tiếng Anh/Pāli, tập quán thiền viện, phản hồi cho bài không phải trình pháp | Danh sách chi tiết trong CONTENT_AUDIT.md; không tự gỡ `needs_review` |
-| ZEN-010 | Ready | P1 · người duyệt + audio | Duyệt script/giọng/quyền sử dụng, đóng gói audio và nghe thử; hoặc nghiệm thu luồng đọc không chặn học | Cả 8 bài chưa có bản thu Input; chưa có deadline sản xuất được duyệt |
+| ZEN-009 | Ready | P1 · người duyệt nội dung | Duyệt 4 bản nháp A1, tiếng Anh/Pāli, tập quán thiền viện, phản hồi cho bài không phải trình pháp | Danh sách chi tiết trong CONTENT_AUDIT.md; không tự gỡ `needs_review`. **04/10: chủ dự án báo app chỉ thấy 4 bài — nguyên nhân là UI, không phải thiếu nội dung (ZEN-017), assets vẫn đủ 8 bài** |
+| ZEN-010 | Verify | P1 · agent Flutter + người duyệt | Chưa có bản thu thì đọc bằng TTS; có file thu thì **tự ưu tiên bản thu**, không cần sửa code | Quyết định 04/10 của chủ dự án. Đã có `SpeechSynthesizer`/`SpeechService` + `resolveInputAudio` + nhãn "giọng tổng hợp" trên UI; nghe thử trên thiết bị và duyệt giọng/quyền vẫn chưa làm |
 | ZEN-011 | Ready | P1 · agent + người dùng | Nghiệm thu APK: máy bay, Việt–Anh, lưu tiến độ, CH04, màn hình nhỏ, cỡ chữ lớn; triage lỗi | Phụ thuộc APK của ZEN-005; người dùng dự định tải về thử |
 | ZEN-012 | Ready | P2 · agent Flutter | Ẩn/thay AI placeholder; kiểm định locale ngoài Việt–Anh và hỗ trợ accessibility | Không mở rộng phạm vi ngôn ngữ trước khi luồng chính ổn định |
 | ZEN-013 | Verify | P1 · agent kế tiếp | Bàn giao không phụ thuộc nhánh: AGENTS, Kanban, plan, handoff và quy trình merge/release đều có trên main | Đợt bàn giao tách workflow khỏi code/tests/docs. Chỉ hoàn tất sau khi merge và kiểm tra main |
 | ZEN-015 | Done | P0 · agent trước PR | Đồng bộ main mới và giữ cả sửa theme trên main lẫn code/nội dung beta | Đã merge main `ce01f0a`, giải quyết conflict theme/localization, giữ ba tham chiếu AppColors. Validator và 7 Python tests đạt; Flutter checks vẫn ở ZEN-002. Fetch lại nếu main đổi |
-| ZEN-016 | Ready | P0 · agent Flutter | Tái hiện và xử lý báo lỗi `_lastVoiceText` undefined; xác minh lỗi theme không quay lại | Chưa tìm thấy `_lastVoiceText` trong mã đã kiểm tra. Cần file/dòng hoặc log analyzer mới; không tuyên bố đã sửa. Done khi có kết quả analyzer và kiểm tra luồng liên quan |
+| ZEN-016 | Done (không tái hiện) | P0 · agent Flutter | Tái hiện và xử lý báo lỗi `_lastVoiceText` undefined; xác minh lỗi theme không quay lại | `grep -rn "_lastVoiceText" lib` không có kết quả; `flutter analyze` xanh trên PR #4 (run `37219148852`). Mở lại nếu có file/dòng hoặc log mới |
+| ZEN-017 | Verify | P0 · agent Flutter | Thư viện bài học: mọi bài trong registry đều có đường vào từ UI, có trạng thái/nhãn | **Nguyên nhân "chỉ thấy 4 bài"**: Home chỉ có 4 thẻ quick-start hardcode trong `ai_interview_quick_start.dart`, không màn hình nào gọi `loadAllLessons()`. Đã thêm `/lessons` + `lessonCatalogProvider` + thẻ vào Home + 4 test. Chưa xem trên thiết bị |
+| ZEN-018 | Verify | P1 · agent Flutter | TTS fallback đa ngôn ngữ, thay engine không đụng call-site (dọn đường cho Sherpa) | `SpeechSynthesizer` interface + `FlutterTtsSynthesizer` + `SpeechService.overrideWith()`. Engine offline đóng gói (Sherpa-onnx) là thẻ riêng, chưa làm. Cần đo dung lượng APK sau khi thêm `flutter_tts` |
 | ZEN-014 | Backlog | P2 · chủ dự án + backend | Backend AI có xác thực/hạn mức/consent; cloud sync, store signing và vận hành | Ngoài beta offline; chưa triển khai |
 
 ## Cách tiếp nhận một thẻ

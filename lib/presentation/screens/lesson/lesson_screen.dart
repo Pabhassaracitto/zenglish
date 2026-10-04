@@ -7,6 +7,7 @@ import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/models/lesson.dart';
 import 'package:zenglish/data/models/lesson_flow.dart';
 import 'package:zenglish/data/services/audio_playback_service.dart';
+import 'package:zenglish/data/services/input_audio_resolver.dart';
 import 'package:zenglish/presentation/providers/home_provider.dart';
 import 'package:zenglish/presentation/providers/lesson_provider.dart';
 import 'package:zenglish/presentation/screens/lesson/stages/pattern_stage.dart';
@@ -64,7 +65,9 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
   }
 
   /// Called by every audio play button in the lesson.
-  Future<void> _playAudio(String source) async {
+  ///
+  /// Ưu tiên bản thu thật; nếu bài chưa có bản thu thì đọc bằng giọng tổng hợp.
+  Future<void> _playInputAudio(InputAudioPlan plan) async {
     final isSilent = ref.read(lessonProvider.select((s) => s.isSilentMode));
 
     if (isSilent) {
@@ -78,12 +81,17 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     // Optimistically mark as playing in UI.
     ref.read(lessonProvider.notifier).setAudioPlaying(true);
 
-    final result = await AudioPlaybackService.instance.play(
-      source,
+    final result = await AudioPlaybackService.instance.playInput(
+      plan,
       isSilentMode: isSilent,
     );
 
     if (!mounted) return;
+
+    // Giọng tổng hợp đọc xong là kết thúc — trả nút về trạng thái ban đầu.
+    if (plan.isSynthesized) {
+      ref.read(lessonProvider.notifier).setAudioPlaying(false);
+    }
 
     switch (result) {
       case AudioLoadResult.success:
@@ -118,6 +126,23 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       case AudioLoadResult.unknown:
         ref.read(lessonProvider.notifier).setAudioPlaying(false);
         _showSnackBar('Đã xảy ra lỗi. Vui lòng thử lại.');
+        break;
+
+      case AudioLoadResult.ttsUnavailable:
+        ref.read(lessonProvider.notifier).setAudioPlaying(false);
+        _showSnackBar(
+          'Thiết bị chưa có giọng đọc tiếng Anh. Hãy cài gói giọng nói trong '
+          'Cài đặt → Ngôn ngữ, hoặc đọc văn bản bên dưới để tiếp tục.',
+          icon: Icons.record_voice_over_outlined,
+        );
+        break;
+
+      case AudioLoadResult.noContent:
+        ref.read(lessonProvider.notifier).setAudioPlaying(false);
+        _showSnackBar(
+          'Bài này chưa có bản thu lẫn văn bản tiếng Anh để đọc.',
+          icon: Icons.audio_file,
+        );
         break;
     }
   }
@@ -248,7 +273,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
         return _InputStageView(
           lesson: lesson,
           state: state,
-          onPlayAudio: _playAudio,
+          onPlayAudio: _playInputAudio,
           notifier: ref.read(lessonProvider.notifier),
         );
       case LessonStage.pattern:
@@ -443,7 +468,7 @@ class _InputStageView extends StatelessWidget {
 
   final Lesson lesson;
   final LessonState state;
-  final Future<void> Function(String) onPlayAudio;
+  final Future<void> Function(InputAudioPlan) onPlayAudio;
   final LessonNotifier notifier;
 
   @override
@@ -453,8 +478,8 @@ class _InputStageView extends StatelessWidget {
     final idx = state.currentDialogueIndex;
     final hasDialogues = dialogues.isNotEmpty;
 
-    // ✅ Audio URL lấy từ InputPhase, không phải từ SampleDialogue
-    final audioUrl = inputPhase.audioUrl;
+    // Nguồn âm thanh: ưu tiên bản thu thật, fallback giọng tổng hợp (TTS).
+    final audioPlan = resolveInputAudio(lesson);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -470,15 +495,19 @@ class _InputStageView extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ── Audio Player toàn bài ──────────────────────────────────────
-          if (audioUrl != null) ...[
+          if (audioPlan.canPlay) ...[
             _AudioPlayerBar(
               isPlaying: state.isAudioPlaying,
               isSilentMode: state.isSilentMode,
-              onPlay: () => onPlayAudio(audioUrl),
+              onPlay: () => onPlayAudio(audioPlan),
             ),
+            if (audioPlan.isSynthesized) ...[
+              const SizedBox(height: 8),
+              const _SynthesizedVoiceNotice(),
+            ],
             const SizedBox(height: 16),
           ] else ...[
-            // MVP: chưa có audio file
+            // Không có bản thu lẫn văn bản tiếng Anh để đọc.
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -1038,6 +1067,42 @@ class _SpeakerBubble extends StatelessWidget {
 }
 
 /// Thanh phát audio đơn giản cho toàn bài (Input Stage)
+
+/// Nhãn minh bạch: đây là giọng máy, không phải bản thu của vị thầy/giảng viên.
+class _SynthesizedVoiceNotice extends StatelessWidget {
+  const _SynthesizedVoiceNotice();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: AppTheme.secondary.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppTheme.secondary.withOpacity(0.25)),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.record_voice_over_outlined,
+            size: 16,
+            color: AppTheme.secondary,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Giọng đọc tổng hợp của thiết bị (TTS) — bài này chưa có bản thu. '
+              'Khi có bản thu thật, app sẽ tự dùng bản thu. / Synthesized voice; '
+              'real recording pending.',
+              style: AppTheme.labelSmall.copyWith(height: 1.4),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _AudioPlayerBar extends StatelessWidget {
   const _AudioPlayerBar({
     required this.isPlaying,

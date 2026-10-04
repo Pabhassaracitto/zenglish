@@ -28,6 +28,21 @@ Cột “cần thu từ vựng” là số mục đang được đánh dấu tro
 | A2_CH07_L01 | Five Precepts & Eight Precepts — Reporting Your Practice | 10 | 5 | Chưa có |
 | B1_CH12_L01 | The 5-Part Meditation Interview Report (Core) | 10 | 5 | Chưa có |
 
+## Chính sách âm thanh — cập nhật 04/10/2026
+
+Chủ dự án chốt: **bài nào chưa có bản thu thì đọc bằng giọng tổng hợp (TTS); khi có file thu thật thì app tự ưu tiên bản thu.**
+
+- Thứ tự ưu tiên do `resolveInputAudio()` (`lib/data/services/input_audio_resolver.dart`) quyết định:
+  1. `lesson_flow.input.audio_url` có giá trị → phát bản thu (asset hoặc URL).
+  2. Chưa có → đọc `reading_text_en`, nếu không có thì ghép `sample_dialogues` (đã bỏ nhãn người nói).
+  3. Không có cả hai → giữ thông báo cũ, người học đọc văn bản để tiếp tục.
+- Thêm `audio_url` vào JSON là đủ để chuyển sang bản thu, **không phải sửa code**.
+- UI luôn gắn nhãn "Giọng đọc tổng hợp của thiết bị (TTS)" khi không dùng bản thu — không được trình bày giọng máy như bản thu của vị thầy.
+- Engine hiện tại là TTS của hệ điều hành qua `flutter_tts`, phụ thuộc gói giọng người dùng đã cài. Nếu thiếu, app báo cách cài và vẫn cho đọc văn bản.
+- Dự án đa ngôn ngữ: `SpeechSynthesizer` là interface, đổi sang engine offline đóng gói (ví dụ Sherpa-onnx kế thừa từ dự án khác của chủ dự án) chỉ cần `SpeechService.overrideWith(...)`, không đụng tới UI.
+
+Chưa nghiệm thu: chất lượng phát âm Pāḷi bằng TTS, tốc độ đọc, hành vi khi tắt màn hình, và dung lượng APK sau khi thêm `flutter_tts`.
+
 ## Thứ tự sản xuất âm thanh đề xuất
 
 1. Duyệt văn bản Việt–Anh và cách phát âm Pāli trước khi thu.
@@ -37,6 +52,15 @@ Cột “cần thu từ vựng” là số mục đang được đánh dấu tro
 5. Đặt file trong `assets/audio/`, khai báo thư mục trong pubspec, gán `audio_url` cho Input.
    Validator chặn file không tồn tại và URL từ xa trong catalog offline.
 6. Nghe nghiệm thu trên Android, kiểm tra chế độ im lặng, pause/resume và chuyển bài.
+
+## Khả năng truy cập nội dung trên giao diện — 04/10/2026
+
+Chủ dự án báo trong app chỉ thấy 4 mục (Ānāpāna, Giới, 5 Phần, Sức khoẻ). Đối chiếu mã nguồn:
+
+- `assets/data/lessons/` **vẫn đủ 8 bài** và `validate_content.py` đạt — không phải mất nội dung.
+- Bốn mục đó là `_QuickCardGrid` hardcode trong `lib/presentation/screens/home/components/ai_interview_quick_start.dart`.
+- Trước bản sửa này **không màn hình nào gọi `loadAllLessons()`**; Home chỉ hiển thị một bài đề xuất, nên A1 chương 1–4 không có đường vào trừ khi placement route đúng vào đó.
+- Đã bổ sung màn hình `/lessons` (`LessonCatalogScreen`) đọc thẳng từ repository: thêm bài vào registry là bài tự hiện, kèm nhãn "chờ duyệt", "giọng tổng hợp" và gợi ý bài tiên quyết.
 
 ## Hạng mục chờ người phụ trách nội dung duyệt
 

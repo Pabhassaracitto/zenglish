@@ -63,7 +63,8 @@ Sau lần resolve dependencies thành công, rà soát và lưu thay đổi `pub
 - `test/`: kiểm thử models/assets, repository, phản hồi, hồ sơ và widget.
 
 Font tiêu đề Merriweather đóng gói sẵn; nội dung dùng font hệ thống, không tải Google Fonts lúc chạy.
-Tám bài hiện chưa có bản thu Input; giao diện hỗ trợ đọc nội dung để tiếp tục.
+Tám bài hiện chưa có bản thu Input: app đọc bằng **giọng tổng hợp (TTS)** của thiết bị và gắn nhãn rõ ràng; khi có file thu thật trong `audio_url` thì bản thu được ưu tiên tự động. Engine TTS nằm sau interface `SpeechSynthesizer` nên thay được (ví dụ Sherpa-onnx offline) mà không sửa UI.
+Màn hình **Thư viện bài học** (`/lessons`) liệt kê toàn bộ bài trong registry; Home chỉ hiển thị bài đề xuất và 4 thẻ trình pháp nhanh.
 Xem [báo cáo nội dung và backlog thu âm](docs/CONTENT_AUDIT.md).
 Các locale ngoài Việt–Anh còn cần kiểm định bản dịch và tương thích widget/font.
 

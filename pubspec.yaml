@@ -37,6 +37,11 @@ dependencies:
   cloud_firestore: ^6.5.0
   just_audio: ^0.10.5
 
+  # ── Giọng đọc tổng hợp (fallback khi bài chưa có bản thu) ──
+  # Dùng engine TTS của hệ điều hành. Có thể thay bằng engine offline
+  # đóng gói kèm app (ví dụ Sherpa-onnx) qua SpeechSynthesizer interface.
+  flutter_tts: ^4.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
