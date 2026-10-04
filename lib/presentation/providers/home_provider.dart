@@ -9,6 +9,7 @@ import '../../data/models/placement_result.dart';
 import '../../data/models/user_profile.dart';
 import '../../data/services/user_session_service.dart';
 import '../../logic/content_router.dart';
+import 'catalog_provider.dart';
 
 // ─────────────────────────────────────────────
 // STATE
@@ -76,12 +77,16 @@ class HomeNotifier extends StateNotifier<HomeState> {
         return;
       }
 
-      // Load next lesson
-      final nextLessonId = _resolveNextLessonId(profile);
-      final nextLesson =
-          nextLessonId != null ? await _repo.getLessonById(nextLessonId) : null;
+      // Load next lesson — duyệt toàn bộ thư viện, không dừng ở một gợi ý
+      final lessons = await _repo.loadAllLessons();
+      final catalog = buildCatalog(lessons, profile);
+      final nextEntry = resolveNextEntry(
+        catalog,
+        suggestedId: _suggestedLessonId(profile),
+      );
+      final nextLesson = nextEntry?.lesson;
 
-      state = state.copyWith(
+      state = HomeState(
         userProfile: profile,
         nextLesson: nextLesson,
         isLoading: false,
@@ -110,27 +115,15 @@ class HomeNotifier extends StateNotifier<HomeState> {
 
   // ─── Private helpers ─────────────────────────
 
-  String? _resolveNextLessonId(UserProfile profile) {
-    // Nếu có bài đang học dở → tiếp tục
-    if (profile.inProgressLessonIds.isNotEmpty) {
-      return profile.inProgressLessonIds.first;
-    }
-
-    // Dùng ContentRouter để đề xuất
-    final nextId = ContentRouter.getStartLesson(
+  /// Gợi ý ban đầu của ContentRouter; việc chọn bài cuối cùng do
+  /// [resolveNextEntry] quyết định trên toàn bộ thư viện.
+  String? _suggestedLessonId(UserProfile profile) {
+    return ContentRouter.getStartLesson(
       languageLevel: profile.languageLevel,
       meditationStage: profile.meditationStage,
       paliLevel: profile.paliKnowledgeLevel,
       meditationExperience: _stageToExperience(profile.meditationStage),
     );
-
-    // Nếu bài gợi ý đã hoàn thành, tìm bài tiếp theo (đơn giản hóa: trả về null nếu đã xong)
-    // Trong tương lai cần logic duyệt danh sách bài học theo thứ tự
-    if (profile.completedLessonIds.contains(nextId)) {
-      return null;
-    }
-
-    return nextId;
   }
 
   MeditationExperience _stageToExperience(MeditationStage stage) {
