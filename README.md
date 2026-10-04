@@ -30,7 +30,7 @@ Chưa phát hành lên Play Store/App Store; chưa có đồng bộ tài khoản
   `env.FLUTTER_VERSION_DEFAULT` trong `.github/workflows/quality.yml`; `full_build.yml` và
   `premium_build.yml` nhận lại qua output của quality gate nên không thể lệch pin.
   `pubspec.lock` (Dart `>=3.11.0`) và `pubspec.yaml` (Flutter `>=3.41.0`) đều tương thích
-  Dart 3.12.2 đi kèm 3.44.0, nhưng **chưa có run nào chứng minh** 3.44.0 đạt trên repo này.
+  Dart 3.12.2 đi kèm 3.44.0; PR #4 (run `37219148852`) đã chứng minh analyze + tests + APK debug đạt trên 3.44.0.
   Nếu PR đỏ vì lint/lockfile sau bump: chạy `Quality checks` thủ công với `flutter_version=3.41.4`
   để đối chiếu, lùi một dòng pin đó, rồi resolve `pubspec.lock` riêng (ZEN-002) — không nới gate.
 - Android SDK và Java 17 để build Android.
@@ -69,13 +69,13 @@ Các locale ngoài Việt–Anh còn cần kiểm định bản dịch và tươ
 
 ## CI
 
-Bản cập nhật workflow (soạn 18/09, chốt 04/10/2026) nhưng **chưa nằm trên `main`**: push bị GitHub từ chối vì GitHub App của phiên thiếu quyền `workflows` ("refusing to allow a GitHub App to create or update workflow ... without `workflows` permission"). Bàn giao bằng patch + ZIP theo [docs/WORKFLOW_MANUAL.md](docs/WORKFLOW_MANUAL.md); chỉ sau khi chủ repository áp patch và mở PR thì mới có bằng chứng CI. Không suy cấu hình CI từ file YAML đã viết.
+Bản cập nhật workflow (soạn 18/09, chốt 04/10/2026) nằm ở [PR #4](https://github.com/Pabhassaracitto/zenglish/pull/4) — **chưa merge**. Gate đã chạy thật và xanh trên PR đó: run `37219148852`, 6m48s, trên Flutter 3.44.0 (xem `docs/HANDOFF.md` mục 0 cho chi tiết từng job). Nếu đọc tài liệu này mà chưa thấy workflow mới trên `main` thì gate mới chưa áp dụng cho main: kiểm tra `gh run list --workflow quality.yml`, không suy từ file YAML.
 
 `quality.yml` là quality gate: chạy ngay trên **pull request** vào main, push `main`/`arena/**`, `workflow_dispatch`, và `workflow_call` cho hai workflow đóng gói. Ba job song song/nối tiếp:
 
 1. `Content validator + Python tests` — `validate_content.py` + unittest.
 2. `Flutter analyze + tests` — `pub get` (cache theo `pubspec.lock`) → `gen-l10n` → `analyze` (chặn errors) → `flutter test --coverage`, kèm summary log test trong job và artifact `flutter-coverage`.
-3. `Android debug APK (ARM64)` — chạy **trên mọi PR và push** (chỉ sau khi job Flutter đạt), cache Gradle, upload artifact `android-offline-beta-debug-<run_id>` (14 ngày) + SHA-256 trong summary để cài thử ngay từ PR. Repo **public** nên phút runner và storage artifact không tính tiền, `main` không bật branch protection nên run dài (~6 phút cho job Android) không chặn ai merge.
+3. `Android debug APK (ARM64)` — chạy **trên mọi PR và push** (chỉ sau khi job Flutter đạt), cache Gradle, upload artifact `android-offline-beta-debug-<run_id>` (14 ngày) + SHA-256 trong summary để cài thử ngay từ PR. Repo **public** nên phút runner và storage artifact không tính tiền; `main` không bật branch protection. Đo thực tế trên PR #4: job Android 4m21s, APK debug 55.67 MB, cả gate 6m48s (run `37219148852`).
 
 Runner mới nhất của cùng PR thay run cũ (`cancel-in-progress`), mỗi job có `timeout-minutes`. `full_build.yml` chỉ còn manual và phải qua gate; `premium_build.yml` gọi gate trước `prepare`, build chỉ khi gate+prepare thành công, release chỉ khi không build nào fail, và tag `*-beta.*` không kích hoạt nó. Người dùng đã yêu cầu APK thử nghiệm; xem [quy trình beta release](docs/DELIVERY.md), chỉ tạo release có APK đúng commit sau khi build/checks đạt.
 
