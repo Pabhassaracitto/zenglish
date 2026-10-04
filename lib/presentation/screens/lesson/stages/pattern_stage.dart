@@ -269,6 +269,18 @@ class _TrilingualMatchCard extends StatelessWidget {
     final isCorrect = state.patternCorrect[vocabItem.stt];
     final hasAnswered = state.patternAnswers.containsKey(vocabItem.stt);
 
+    // Mỗi nghĩa đúng chỉ nên được ghép một lần. Ẩn các lựa chọn đã ghép
+    // đúng ở những dòng khác để danh sách ngắn dần theo tiến độ.
+    final usedCorrectAnswers = state.patternCorrect.entries
+        .where((entry) => entry.value && state.patternAnswers[entry.key] != null)
+        .map((entry) => state.patternAnswers[entry.key]!.stt)
+        .toSet();
+    final availableOptions = allVocab.where((option) {
+      return option.stt == vocabItem.stt ||
+          option.stt == answered?.stt ||
+          !usedCorrectAnswers.contains(option.stt);
+    }).toList();
+
     return Container(
       margin: const EdgeInsets.only(bottom: AppTheme.spaceSM),
       padding: const EdgeInsets.all(AppTheme.spaceMD),
@@ -337,7 +349,7 @@ class _TrilingualMatchCard extends StatelessWidget {
               Expanded(
                 child: _AnswerDropdown(
                   hintText: 'Chọn nghĩa tiếng Việt...',
-                  options: allVocab,
+                  options: availableOptions,
                   selected: answered,
                   getLabel: (v) => v.vietnamese,
                   onSelected: (v) {
