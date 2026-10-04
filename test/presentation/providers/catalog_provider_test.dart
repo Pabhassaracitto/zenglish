@@ -103,4 +103,39 @@ void main() {
       reason: 'Hiện chưa bài nào có bản thu Input',
     );
   });
+
+  test('ZEN-008: hoàn thành bài gợi ý vẫn còn bài kế tiếp (Home không trống)',
+      () async {
+    final lessons = await _loadAll();
+    final all = buildCatalog(lessons, null).entries;
+    final firstId = all.first.lesson.lessonId;
+
+    final catalog = buildCatalog(lessons, _profile(completed: [firstId]));
+    final next = resolveNextEntry(catalog, suggestedId: firstId);
+
+    expect(next, isNotNull);
+    expect(next!.lesson.lessonId, isNot(firstId));
+    expect(next.status, LessonProgressStatus.notStarted);
+  });
+
+  test('ZEN-008: bài đang học dở được ưu tiên hơn gợi ý của ContentRouter',
+      () async {
+    final lessons = await _loadAll();
+    final catalog = buildCatalog(
+      lessons,
+      _profile(inProgress: const ['A1_CH03_L01']),
+    );
+
+    final next = resolveNextEntry(catalog, suggestedId: 'A1_CH01_L01');
+    expect(next!.lesson.lessonId, 'A1_CH03_L01');
+  });
+
+  test('ZEN-008: hoàn thành toàn bộ thư viện → không còn bài kế tiếp',
+      () async {
+    final lessons = await _loadAll();
+    final allIds = lessons.map((l) => l.lessonId).toList();
+    final catalog = buildCatalog(lessons, _profile(completed: allIds));
+
+    expect(resolveNextEntry(catalog, suggestedId: allIds.first), isNull);
+  });
 }

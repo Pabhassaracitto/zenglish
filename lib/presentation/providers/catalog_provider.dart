@@ -96,6 +96,37 @@ LessonCatalog buildCatalog(List<Lesson> lessons, UserProfile? profile) {
   return LessonCatalog(entries: entries);
 }
 
+/// Chọn bài học tiếp theo nên hiển thị trên Home.
+///
+/// Thứ tự ưu tiên (hàm thuần, kiểm thử được):
+/// 1. Bài đang học dở đầu tiên theo thứ tự thư viện.
+/// 2. Bài do [suggestedId] (ContentRouter) gợi ý, nếu có trong thư viện và
+///    **chưa** hoàn thành.
+/// 3. Bài chưa bắt đầu đầu tiên theo thứ tự A1 → C2.
+/// Hết bài (đã hoàn thành tất cả) → `null`.
+///
+/// ZEN-008: trước đây Home trả `null` ngay khi bài gợi ý đã hoàn thành, nên
+/// màn hình trống dù còn bài chưa học.
+CatalogEntry? resolveNextEntry(LessonCatalog catalog, {String? suggestedId}) {
+  for (final entry in catalog.entries) {
+    if (entry.isInProgress) return entry;
+  }
+
+  if (suggestedId != null) {
+    for (final entry in catalog.entries) {
+      if (entry.lesson.lessonId == suggestedId && !entry.isCompleted) {
+        return entry;
+      }
+    }
+  }
+
+  for (final entry in catalog.entries) {
+    if (entry.status == LessonProgressStatus.notStarted) return entry;
+  }
+
+  return null;
+}
+
 /// Tải **toàn bộ** bài học trong assets (không phải danh sách quick-start
 /// hardcode trên Home).
 final lessonCatalogProvider = FutureProvider<LessonCatalog>((ref) async {

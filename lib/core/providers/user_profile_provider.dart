@@ -1,12 +1,11 @@
 // ============================================================
 // PROVIDER: UserProfile state - dùng cho router redirect logic
 // ============================================================
-import 'dart:convert';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/models/user_profile.dart';
+import '../../data/services/progress_store.dart';
 
 // ── SharedPreferences Provider ──
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
@@ -16,7 +15,9 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 
 // ── UserProfile Notifier ──
 class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
-  static const _storageKey = 'userprofile';
+  /// ZEN-008: tiến độ chỉ có **một** nguồn — [ProgressStore] (key
+  /// `userprofile`). `UserSessionService` là facade trên cùng kho này.
+  ProgressStore get _store => ProgressStore(ref.read(sharedPreferencesProvider));
 
   @override
   Future<UserProfile?> build() async {
@@ -25,12 +26,12 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
 
   Future<UserProfile?> loadFromStorage() async {
     try {
-      final prefs = ref.read(sharedPreferencesProvider);
-      final jsonStr = prefs.getString(_storageKey);
-      if (jsonStr == null) return null;
-      return UserProfile.fromJson(jsonDecode(jsonStr) as Map<String, dynamic>);
+      final store = _store;
+      // Nhập dữ liệu beta cũ (các key rời) nếu có; chạy đúng một lần.
+      await store.migrateIfNeeded();
+      return store.read();
     } catch (e) {
-      // Nếu parse lỗi → coi như chưa có profile
+      // Nếu parse lỗi → coi như chưa có profile, không làm trắng màn hình
       return null;
     }
   }
@@ -39,11 +40,7 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
   Future<void> saveProfile(UserProfile profile) async {
     state = const AsyncLoading();
     try {
-      final prefs = ref.read(sharedPreferencesProvider);
-      await prefs.setString(
-        _storageKey,
-        jsonEncode(profile.toJson()),
-      );
+      await _store.write(profile);
       state = AsyncData(profile);
     } catch (e, st) {
       state = AsyncError(e, st);
@@ -66,17 +63,23 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
     await saveProfile(updated);
   }
 
-  /// ✅ NEW: Mark a lesson as completed — persists to SharedPreferences
+  /// Đánh dấu hoàn thành — ghi vào kho canonical, không trùng ID.
   Future<void> markLessonCompleted(String lessonId) async {
-    final current = state.valueOrNull;
+    final current = state.valueOrNull ?? _store.read();
     if (current == null) return;
-
-    // Guard: skip if already marked to avoid redundant writes
     if (current.completedLessonIds.contains(lessonId)) return;
 
-    final updatedIds = [...current.completedLessonIds, lessonId];
-    final updated = current.copyWith(completedLessonIds: updatedIds);
-    await saveProfile(updated);
+    final updated = await _store.markLessonCompleted(lessonId);
+    if (updated != null) state = AsyncData(updated);
+  }
+
+  /// Đánh dấu đang học (mở bài) để Home gợi ý tiếp đúng bài đang dở.
+  Future<void> markLessonInProgress(String lessonId) async {
+    final current = state.valueOrNull ?? _store.read();
+    if (current == null) return;
+
+    final updated = await _store.markLessonInProgress(lessonId);
+    if (updated != null) state = AsyncData(updated);
   }
 
   /// ✅ NEW: Check if a lesson is completed
@@ -88,8 +91,7 @@ class UserProfileNotifier extends AsyncNotifier<UserProfile?> {
 
   /// Xóa profile (reset app)
   Future<void> clearProfile() async {
-    final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.remove(_storageKey);
+    await _store.clear();
     state = const AsyncData(null);
   }
 }
