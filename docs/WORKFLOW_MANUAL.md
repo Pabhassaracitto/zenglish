@@ -1,4 +1,24 @@
-# Workflow — chủ repository cập nhật thủ công
+# Workflow — bản cập nhật đã nộp vào repository
+
+Cập nhật **18/09/2026**, chốt phương án **04/10/2026**: chủ dự án yêu cầu agent nộp đúng bộ workflow để test Flutter ngay trên pull request. Ba file đã sửa xong và commit trên nhánh phiên (`ci(quality): chạy Flutter tests + APK debug ngay trên pull request`), nhưng **push bị GitHub từ chối** vì GitHub App của phiên không có quyền `workflows`. Bản cập nhật vì vậy bàn giao bằng patch + ZIP (không commit ZIP vào repo, không tự áp dụng). Chủ repository chọn một trong hai đường:
+
+- **Cấp quyền `workflows`** cho GitHub App / kết nối Arena rồi báo agent push lại và mở PR — checks Flutter chạy ngay trên PR đó; hoặc
+- **Tự áp patch**: tạo nhánh từ main, `git am < zenglish-workflows-2026-09-18.patch` (đã kiểm tra apply sạch trên main), push và mở PR. ZIP kèm ba file YAML + `SHA256SUMS.txt` cho ai muốn diff thủ công.
+
+Bảng dưới mô tả đúng nội dung đã commit; **chưa có run Actions nào** chứng minh cấu hình mới đạt. Phần còn lại của tài liệu giữ làm đặc tả lịch sử và hướng review.
+
+Bản đã nộp so với đặc tả cũ:
+
+| Đặc tả cũ | Bản đã nộp | Lý do |
+|---|---|---|
+| `quality.yml` pin Flutter 3.44.0 | Pin `3.44.0` trong `env.FLUTTER_VERSION_DEFAULT` (một chỗ duy nhất), có input `flutter_version` cho `workflow_dispatch` để thử bản khác | Chủ dự án chốt 3.44.0 cho khớp README/local SDK. Chưa có run xanh cho bản này: nếu analyze hoặc lockfile vỡ sau bump thì lùi đúng một dòng về `3.41.4` (bản đang xanh, run `34786664905`) và xử `pubspec.lock` riêng ở ZEN-002 |
+| Java 17 hardcode từng workflow | `env.JAVA_VERSION_DEFAULT` trong `quality.yml`, hai workflow đóng gói nhận `needs.*.outputs.java_version` | Một chỗ đổi pin; job `sdk-pin` fail nếu workflow khác tự hardcode |
+| ZIP bàn giao ngoài repo | Không còn ZIP; toàn bộ nằm trong repo, review bằng diff PR | Tránh bàn giao phụ thuộc workspace/phiên cũ |
+| Ba workflow độc lập | `full_build.yml` và `premium_build.yml` đều `uses: ./.github/workflows/quality.yml`; build chỉ chạy khi gate + prepare thành công; release khi không build nào fail; tag `!v*-beta.*` loại beta khỏi premium | Đúng tinh thần "không đánh đổi chất lượng để lấy artifact" |
+| Không nói tới feedback speed | `concurrency.cancel-in-progress` cho PR, `timeout-minutes` từng job, cache `~/.pub-cache` và `~/.gradle`, summary + coverage + APK artifact ngay trên PR | Mục tiêu "test Flutter ngay khi mở pull request"; job Flutter báo check ở ~2 phút, APK (~6 phút) chạy song song sau đó |
+| APK build trên mọi run? | **Giữ**: chạy ở mọi PR/push, upload artifact 14 ngày | Repo public nên phút + storage không tính tiền (chỉ có trần 6h/job và giới hạn concurrency theo tài khoản); `main` không bật branch protection nên không chặn merge. Build là cách duy nhất chứng minh packaging + là nguồn APK cho `docs/DELIVERY.md`. Muốn PR nhẹ hơn thì thêm `if:` chặn theo nhãn — một dòng |
+
+## Đặc tả gốc (13/09/2026)
 
 Người dùng đã yêu cầu push ứng dụng, nội dung và tài liệu trước; **không push thay đổi trong `.github/workflows/`**. Các file workflow cũ trên remote không bị xóa hoặc chỉnh trong commit này.
 

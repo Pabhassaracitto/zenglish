@@ -1,5 +1,9 @@
 name: Legacy manual platform builds
 
+# Chỉ chạy THỦ CÔNG: không nhận pull_request/push/tag, để quality.yml là gate trên PR
+# và premium_build.yml là đường phát hành theo tag (tránh hai workflow cùng build/release).
+# Mọi build phía dưới phụ thuộc reusable quality gate; phiên bản SDK lấy từ output của
+# gate đó (pin duy nhất nằm trong .github/workflows/quality.yml).
 on:
   workflow_dispatch:
     inputs:
@@ -20,16 +24,23 @@ on:
         type: boolean
         default: false
 
+concurrency:
+  group: full-build-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: read
 
 jobs:
+  # Gate bắt buộc: content validator, Flutter analyze/tests, APK debug.
+  # Các job build dưới đây dùng outputs của job này thay vì tự khai báo SDK.
   quality:
     uses: ./.github/workflows/quality.yml
     permissions:
       contents: read
 
   build-android:
+    timeout-minutes: 45
     name: Build Android APK
     needs: quality
     if: ${{ inputs.build_android }}
@@ -43,12 +54,12 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: ${{ needs.quality.outputs.java_version }}
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.4'
+          flutter-version: ${{ needs.quality.outputs.flutter_version }}
           channel: 'stable'
           cache: true
 
@@ -79,6 +90,7 @@ jobs:
           retention-days: 14
 
   build-windows:
+    timeout-minutes: 40
     name: Build Windows App
     needs: quality
     if: ${{ inputs.build_windows }}
@@ -94,7 +106,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.4'
+          flutter-version: ${{ needs.quality.outputs.flutter_version }}
           channel: 'stable'
           cache: true
 
@@ -126,6 +138,7 @@ jobs:
           retention-days: 14
 
   build-ios:
+    timeout-minutes: 60
     name: Build iOS IPA (unsigned)
     needs: quality
     if: ${{ inputs.build_ios }}
@@ -138,7 +151,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.4'
+          flutter-version: ${{ needs.quality.outputs.flutter_version }}
           channel: 'stable'
           cache: true
 
@@ -181,6 +194,7 @@ jobs:
           retention-days: 14
 
   build-linux:
+    timeout-minutes: 35
     name: Build Linux App
     needs: quality
     if: ${{ inputs.build_linux }}
@@ -208,7 +222,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.4'
+          flutter-version: ${{ needs.quality.outputs.flutter_version }}
           channel: 'stable'
           cache: true
 
