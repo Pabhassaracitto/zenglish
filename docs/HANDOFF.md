@@ -46,6 +46,8 @@ gh release create v1.0.1-beta.1 \
 
 `docs/BETA_ACCEPTANCE.md`: checklist 6 mục đánh số bằng tiếng Việt (8 bài trong `/lessons`; TTS + nhãn "giọng tổng hợp" + máy thiếu gói giọng; placement → học → thoát → mở lại; chế độ máy bay; màn hình nhỏ + cỡ chữ lớn; đổi Việt↔Anh), kèm phần "đã biết, không cần báo" và mẫu báo lỗi. Khi có phản hồi: tách từng lỗi thành thẻ Kanban có bước tái hiện; **không** đóng thẻ khi chưa sửa.
 
+**Bằng chứng CI của lượt này:** PR [#6](https://github.com/Pabhassaracitto/zenglish/pull/6), run [`37227371313`](https://github.com/Pabhassaracitto/zenglish/actions/runs/37227371313) — 5/5 job `success` (`Resolve SDK pins`, `Content validator + Python tests`, `Flutter analyze + tests`, `Android debug APK (ARM64)`, `Run summary`). Cảnh báo `pubspec.lock` lệch vẫn còn cho tới khi ZEN-002 được chạy trên máy có SDK.
+
 **Giới hạn kiểm chứng lượt này:** local chỉ chạy được `python3 scripts/validate_content.py` → `PASS: 8 lessons`; `python3 -m unittest discover -s scripts -p 'test_*.py'` → `Ran 7 tests ... OK`; `git diff --check` sạch. `flutter pub get/gen-l10n/analyze/test/build apk` **chưa chạy local** — bằng chứng lấy từ run Actions của PR nhánh `arena/01a1084f-zenglish`. Đã đối chiếu hằng số theme trước khi push (không dùng `AppTheme.success/warning`; các file sửa không thêm tham chiếu màu mới).
 
 **Điểm tiếp tục:** (1) chủ dự án chạy hai lệnh ở trên → lockfile + pre-release; (2) gửi phản hồi theo `docs/BETA_ACCEPTANCE.md` → triage thành thẻ; (3) ZEN-009/010 chờ **người phụ trách nội dung** (không gỡ `needs_review`, không tự duyệt giọng); (4) khi có file thu âm: đặt vào `assets/audio/`, khai báo pubspec, gán `audio_url` — app tự ưu tiên bản thu.
