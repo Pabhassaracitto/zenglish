@@ -93,9 +93,35 @@ gh release create v1.0.1-beta.1 \
 - `full_build.yml` chỉ manual. Không đổi beta thành stable tag để kích hoạt tất cả nền tảng.
 - Cần tải artifact và gắn APK vào Release trước khi artifact hết hạn, hoặc build lại đúng commit.
 
+
 ## D. Hướng dẫn người dùng thử APK
 
 - Chỉ dành cho Android ARM64; cho phép cài từ nguồn này theo hướng dẫn Android.
 - APK debug không phải gói Play Store. Debug keystore giữa các runner có thể khác; cập nhật đè có thể báo lỗi chữ ký. Không bảo người dùng gỡ app mà không cảnh báo **mất tiến độ local**; chưa có export/backup.
 - Test lần đầu, placement, CH01–04/đọc email, hoàn thành bài, mở lại và chế độ máy bay. Thiếu audio là giới hạn đã biết, không phải bằng chứng nút phát hoạt động.
 - Báo lỗi kèm version, thiết bị/Android, bước tái hiện và ảnh không chứa thông tin riêng tư.
+
+## E. Áp bản cập nhật workflow khi agent thiếu quyền `workflows`
+
+Dấu hiệu: `git push` bị từ chối với `refusing to allow a GitHub App to create or update workflow '.github/workflows/...' without 'workflows' permission`. Giữ nguyên commit local, **không** dùng API khác để lách quyền, và không bỏ quality gate để cho xanh.
+
+Tạo patch từ commit đã review (patch/ZIP tạo trong sandbox không sống qua phiên kế tiếp, nhưng commit thì có):
+
+```sh
+git log --oneline -1                     # SHA commit workflow trên nhánh phiên
+git format-patch -1 <SHA> --stdout > zenglish-workflows.patch
+```
+
+Chủ repository áp vào nhánh CI riêng rồi mở PR — chỉ cần quyền `contents: write` của chủ repo, GitHub không chặn chủ repo sửa workflow:
+
+```sh
+git fetch origin main
+git checkout -B ci/quality-gate origin/main
+git am < zenglish-workflows.patch         # lệch thì sửa tay, rồi git add -A && git am --continue
+python3 -c "import glob,yaml; [yaml.safe_load(open(f)) for f in glob.glob('.github/workflows/*.yml')]; print('YAML OK')"
+git push -u origin ci/quality-gate
+```
+
+Mở PR theo `.github/pull_request_template.md`, ghi rõ lệnh nào chưa chạy. Checks `Quality checks` chạy **ngay trên PR đó** bằng chính bản workflow trong PR: đó là bằng chứng đầu tiên cho gate mới, chưa có run xanh thì chưa được coi là đạt.
+
+Đường khác: Settings → Third-party Access (hoặc kết nối Arena) → GitHub App của môi trường → Repository permissions → **Workflows: Read & write** → Save, rồi báo agent push lại và mở PR.

@@ -1,20 +1,110 @@
 name: Quality checks
 
+# Quality gate dùng chung cho repository.
+#
+# Chạy ngay khi mở/cập nhật pull request vào main, khi push main hoặc nhánh
+# arena/*, khi gọi thủ công, và được full_build.yml / premium_build.yml gọi lại
+# qua workflow_call. Chỉ cần quyền đọc nội dung.
+#
+# Mục tiêu: feedback Flutter (pub get → gen-l10n → analyze → test) trong vài phút,
+# đồng thời để lại APK debug trên chính PR/run để cài thử lên máy.
 on:
   workflow_call:
+    outputs:
+      flutter_version:
+        description: 'Phiên bản Flutter thực sự dùng trong run này'
+        value: ${{ jobs.sdk-pin.outputs.flutter_version }}
+      java_version:
+        description: 'Phiên bản Java dùng cho các job build Android'
+        value: ${{ jobs.sdk-pin.outputs.java_version }}
   workflow_dispatch:
+    inputs:
+      flutter_version:
+        description: 'Override Flutter (vd: 3.44.0). Để trống = bản pin ở env.FLUTTER_VERSION_DEFAULT'
+        required: false
+        type: string
+        default: ''
   pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
+      - 'arena/**'
 
 permissions:
   contents: read
 
+# PR mới nhất thay thế run cũ của cùng PR; push main/arena không bị hủy giữa chừng.
+concurrency:
+  group: quality-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # CHỖ DUY NHẤT khai báo phiên bản SDK. Job sdk-pin sẽ fail nếu workflow đóng gói
+  # tự hardcode `flutter-version:` / `java-version:` riêng, để tránh lệch pin giữa
+  # CI và README (xem docs/WORKFLOW_MANUAL.md).
+  #
+  # 3.44.0 = bản chủ dự án chọn (khớp README, Dart 3.12.2 thỏa pubspec
+  # `sdk: '>=3.11.0 <4.0.0'` và `flutter: '>=3.41.0'`). Bản 3.41.4 từng xanh trên
+  # main (run 34786664905); nếu PR fail vì lint/lockfile do bump SDK thì lùi đúng
+  # một dòng này về '3.41.4' rồi xử lockfile riêng — không nới gate.
+  FLUTTER_VERSION_DEFAULT: '3.44.0'
+  JAVA_VERSION_DEFAULT: '17'
+
 jobs:
-  verify:
-    name: Validate content and Flutter
+  sdk-pin:
+    name: Resolve SDK pins
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    outputs:
+      flutter_version: ${{ steps.resolve.outputs.flutter_version }}
+      java_version: ${{ steps.resolve.outputs.java_version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Guard against duplicated SDK pins
+        shell: bash
+        run: |
+          set -euo pipefail
+          status=0
+          for f in .github/workflows/full_build.yml .github/workflows/premium_build.yml; do
+            [ -f "$f" ] || continue
+            if grep -nE "(flutter|java)-version:[[:space:]]*'" "$f"; then
+              echo "::error file=$f::$f tự khai báo phiên bản SDK. Nhận flutter_version/java_version từ needs.quality thay vì hardcode."
+              status=1
+            fi
+          done
+          exit "$status"
+
+      - name: Resolve effective versions
+        id: resolve
+        env:
+          FLUTTER_OVERRIDE: ${{ github.event.inputs.flutter_version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          flutter_version="${FLUTTER_OVERRIDE:-$FLUTTER_VERSION_DEFAULT}"
+          java_version="$JAVA_VERSION_DEFAULT"
+          {
+            echo "flutter_version=$flutter_version"
+            echo "java_version=$java_version"
+          } >> "$GITHUB_OUTPUT"
+          {
+            echo "### SDK pins"
+            echo ""
+            echo "- Flutter: \`$flutter_version\` (pin mặc định \`$FLUTTER_VERSION_DEFAULT\`, override: \`${FLUTTER_OVERRIDE:-none}\`)"
+            echo "- Java: \`$java_version\`"
+            echo "- Trigger: \`$GITHUB_EVENT_NAME\` · ref \`$GITHUB_REF_NAME\` · SHA \`${GITHUB_SHA:0:7}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  content:
+    name: Content validator + Python tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout code
@@ -31,12 +121,131 @@ jobs:
       - name: Run content validator tests
         run: python -m unittest discover -s scripts -p 'test_*.py' -v
 
+  flutter:
+    name: Flutter analyze + tests
+    needs: sdk-pin
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.41.4'
+          flutter-version: ${{ needs.sdk-pin.outputs.flutter_version }}
           channel: 'stable'
           cache: true
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache/hosted
+          key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            pub-${{ runner.os }}-
+
+      - name: Show SDK
+        run: flutter --version
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Check pubspec.lock matches pubspec.yaml
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! git diff --quiet -- pubspec.lock; then
+            echo "::warning title=pubspec.lock lệch::flutter pub get phải sửa pubspec.lock — lockfile chưa được resolve bằng Flutter ${FLUTTER_VERSION}. Commit lại pubspec.lock (xem AGENTS.md); bước này chưa chặn merge."
+            echo "⚠️ \`pubspec.lock\` thay đổi sau \`flutter pub get\`: cần resolve và commit bằng Flutter \`${FLUTTER_VERSION}\`." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "✅ pubspec.lock khớp với pubspec.yaml."
+          fi
+        env:
+          FLUTTER_VERSION: ${{ needs.sdk-pin.outputs.flutter_version }}
+
+      - name: Generate localizations
+        run: flutter gen-l10n
+
+      - name: Analyze Flutter code
+        shell: bash
+        run: |
+          set -o pipefail
+          flutter analyze --no-fatal-infos --no-fatal-warnings 2>&1 | tee "$RUNNER_TEMP/flutter-analyze.log"
+
+      - name: Run Flutter tests
+        shell: bash
+        run: |
+          set -o pipefail
+          flutter test --coverage 2>&1 | tee "$RUNNER_TEMP/flutter-test.log"
+        env:
+          CI: 'true'
+
+      - name: Test summary for PR review
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "### Flutter tests"
+            echo ""
+            echo '```text'
+            tail -n 12 "$RUNNER_TEMP/flutter-test.log" 2>/dev/null || echo "(không có log: job dừng trước bước test)"
+            echo '```'
+            if [ -f coverage/lcov.info ]; then
+              lines=$(grep -c '^DA:' coverage/lcov.info || true)
+              echo "- Coverage lines collected: $lines (artifact \`flutter-coverage\`)"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-coverage
+          path: coverage/lcov.info
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # Chạy trên MỌI PR/push: repo public nên phút và storage artifact không tính tiền,
+  # main không bật branch protection nên run dài không chặn merge; job này chỉ để
+  # phát hiện vỡ packaging (Gradle/AGP/asset/l10n) mà analyze+test không thấy, và để
+  # tải APK thử ngay theo docs/DELIVERY.md.
+  android-debug-apk:
+    name: Android debug APK (ARM64)
+    needs: [sdk-pin, flutter]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: ${{ needs.sdk-pin.outputs.java_version }}
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ needs.sdk-pin.outputs.flutter_version }}
+          channel: 'stable'
+          cache: true
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper/dists
+            ~/.gradle/android
+          # Vô hiệu hóa cache khi build script hoặc dependency graph đổi; Gradle tự
+          # bỏ entry hỏng, không cần dọn tay.
+          key: gradle-${{ runner.os }}-${{ hashFiles('pubspec.lock', 'android/**/*.gradle*', 'android/**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
 
       - name: Get dependencies
         run: flutter pub get
@@ -44,8 +253,56 @@ jobs:
       - name: Generate localizations
         run: flutter gen-l10n
 
-      - name: Analyze Flutter code
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+      - name: Build debug APK
+        run: flutter build apk --debug --target-platform android-arm64
 
-      - name: Run Flutter tests
-        run: flutter test --coverage
+      - name: Record APK checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk=build/app/outputs/flutter-apk/app-debug.apk
+          ls -lh "$apk"
+          checksum=$(sha256sum "$apk" | cut -d' ' -f1)
+          {
+            echo "### Android debug APK"
+            echo ""
+            echo "- SHA-256: \`$checksum\`"
+            echo "- Build: debug / arm64, Flutter \`${{ needs.sdk-pin.outputs.flutter_version }}\`, SHA \`${GITHUB_SHA:0:7}\`"
+            echo "- Artifact: \`android-offline-beta-debug-${{ github.run_id }}\` (giữ 14 ngày)"
+            echo "- APK debug không có chữ ký ổn định giữa các runner: không dùng cho Play Store, cập nhật đè có thể báo lỗi chữ ký."
+            echo "- Chi phí tham chiếu: job Android build mất ~6 phút trên repo này (artifact ~22-90 MB); phút/storage không tính tiền vì repo public."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-offline-beta-debug-${{ github.run_id }}
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
+  run-summary:
+    name: Run summary
+    if: always()
+    needs: [sdk-pin, content, flutter, android-debug-apk]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Summarize gate
+        shell: bash
+        run: |
+          {
+            echo "### Quality gate"
+            echo ""
+            echo "| Job | Kết quả |"
+            echo "|---|---|"
+            echo "| Content validator + Python tests | ${{ needs.content.result }} |"
+            echo "| Flutter analyze + tests | ${{ needs.flutter.result }} |"
+            echo "| Android debug APK | ${{ needs.android-debug-apk.result }} |"
+            echo ""
+            echo "- Flutter: \`${{ needs.sdk-pin.outputs.flutter_version }}\` · Java: \`${{ needs.sdk-pin.outputs.java_version }}\`"
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              echo "- PR chưa merge: toàn bộ job ở trên phải xanh (xem tiêu chí trong docs/KANBAN.md)."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

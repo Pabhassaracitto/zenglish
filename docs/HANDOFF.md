@@ -1,6 +1,20 @@
 # ZenGlish — bàn giao cho phiên/agent tiếp theo
 
-Cập nhật: **13/09/2026**. Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+Cập nhật: **04/10/2026** (mục 0). Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+
+## 0. Bản cập nhật workflow cho quality gate trên PR — 18/09, chốt phương án 04/10/2026
+
+Chủ dự án yêu cầu nộp workflow để test Flutter ngay khi mở pull request, nên `.github/workflows/` không còn tách riêng ngoài repo. **Trạng thái: đã sửa và commit trên `arena/01a0b474-zenglish`, nhưng push bị GitHub từ chối vì GitHub App thiếu quyền `workflows`** (`refusing to allow a GitHub App to create or update workflow ... without 'workflows' permission`). Bàn giao bằng patch `zenglish-workflows-2026-09-18.patch` + ZIP cùng `SHA256SUMS.txt` ở thư mục workspace (ngoài repo). Hoặc cấp quyền `workflows` rồi báo agent push + mở PR, hoặc chủ repository `git am` patch vào một nhánh CI. **Lưu ý môi trường:** patch/ZIP tạo trong phiên cũ không sống qua phiên kế tiếp; tạo lại bất cứ lúc bằng lệnh trong `docs/DELIVERY.md` (mục E) vì toàn bộ nội dung đã nằm trong commit của repo. Đã sửa ba file + tài liệu liên quan:
+
+- `.github/workflows/quality.yml` (viết lại): triggers `pull_request → main`, `push → main|arena/**`, `workflow_dispatch` (có input `flutter_version`), `workflow_call` (có outputs `flutter_version`/`java_version`). Jobs: `sdk-pin` (pin + guard chống hardcode SDK ở workflow khác) ∥ `content` (validator + unittest) → `flutter` (pub get có cache → gen-l10n → analyze → test --coverage → summary + artifact coverage) → `android-debug-apk` (Java 17, `flutter build apk --debug --target-platform android-arm64`, artifact `android-offline-beta-debug-<run_id>` 14 ngày, SHA-256 trong summary) → `run-summary`. `concurrency` hủy run PR cũ, `timeout-minutes` từng job, `permissions: contents: read`.
+- `.github/workflows/full_build.yml`: vẫn chỉ `workflow_dispatch`; mọi build lấy SDK từ `needs.quality.outputs.*`, thêm `timeout-minutes` + `concurrency`.
+- `.github/workflows/premium_build.yml`: thêm job `quality` (`uses` reusable) trước `prepare`; build bỏ `always()` nên chỉ chạy khi gate + prepare xanh; `create-release` yêu cầu không build nào fail/cancel; filter tag `v*` + `!v*-beta.*`; `cancel-in-progress: false`.
+- Pin mặc định đổi sang **3.44.0** theo lựa chọn của chủ dự án (một dòng `env.FLUTTER_VERSION_DEFAULT` trong `quality.yml`; hai workflow đóng gói nhận qua output của gate, không tự khai báo). **Chưa có run nào chứng minh 3.44.0 đạt** trên repo: nếu job `flutter` đỏ vì lint mới hoặc `pubspec.lock`, chạy dispatch với `flutter_version=3.41.4` để xác nhận nguyên nhân là bump SDK, rồi lùi một dòng pin và xử lockfile ở ZEN-002 — không tắt analyze/test để lấy xanh.
+- Job `android-debug-apk` giữ trên **mọi PR/push** sau khi chủ dự án xác nhận chi phí: repo public nên phút runner + storage artifact không tính tiền, `main` không bật branch protection (chỉ có trần 6h/job và concurrency theo tài khoản).Thời gian tham chiếu đo được từ Actions: `Build Android APK` gần nhất 6m20s, APK release 22.5 MB (debug thường lớn hơn). Có cache `~/.gradle` để bớt thời gian.
+
+Bằng chứng đã chạy trong sandbox: `git diff --check` sạch; `python3 scripts/validate_content.py` → `PASS: 8 lessons`; `python3 -m unittest discover -s scripts -p 'test_*.py'` → `Ran 7 tests ... OK`; ba file YAML parse bằng PyYAML; script của job `sdk-pin` (guard + resolve outputs/summary) được chạy mô phỏng cho cả trường hợp có và không có override. `test/` và `scripts/` không đổi nên không cần chạy lại Flutter tests ngoài CI. **Không có Flutter/Dart/Java trong sandbox** (`storage.googleapis.com` vẫn chặn TLS như mục 4 bên dưới) nên `flutter pub get`, `gen-l10n`, `analyze`, `flutter test`, `build apk` **chưa được chạy**; kết quả thật phải lấy từ run Actions của PR. Không coi ba file YAML đã commit local là bằng chứng gate đang chạy trên GitHub.
+
+Việc tiếp theo: (0) **gỡ blocker quyền `workflows`** — chủ repository cấp quyền cho GitHub App hoặc tự áp patch rồi mở PR; (1) xem run `Quality checks` của PR workflow — nếu `flutter` fail do lint/test thì sửa code, **không nới gate**; (2) nếu APK fail vì runner thiếu Android SDK/NDK, ghi log và báo, không bỏ job APK; (3) merge ZEN-001/003 khi run xanh, điền run URL + SHA vào bảng mục 2; (4) ZEN-002 vẫn chờ resolve `pubspec.lock` trên SDK thật (CI sẽ báo warning nếu lockfile lệch).
 
 ## 1. Mục tiêu người dùng đã duyệt
 
@@ -40,8 +54,8 @@ Không checkout nhánh cũ và không dừng lại chỉ vì ghi chú lịch s�
 | PR URL + merge commit trên main | Chưa có; chờ yêu cầu create PR |
 | Main có AGENTS, Kanban, handoff, plan và 8 bài | Chưa có ở main được kiểm tra; bộ này đang ở nhánh ứng dụng |
 | Ba tham chiếu màu dùng `AppColors` sau hợp nhất | Đã thấy đúng trên main `3a7cc22`; phải bảo toàn trong kết quả merge |
-| Commit workflow do chủ repository cập nhật | Chưa xác nhận |
-| CI / Flutter tests / APK đúng SHA main | Chưa xác nhận |
+| Commit workflow do chủ repository cập nhật | Đã commit trên nhánh phiên; **push fail vì thiếu quyền `workflows`**, patch/ZIP ở workspace; chưa PR, chưa run |
+| CI / Flutter tests / APK đúng SHA main | Quality checks cũ (pin 3.41.4) xanh trên main `c3c5b25`; APK debug artifact và gate mới **chưa** có run |
 | Beta release URL + APK checksum | Chưa có |
 
 ## 3. Những gì đã làm trong mã

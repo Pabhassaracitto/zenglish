@@ -15,9 +15,9 @@
 - Không nhúng service API key, không bật AI từ xa, không bỏ prerequisite hoặc tuyên bố nội dung đã được chuyên gia duyệt khi chưa có bằng chứng.
 - Không yêu cầu credentials trong chat. Nếu GitHub thiếu quyền cập nhật workflows, báo người dùng sửa kết nối/quyền; không tìm cách lách quyền.
 
-## Tách workflow theo yêu cầu chủ dự án
+## Workflow trong repository
 
-Đợt push này chỉ gồm code/tests/docs. Chủ repository tự cập nhật workflow; xem `docs/WORKFLOW_MANUAL.md`. Không stage `.github/workflows/` còn pending ngoài ý muốn và không cho rằng quality gate mới đã có trên GitHub. Việc tách phạm vi do người dùng yêu cầu không có nghĩa được bỏ các kiểm tra trước release.
+Chủ dự án đã yêu cầu nộp bản cập nhật workflow (18/09, chốt phương án 04/10/2026); `.github/workflows/` vì vậy được phép sửa **khi được yêu cầu rõ ràng**, kèm PR riêng như `docs/WORKFLOW_MANUAL.md` mô tả. Quyền `workflows` của GitHub App vẫn thiếu nên hiện agent chỉ tạo được patch/ZIP bàn giao: nếu push fail vì lý do này, giữ nguyên commit local, báo chủ repository áp patch hoặc cấp quyền — không lách qua API khác và không bỏ quality gate. Pin SDK đặt ở `env.FLUTTER_VERSION_DEFAULT` trong `quality.yml`; workflow đóng gói nhận qua output của quality gate, không hardcode `flutter-version:`/`java-version:` (có job guard chặn việc này). Không stage thay đổi workflow ngoài ý muốn và không coi YAML đã push là CI đã chạy: chỉ lấy kết quả run thật trên Actions. Việc tách phạm vi không có nghĩa được bỏ kiểm tra trước release.
 
 ## Quy ước kỹ thuật
 

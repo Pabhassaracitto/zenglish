@@ -1,6 +1,6 @@
 # ZenGlish — Kanban
 
-Cập nhật: **13/09/2026**. Bảng công việc chính nằm trong repository; cập nhật cùng PR thay đổi mã nguồn.
+Cập nhật: **04/10/2026**. Bảng công việc chính nằm trong repository; cập nhật cùng PR thay đổi mã nguồn.
 
 **Điểm bắt đầu:** trước PR làm ZEN-015 → ZEN-016/004. Sau khi đọc bộ tài liệu này trên main, xác minh ZEN-013 rồi làm ZEN-001/002/003 → ZEN-008/007 → ZEN-005 → ZEN-011. Không cần nhánh cũ hay lịch sử chat. Các trạng thái dưới đây là mốc trước PR, phải cập nhật theo bằng chứng mới.
 
@@ -8,9 +8,9 @@ Cập nhật: **13/09/2026**. Bảng công việc chính nằm trong repository;
 
 | ID | Trạng thái | Ưu tiên / vai trò tiếp nhận | Công việc và điều kiện hoàn thành | Bằng chứng / phụ thuộc |
 |---|---|---|---|---|
-| ZEN-001 | Ready | P0 · chủ repository | Cập nhật ba workflow thủ công theo WORKFLOW_MANUAL.md | Người dùng nhận phần workflow; không còn chặn push riêng code/tests/docs |
+| ZEN-001 | Blocked | P0 · chủ repository | Cập nhật ba workflow, review và merge qua PR | Ba file đã sửa + commit trên nhánh phiên; push fail vì GitHub App thiếu quyền `workflows`. Done khi chủ repository áp patch (hoặc cấp quyền để agent push) và mở PR |
 | ZEN-002 | Ready | P0 · agent Flutter | Resolve trên Flutter 3.44.0, cập nhật lockfile; gen-l10n, analyzer, Flutter tests và APK đạt | Môi trường trước tải SDK lỗi SSL; agent mới cần kiểm tra lại môi trường. Chưa xác nhận Flutter checks; có thể làm local độc lập ZEN-001 |
-| ZEN-003 | Blocked | P0 · agent CI | Quality gate chạy trên PR/main, không đóng gói khi gate thất bại | Ba workflow mới chỉ có ở workspace, không push; chờ chủ repository cập nhật và run thành công |
+| ZEN-003 | Blocked | P0 · agent CI | Quality gate chạy trên PR/main, không đóng gói khi gate thất bại | `quality.yml` đã có job content + Flutter analyze/tests + APK debug, hai workflow đóng gói gọi gate. Mới kiểm tra bằng PyYAML + mô phỏng shell; **chưa run thật** vì workflow chưa lên được GitHub |
 | ZEN-004 | Ready | P0 · agent + chủ repository | Merge PR sau review/checks; xác nhận tài liệu, tests và nội dung đều có trên main | Người dùng đã yêu cầu create PR; ZEN-015 hoàn tất. Mở draft PR để review, chờ Flutter checks trước merge |
 | ZEN-005 | Blocked | P0 · agent release | Xuất bản `v1.0.1-beta.1` dạng pre-release có APK + SHA-256 + hướng dẫn cài | Người dùng đã yêu cầu bản tải thử. Chưa có tag/release/APK beta; cần build đạt. Không dùng pipeline stable cho beta |
 | ZEN-006 | Done | P1 · agent nội dung | Đủ 8 bài trong registry, prerequisite không thiếu/vòng lặp, ID routing có trong assets | `validate_content.py` đạt; 7/7 Python tests đạt. Chỉ xác minh tĩnh, chưa nghiệm thu mở khóa trên UI |
