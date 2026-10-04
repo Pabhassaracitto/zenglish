@@ -5,6 +5,7 @@
 //   / → check profile → /placement hoặc /home
 //   /placement → PlacementTestScreen
 //   /home → HomeScreen
+//   /lessons → LessonCatalogScreen (toàn bộ bài học)
 //   /lesson/:id → LessonScreen
 //   /ai-interview → AIInterviewScreen (placeholder)
 // ============================================================
@@ -14,6 +15,7 @@ import 'package:go_router/go_router.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/l10n/app_localizations.dart';
 
+import '../../presentation/screens/catalog/lesson_catalog_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/lesson/lesson_screen.dart';
 import '../../presentation/screens/placement/placement_test_screen.dart';
@@ -25,6 +27,7 @@ abstract class AppRoutes {
   static const String placement = '/placement';
   static const String home = '/home';
   static const String lesson = '/lesson';
+  static const String catalog = '/lessons';
   static const String aiInterview = '/ai-interview';
 }
 
@@ -95,6 +98,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: const HomeScreen(),
           transitionsBuilder: fadeTransition,
+        ),
+      ),
+
+      // Thư viện toàn bộ bài học
+      GoRoute(
+        path: AppRoutes.catalog,
+        name: 'catalog',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const LessonCatalogScreen(),
+          transitionsBuilder: slideUpTransition,
         ),
       ),
 

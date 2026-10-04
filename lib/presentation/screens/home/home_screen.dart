@@ -6,6 +6,7 @@ import 'package:zenglish/l10n/app_localizations.dart';
 import '../../providers/home_provider.dart';
 import 'components/ai_interview_quick_start.dart';
 import 'components/home_header.dart';
+import 'components/lesson_library_card.dart';
 import 'components/smart_suggestion_card.dart';
 import 'components/user_profile_card.dart';
 
@@ -92,7 +93,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: SizedBox(height: AppTheme.spaceLG),
                 ),
 
-                // Section 3: AI Interview Quick Start
+                // Section 3: Thư viện toàn bộ bài học
+                const SliverToBoxAdapter(
+                  child: _SectionLabel(
+                    label: 'TẤT CẢ BÀI HỌC',
+                    icon: Icons.menu_book_outlined,
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: AppTheme.spaceSM),
+                ),
+                const SliverToBoxAdapter(
+                  child: LessonLibraryCard(),
+                ),
+
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: AppTheme.spaceLG),
+                ),
+
+                // Section 4: AI Interview Quick Start
                 const SliverToBoxAdapter(
                   child: AIInterviewQuickStart(),
                 ),
