@@ -241,7 +241,7 @@ class _LessonTile extends StatelessWidget {
                     const _Badge(
                       label: 'Chờ duyệt nội dung',
                       icon: Icons.fact_check_outlined,
-                      color: AppTheme.warning,
+                      color: AppColors.warning,
                     ),
                   if (entry.usesSynthesizedVoice)
                     const _Badge(
@@ -277,7 +277,7 @@ class _StatusIcon extends StatelessWidget {
       case LessonProgressStatus.completed:
         return const Icon(
           Icons.check_circle,
-          color: AppTheme.success,
+          color: AppColors.success,
           size: 22,
         );
       case LessonProgressStatus.inProgress:
