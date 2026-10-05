@@ -50,7 +50,9 @@ gh release create v1.0.1-beta.1 \
 
 **Giới hạn kiểm chứng lượt này:** local chỉ chạy được `python3 scripts/validate_content.py` → `PASS: 8 lessons`; `python3 -m unittest discover -s scripts -p 'test_*.py'` → `Ran 7 tests ... OK`; `git diff --check` sạch. `flutter pub get/gen-l10n/analyze/test/build apk` **chưa chạy local** — bằng chứng lấy từ run Actions của PR nhánh `arena/01a1084f-zenglish`. Đã đối chiếu hằng số theme trước khi push (không dùng `AppTheme.success/warning`; các file sửa không thêm tham chiếu màu mới).
 
-**Điểm tiếp tục:** (1) chủ dự án chạy hai lệnh ở trên → lockfile + pre-release; (2) gửi phản hồi theo `docs/BETA_ACCEPTANCE.md` → triage thành thẻ; (3) ZEN-009/010 chờ **người phụ trách nội dung** (không gỡ `needs_review`, không tự duyệt giọng); (4) khi có file thu âm: đặt vào `assets/audio/`, khai báo pubspec, gán `audio_url` — app tự ưu tiên bản thu.
+**Quyết định của chủ dự án (05/10/2026):** (a) ZEN-002 — chủ dự án **sẽ tự chạy** `flutter pub get` trên máy có Flutter 3.44.0 và commit `pubspec.lock`; (b) ZEN-005 — **hoãn phát hành beta**, chưa tạo tag/release lần này (phương án workflow `beta_release.yml` tự publish đã được đề xuất, chưa chọn). Khi mở lại ZEN-005: kiểm tra artifact `android-offline-beta-debug-*` còn hạn (14 ngày) hay phải chạy lại `quality.yml` trên commit sẽ tag.
+
+**Điểm tiếp tục:** (1) chủ dự án commit lockfile, sau đó quyết định mở lại ZEN-005 theo khối lệnh ở trên; (2) gửi phản hồi theo `docs/BETA_ACCEPTANCE.md` → triage thành thẻ; (3) ZEN-009/010 chờ **người phụ trách nội dung** (không gỡ `needs_review`, không tự duyệt giọng); (4) khi có file thu âm: đặt vào `assets/audio/`, khai báo pubspec, gán `audio_url` — app tự ưu tiên bản thu.
 
 ## 0-bis. Thư viện bài học + TTS fallback — 04/10/2026, sau khi PR #4 merge
 
