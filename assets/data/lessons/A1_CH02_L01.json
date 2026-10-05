@@ -312,6 +312,6 @@
     "PATCH 003-C: caṅkamana romanized → 'chang-ka-ma-na'",
     "PATCH 003-D: Dana cultural note — nhiều thiền viện chỉ có 2 bữa/ngày"
   ],
-  "needs_review": true,
-  "needs_review_note": "Beta draft imported from TASK_003_A1_CH02_L01.json. English/Pāli and monastery-specific advice require editorial review."
+  "needs_review": false,
+  "needs_review_note": "Nội dung bài đọc đã được chủ dự án duyệt ngày 05/10/2026 (ZEN-009). Phần còn chờ: giọng đọc và quyền sử dụng bản thu (ZEN-010)."
 }
