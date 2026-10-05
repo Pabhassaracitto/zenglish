@@ -43,6 +43,34 @@ Chủ dự án chốt: **bài nào chưa có bản thu thì đọc bằng giọn
 
 Chưa nghiệm thu: chất lượng phát âm Pāḷi bằng TTS, tốc độ đọc, hành vi khi tắt màn hình, và dung lượng APK sau khi thêm `flutter_tts`.
 
+## Lựa chọn nguồn giọng đọc — phân tích cho quyết định ZEN-010 (05/10/2026)
+
+Câu hỏi của chủ dự án: dùng **Sherpa-onnx đọc trên máy** hay **xuất văn bản rồi
+nhờ TTS chất lượng cao (Grok, Google AI Studio/Gemini TTS…) tạo file sẵn**?
+
+| Tiêu chí | File dựng sẵn từ TTS chất lượng cao | Sherpa-onnx chạy trên máy |
+|---|---|---|
+| Chất lượng nghe | Cao nhất; nghe lại và chỉnh từng câu trước khi phát hành | Khá, thua TTS đám mây; phụ thuộc model |
+| Phát âm Pāḷi (kuṭi, dukkha, dāna) | **Nghe kiểm tra được từng file**, sai thì tạo lại | Không kiểm soát trước, sai là sai với mọi người dùng |
+| Offline | Có (file nằm trong assets) | Có |
+| Dung lượng app | ~0,3–1 MB/bài đọc (Opus/AAC 48–64 kbps) → 8 bài vài MB | Model TTS 20–100 MB+/giọng, nhân cho mỗi ngôn ngữ |
+| Chi phí vận hành | Một lần, lúc sản xuất | Không |
+| Nội dung động (câu người học tự nhập, từ vựng mới) | Không phủ được | Phủ được |
+| Pháp lý | **Phải đọc ToS**: quyền phân phối lại audio sinh ra trong app; ghi rõ "giọng tổng hợp", không gán cho một vị thầy | Model có giấy phép riêng (Apache/CC), tự chủ hoàn toàn |
+
+**Khuyến nghị:** 8 bài hiện tại là **nội dung tĩnh, số lượng nhỏ** → nên **xuất
+văn bản rồi dựng file bằng TTS chất lượng cao**, đặt vào `assets/audio/` và gán
+`audio_url`; app đã tự ưu tiên bản thu nên **không phải sửa code**. Giữ
+`flutter_tts` (giọng hệ điều hành) làm fallback cho máy chưa tải xong/nội dung
+chưa có file. Chỉ chuyển sang **Sherpa-onnx khi cần đọc văn bản động** (đọc câu
+người học viết, từ vựng mở rộng, nhiều ngôn ngữ) — khi đó chỉ cần
+`SpeechService.overrideWith(...)`, không đụng UI.
+
+Việc cần làm nếu chọn hướng file dựng sẵn: (1) chốt một giọng/một tốc độ cho cả
+bộ; (2) kiểm tra ToS của nhà cung cấp về phân phối lại; (3) nghe soát riêng các
+từ Pāḷi; (4) nén Opus/AAC mono 24 kHz; (5) thêm file + `audio_url`, chạy
+validator (validator chặn file không tồn tại và URL từ xa).
+
 ## Thứ tự sản xuất âm thanh đề xuất
 
 1. Duyệt văn bản Việt–Anh và cách phát âm Pāli trước khi thu.
@@ -62,7 +90,18 @@ Chủ dự án báo trong app chỉ thấy 4 mục (Ānāpāna, Giới, 5 Phần
 - Trước bản sửa này **không màn hình nào gọi `loadAllLessons()`**; Home chỉ hiển thị một bài đề xuất, nên A1 chương 1–4 không có đường vào trừ khi placement route đúng vào đó.
 - Đã bổ sung màn hình `/lessons` (`LessonCatalogScreen`) đọc thẳng từ repository: thêm bài vào registry là bài tự hiện, kèm nhãn "chờ duyệt", "giọng tổng hợp" và gợi ý bài tiên quyết.
 
-## Hạng mục chờ người phụ trách nội dung duyệt
+## Duyệt nội dung — 05/10/2026 (ZEN-009)
+
+**Chủ dự án đã duyệt nội dung bài đọc của 4 bản nháp A1 (CH01–CH04).** Cờ
+`needs_review` trong 4 file JSON được đặt `false`, `needs_review_note` ghi lại
+ngày và phạm vi duyệt. Agent **không** tự quyết định việc này — đây là quyết
+định của người phụ trách nội dung, ghi ngày 05/10/2026.
+
+**Chưa được duyệt bởi quyết định này:** giọng đọc và quyền sử dụng bản thu
+(ZEN-010), chất lượng phát âm Pāḷi khi đọc bằng máy, và chính sách mở khoá bài
+học. Các điểm dưới đây giữ nguyên để tham chiếu khi nội dung được sửa tiếp.
+
+## Hạng mục chờ người phụ trách nội dung duyệt (danh sách gốc, đã duyệt ngày 05/10 với 4 bài A1)
 
 - Mức độ A1 của câu kể quá khứ, email và mẫu diễn đạt kinh nghiệm thiền.
 - Phát âm/phiên âm các từ dukkha, kuṭi, dāna và thuật ngữ khác.

@@ -310,6 +310,6 @@
       ]
     }
   },
-  "needs_review": true,
-  "needs_review_note": "Beta draft imported from TASK_005_A1_CH04_L01.json. English/Pāli and monastery-specific advice require editorial review."
+  "needs_review": false,
+  "needs_review_note": "Nội dung bài đọc đã được chủ dự án duyệt ngày 05/10/2026 (ZEN-009). Phần còn chờ: giọng đọc và quyền sử dụng bản thu (ZEN-010)."
 }

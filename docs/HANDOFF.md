@@ -50,7 +50,15 @@ gh release create v1.0.1-beta.1 \
 
 **Giới hạn kiểm chứng lượt này:** local chỉ chạy được `python3 scripts/validate_content.py` → `PASS: 8 lessons`; `python3 -m unittest discover -s scripts -p 'test_*.py'` → `Ran 7 tests ... OK`; `git diff --check` sạch. `flutter pub get/gen-l10n/analyze/test/build apk` **chưa chạy local** — bằng chứng lấy từ run Actions của PR nhánh `arena/01a1084f-zenglish`. Đã đối chiếu hằng số theme trước khi push (không dùng `AppTheme.success/warning`; các file sửa không thêm tham chiếu màu mới).
 
-**Quyết định của chủ dự án (05/10/2026):** (a) ZEN-002 — chủ dự án **sẽ tự chạy** `flutter pub get` trên máy có Flutter 3.44.0 và commit `pubspec.lock`; (b) ZEN-005 — **hoãn phát hành beta**, chưa tạo tag/release lần này (phương án workflow `beta_release.yml` tự publish đã được đề xuất, chưa chọn). Khi mở lại ZEN-005: kiểm tra artifact `android-offline-beta-debug-*` còn hạn (14 ngày) hay phải chạy lại `quality.yml` trên commit sẽ tag.
+**Cập nhật 05/10/2026 — phản hồi của chủ dự án:**
+
+1. **ZEN-002 xong.** Chủ dự án đã chạy `flutter pub get` và push [`634e1cf`](https://github.com/Pabhassaracitto/zenglish/commit/634e1cf) lên main (`pubspec.lock`, `.gitattributes`, `analysis_options.yaml`, plugin registrant Windows). Đã `git merge origin/main` vào nhánh phiên; cần xem run gate kế tiếp xác nhận hết cảnh báo `pubspec.lock lệch`.
+2. **ZEN-005 đóng — không phát hành.** Chủ dự án đã có bản test riêng nên không cần APK beta. Không tạo tag/release. Khối lệnh phát hành vẫn giữ bên dưới nếu sau này cần (artifact chỉ sống 14 ngày → phải chạy lại `quality.yml` trên commit sẽ tag).
+3. **ZEN-009 duyệt.** Chủ dự án duyệt nội dung bài đọc của 4 bản nháp A1 (CH01–04) → `needs_review=false`, `needs_review_note` ghi ngày và phạm vi. **Không** bao gồm giọng đọc/quyền bản thu.
+4. **ZEN-010 — hướng giọng đọc.** Khuyến nghị đã ghi trong `docs/CONTENT_AUDIT.md`: 8 bài là nội dung tĩnh → **xuất văn bản, dựng file bằng TTS chất lượng cao**, bỏ vào `assets/audio/` + gán `audio_url` (app tự ưu tiên, không sửa code); giữ `flutter_tts` làm fallback; **Sherpa-onnx** để dành cho khi cần đọc văn bản động. Chờ chốt giọng + kiểm tra ToS về quyền phân phối lại audio.
+5. **ZEN-011 chờ bản cài mới.** Checklist `docs/BETA_ACCEPTANCE.md` vẫn dùng được, nhưng bản test hiện có của chủ dự án **chưa chứa** ZEN-008/017/018.
+
+**Quyết định trước đó (05/10/2026):** (a) ZEN-002 — chủ dự án **sẽ tự chạy** `flutter pub get` trên máy có Flutter 3.44.0 và commit `pubspec.lock`; (b) ZEN-005 — **hoãn phát hành beta**, chưa tạo tag/release lần này (phương án workflow `beta_release.yml` tự publish đã được đề xuất, chưa chọn). Khi mở lại ZEN-005: kiểm tra artifact `android-offline-beta-debug-*` còn hạn (14 ngày) hay phải chạy lại `quality.yml` trên commit sẽ tag.
 
 **Điểm tiếp tục:** (1) chủ dự án commit lockfile, sau đó quyết định mở lại ZEN-005 theo khối lệnh ở trên; (2) gửi phản hồi theo `docs/BETA_ACCEPTANCE.md` → triage thành thẻ; (3) ZEN-009/010 chờ **người phụ trách nội dung** (không gỡ `needs_review`, không tự duyệt giọng); (4) khi có file thu âm: đặt vào `assets/audio/`, khai báo pubspec, gán `audio_url` — app tự ưu tiên bản thu.
 
