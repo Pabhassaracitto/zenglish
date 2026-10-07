@@ -269,6 +269,18 @@ class _TrilingualMatchCard extends StatelessWidget {
     final isCorrect = state.patternCorrect[vocabItem.stt];
     final hasAnswered = state.patternAnswers.containsKey(vocabItem.stt);
 
+    // Mỗi nghĩa đúng chỉ nên được ghép một lần. Ẩn các lựa chọn đã ghép
+    // đúng ở những dòng khác để danh sách ngắn dần theo tiến độ.
+    final usedCorrectAnswers = state.patternCorrect.entries
+        .where((entry) => entry.value && state.patternAnswers[entry.key] != null)
+        .map((entry) => state.patternAnswers[entry.key]!.stt)
+        .toSet();
+    final availableOptions = allVocab.where((option) {
+      return option.stt == vocabItem.stt ||
+          option.stt == answered?.stt ||
+          !usedCorrectAnswers.contains(option.stt);
+    }).toList();
+
     return Container(
       margin: const EdgeInsets.only(bottom: AppTheme.spaceSM),
       padding: const EdgeInsets.all(AppTheme.spaceMD),
@@ -337,7 +349,7 @@ class _TrilingualMatchCard extends StatelessWidget {
               Expanded(
                 child: _AnswerDropdown(
                   hintText: 'Chọn nghĩa tiếng Việt...',
-                  options: allVocab,
+                  options: availableOptions,
                   selected: answered,
                   getLabel: (v) => v.vietnamese,
                   onSelected: (v) {
@@ -351,48 +363,46 @@ class _TrilingualMatchCard extends StatelessWidget {
             ],
           ),
 
-          // Pāḷi (shown after correct answer)
-          if (isCorrect == true && vocabItem.pali != null) ...[
-            const SizedBox(height: AppTheme.spaceSM),
-            Row(
+          // Details stay collapsed after answering; the learner sees only
+          // the useful result first and can open the explanation when needed.
+          if (isCorrect == true && (vocabItem.pali != null || vocabItem.exampleEn.isNotEmpty))
+            ExpansionTile(
+              tilePadding: EdgeInsets.zero,
+              childrenPadding: EdgeInsets.zero,
+              title: Text('Xem thêm: Pāḷi và ví dụ', style: AppTheme.labelSmall),
               children: [
-                _LangBadge(label: 'PĀ', color: AppTheme.paliColor),
-                const SizedBox(width: AppTheme.spaceSM),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      vocabItem.pali!,
-                      style: AppTheme.paliText,
-                    ),
-                    if (vocabItem.paliRomanized != null)
-                      Text(
-                        '[${vocabItem.paliRomanized}]',
-                        style: AppTheme.labelSmall.copyWith(
-                          color: AppTheme.paliColor.withOpacity(0.7),
-                        ),
+                if (vocabItem.pali != null)
+                  Row(
+                    children: [
+                      _LangBadge(label: 'PĀ', color: AppTheme.paliColor),
+                      const SizedBox(width: AppTheme.spaceSM),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(vocabItem.pali!, style: AppTheme.paliText),
+                          if (vocabItem.paliRomanized != null)
+                            Text('[${vocabItem.paliRomanized}]', style: AppTheme.labelSmall),
+                        ],
                       ),
-                  ],
-                ),
+                    ],
+                  ),
+                if (vocabItem.exampleEn.isNotEmpty) ...[
+                  const SizedBox(height: AppTheme.spaceSM),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(AppTheme.spaceSM),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(AppTheme.radiusSM),
+                    ),
+                    child: Text(vocabItem.exampleEn, style: AppTheme.monasteryNote.copyWith(
+                      fontStyle: FontStyle.normal, color: AppTheme.textPrimary,
+                    )),
+                  ),
+                ],
               ],
             ),
-            const SizedBox(height: AppTheme.spaceSM),
-            // Example sentence
-            Container(
-              padding: const EdgeInsets.all(AppTheme.spaceSM),
-              decoration: BoxDecoration(
-                color: AppTheme.surfaceVariant,
-                borderRadius: BorderRadius.circular(AppTheme.radiusSM),
-              ),
-              child: Text(
-                vocabItem.exampleEn,
-                style: AppTheme.monasteryNote.copyWith(
-                  fontStyle: FontStyle.normal,
-                  color: AppTheme.textPrimary,
-                ),
-              ),
-            ),
-          ],
+
         ],
       ),
     );
@@ -445,105 +455,31 @@ class _AnswerDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => _showBottomSheet(context),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppTheme.spaceSM,
-          vertical: AppTheme.spaceSM - 2,
-        ),
-        decoration: BoxDecoration(
-          color: AppTheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(AppTheme.radiusSM),
-          border: Border.all(color: AppTheme.divider),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                selected != null ? getLabel(selected!) : hintText,
-                style: selected != null
-                    ? AppTheme.bodyMedium.copyWith(
-                        color: AppTheme.textPrimary,
-                      )
-                    : AppTheme.bodyMedium,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const Icon(
-              Icons.unfold_more,
-              size: 16,
-              color: AppTheme.textMuted,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppTheme.cardBackground,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppTheme.radiusLG),
-        ),
-      ),
-      builder: (_) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: AppTheme.spaceSM),
-            Container(
-              width: 36,
-              height: 4,
-              decoration: BoxDecoration(
-                color: AppTheme.divider,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(AppTheme.spaceMD),
-              child: Text(
-                'Chọn nghĩa tiếng Việt',
-                style: AppTheme.headingMedium,
-              ),
-            ),
-            const Divider(height: 1),
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.5,
-              ),
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: options.length,
-                separatorBuilder: (_, __) =>
-                    const Divider(height: 1, indent: 16),
-                itemBuilder: (context, i) {
-                  final opt = options[i];
-                  final isSelected = selected?.stt == opt.stt;
-                  return ListTile(
-                    title: Text(getLabel(opt), style: AppTheme.bodyLarge),
-                    trailing: isSelected
-                        ? const Icon(Icons.check_circle_rounded,
-                            color: AppTheme.secondary, size: 20)
-                        : null,
-                    tileColor: isSelected
-                        ? AppTheme.secondary.withOpacity(0.06)
-                        : null,
-                    onTap: () {
-                      onSelected(opt);
-                      Navigator.pop(context);
-                    },
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: AppTheme.spaceMD),
-          ],
-        ),
+    // Keep the choices anchored to the question so learners do not have to
+    // move their eyes to a separate full-width sheet.
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<VocabItem>(
+        value: selected,
+        hint: Text(hintText, maxLines: 1, overflow: TextOverflow.ellipsis),
+        isExpanded: true,
+        icon: const Icon(Icons.keyboard_arrow_down, color: AppTheme.textMuted),
+        dropdownColor: AppTheme.cardBackground,
+        borderRadius: BorderRadius.circular(AppTheme.radiusSM),
+        menuMaxHeight: 280,
+        style: AppTheme.bodyMedium.copyWith(color: AppTheme.textPrimary),
+        items: options
+            .map((option) => DropdownMenuItem<VocabItem>(
+                  value: option,
+                  child: Text(
+                    getLabel(option),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ))
+            .toList(),
+        onChanged: (value) {
+          if (value != null) onSelected(value);
+        },
       ),
     );
   }

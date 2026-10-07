@@ -281,6 +281,6 @@
       "monastery_note": "Thiền sư Pa-Auk thường trả lời ngắn gọn: 'Yes. That is the right reason. Go back and sit.'"
     }
   },
-  "needs_review": false,
-  "needs_review_note": "Nội dung bài đọc đã được chủ dự án duyệt ngày 05/10/2026 (ZEN-009). Phần còn chờ: giọng đọc và quyền sử dụng bản thu (ZEN-010)."
+  "needs_review": true,
+  "needs_review_note": "Beta draft imported from TASK_002_A1_CH01_L01.json. English/Pāli and monastery-specific advice require editorial review."
 }

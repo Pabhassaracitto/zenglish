@@ -3,7 +3,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/di/repository_provider.dart';
-import '../../data/services/user_session_service.dart';
 import '../../data/models/lesson.dart';
 import '../../data/models/vocab_item.dart';
 
@@ -209,13 +208,6 @@ class LessonNotifier extends StateNotifier<LessonState> {
         );
         return;
       }
-      // ZEN-008: mở bài = đang học → Home/thư viện gợi ý đúng bài đang dở.
-      try {
-        await UserSessionService.instance.markLessonInProgress(lessonId);
-      } catch (_) {
-        // Session chưa init (ví dụ trong unit test) → không chặn việc học bài.
-      }
-
       state = state.copyWith(
         lesson: lesson,
         isLoading: false,
