@@ -74,7 +74,42 @@ def validate(root=ROOT):
     for ident in set(re.findall(r"'([A-C][12]_?CH\d+_L\d+)'", router)):
         if ident not in catalog:
             errors.append(f'Placement route references missing lesson {ident}')
+    errors.extend(validate_audio_catalog(root, catalog))
     return catalog, errors
+
+
+def validate_audio_catalog(root, catalog):
+    """Kiểm tra danh mục audio Hugging Face (lib/data/constants/audio_catalog.dart).
+
+    Quy ước: mỗi entry khai báo lessonId, fileName, estimatedBytes;
+    fileName phải đúng dạng `<LESSON_ID>_input_NN.mp3` và trỏ về bài có thật.
+    """
+    errors = []
+    audio_dart = root / 'lib/data/constants/audio_catalog.dart'
+    if not audio_dart.exists():
+        return errors
+    entries = re.findall(
+        r"RemoteAudioFile\(\s*lessonId:\s*'([^']+)'\s*,"
+        r"\s*fileName:\s*'([^']+)'\s*,"
+        r"\s*estimatedBytes:\s*([A-Za-z0-9_]+)",
+        audio_dart.read_text(),
+    )
+    seen_files = set()
+    for lesson_id, file_name, estimated in entries:
+        if file_name in seen_files:
+            errors.append(f'audio catalog: duplicate file {file_name}')
+        seen_files.add(file_name)
+        if lesson_id not in catalog:
+            errors.append(
+                f'audio catalog: {file_name} references missing lesson {lesson_id}'
+            )
+        if not re.fullmatch(rf'{re.escape(lesson_id)}_input_\d{{2}}\.mp3', file_name):
+            errors.append(
+                f'audio catalog: {file_name} must follow <LESSON_ID>_input_NN.mp3'
+            )
+        if estimated.isdigit() and int(estimated) <= 0:
+            errors.append(f'audio catalog: {file_name} estimatedBytes must be positive')
+    return errors
 
 
 if __name__ == '__main__':
@@ -86,4 +121,10 @@ if __name__ == '__main__':
     print(f'PASS: {len(catalog)} lessons; registry, prerequisites, routes, text and audio references valid.')
     pending = [key for key, lesson in catalog.items()
                if not lesson['lesson_flow']['input'].get('audio_url')]
-    print(f'INFO: {len(pending)} lessons have no recording (read-only fallback required).')
+    print(f'INFO: {len(pending)} lessons have no bundled recording.')
+    audio_dart = ROOT / 'lib/data/constants/audio_catalog.dart'
+    if audio_dart.exists():
+        covered = set(re.findall(r"lessonId:\s*'([^']+)'", audio_dart.read_text()))
+        remote_pending = [key for key in pending if key not in covered]
+        print(f'INFO: {len(pending) - len(remote_pending)} of those stream/download from the Hugging Face catalog; '
+              f'{len(remote_pending)} rely on the on-device TTS fallback.')

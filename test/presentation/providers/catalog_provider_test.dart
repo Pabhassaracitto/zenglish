@@ -93,14 +93,16 @@ void main() {
     }
   });
 
-  test('bài chưa có bản thu được đánh dấu dùng giọng tổng hợp', () async {
+  test('audio giọng AI (file Hugging Face/TTS) được đánh dấu minh bạch',
+      () async {
     final lessons = await _loadAll();
     final catalog = buildCatalog(lessons, null);
 
     expect(
-      catalog.entries.where((e) => e.usesSynthesizedVoice).length,
+      catalog.entries.where((e) => e.usesAiVoice).length,
       catalog.total,
-      reason: 'Hiện chưa bài nào có bản thu Input',
+      reason: 'Toàn bộ audio hiện tại là giọng tổng hợp (AI) — kể cả file '
+          'stream/tải từ Hugging Face, không chỉ TTS thiết bị',
     );
   });
 }
