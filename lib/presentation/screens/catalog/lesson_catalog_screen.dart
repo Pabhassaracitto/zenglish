@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/enums/cefr_level.dart';
+import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../providers/catalog_provider.dart';
 
@@ -28,6 +29,13 @@ class LessonCatalogScreen extends ConsumerWidget {
         backgroundColor: AppTheme.cardBackground,
         foregroundColor: AppTheme.textPrimary,
         elevation: 0,
+        actions: [
+          IconButton(
+            tooltip: 'Quản lý audio (tải về máy, dung lượng)',
+            icon: const Icon(Icons.headphones_outlined),
+            onPressed: () => context.push(AppRoutes.audioManager),
+          ),
+        ],
       ),
       body: catalogAsync.when(
         loading: () => const Center(
@@ -230,7 +238,7 @@ class _LessonTile extends StatelessWidget {
               ],
             ),
             if (entry.needsReview ||
-                entry.usesSynthesizedVoice ||
+                entry.usesAiVoice ||
                 entry.hasMissingPrerequisites) ...[
               const SizedBox(height: AppTheme.spaceSM),
               Wrap(
@@ -243,9 +251,9 @@ class _LessonTile extends StatelessWidget {
                       icon: Icons.fact_check_outlined,
                       color: AppColors.warning,
                     ),
-                  if (entry.usesSynthesizedVoice)
+                  if (entry.usesAiVoice)
                     const _Badge(
-                      label: 'Giọng tổng hợp (TTS)',
+                      label: 'Giọng tổng hợp (AI)',
                       icon: Icons.record_voice_over_outlined,
                       color: AppTheme.paliColor,
                     ),

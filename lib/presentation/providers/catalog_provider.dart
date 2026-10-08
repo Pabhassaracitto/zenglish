@@ -32,8 +32,10 @@ class CatalogEntry {
   bool get isInProgress => status == LessonProgressStatus.inProgress;
   bool get hasMissingPrerequisites => missingPrerequisites.isNotEmpty;
 
-  /// Bài chưa có bản thu thật → sẽ đọc bằng giọng tổng hợp.
-  bool get usesSynthesizedVoice => resolveInputAudio(lesson).isSynthesized;
+  /// Audio của bài là giọng tổng hợp (file AI trên Hugging Face, file bundle
+  /// theo danh mục AI, hoặc TTS thiết bị) → gắn nhãn minh bạch trên thư viện.
+  /// Chỉ bản thu con người được gán `audio_url` ngoài danh mục mới không gắn.
+  bool get usesAiVoice => resolveInputAudio(lesson).isAiGenerated;
 
   bool get needsReview => lesson.needsReview;
 }

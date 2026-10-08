@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zenglish/core/providers/locale_provider.dart';
+import 'package:zenglish/core/router/app_router.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'package:zenglish/data/services/user_session_service.dart';
+import 'package:zenglish/presentation/providers/audio_availability_provider.dart';
+import 'package:zenglish/presentation/providers/audio_download_provider.dart';
 import 'package:zenglish/presentation/providers/home_provider.dart';
 import 'package:zenglish/presentation/widgets/language_selector_sheet.dart';
 
@@ -49,6 +52,9 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () => LanguageSelectorSheet.show(context),
             ),
           ]),
+          _Section(title: 'Nội dung & Audio', children: [
+            const _AudioManagerEntry(),
+          ]),
           _Section(title: 'Dữ liệu', children: [
             ListTile(
               contentPadding: EdgeInsets.zero,
@@ -76,6 +82,32 @@ class SettingsScreen extends ConsumerWidget {
           ]),
         ],
       ),
+    );
+  }
+}
+
+/// Lối vào màn hình Quản lý audio — tải theo chương/toàn bộ, xem dung lượng.
+class _AudioManagerEntry extends ConsumerWidget {
+  const _AudioManagerEntry();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final revision =
+        ref.watch(audioDownloadProvider.select((s) => s.revision));
+    final index = ref.watch(audioIndexProvider(revision)).valueOrNull;
+
+    final subtitle = index == null || index.isEmpty
+        ? 'Tải audio bài học về máy để nghe offline'
+        : 'Đã lưu ${index.length} file (${formatMb(downloadedBytesOf(index))}) '
+            '— chạm để quản lý';
+
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: const Icon(Icons.headphones_outlined),
+      title: const Text('Quản lý audio'),
+      subtitle: Text(subtitle),
+      trailing: const Icon(Icons.chevron_right),
+      onTap: () => context.push(AppRoutes.audioManager),
     );
   }
 }
