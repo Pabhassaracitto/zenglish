@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Cần cho việc stream/tải audio bài học từ Hugging Face khi chưa có file local. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="zenglish"
         android:name="${applicationName}"

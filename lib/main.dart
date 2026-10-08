@@ -2,6 +2,8 @@
 // MAIN.DART - Entry point
 // Khởi tạo: SharedPreferences → ProviderScope → App
 // ============================================================
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'core/providers/user_profile_provider.dart';
+import 'data/services/audio_download_service.dart';
 import 'data/services/user_session_service.dart';
 import 'package:zenglish/l10n/app_localizations.dart';
 import 'package:zenglish/core/providers/locale_provider.dart';
@@ -41,6 +44,9 @@ Future<void> main() async {
 
   // ── 3b. Khởi tạo UserSessionService ──
   await UserSessionService.instance.init();
+
+  // ── 3c. Warm-up chỉ mục audio đã tải để mở bài lần đầu không bị trễ ──
+  unawaited(AudioDownloadService.instance.ensureLoaded());
 
   // ── 4. Chạy app với ProviderScope ──
   runApp(

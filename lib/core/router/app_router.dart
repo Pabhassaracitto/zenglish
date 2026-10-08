@@ -8,6 +8,7 @@
 //   /lessons → LessonCatalogScreen (toàn bộ bài học)
 //   /lesson/:id → LessonScreen
 //   /ai-interview → AIInterviewScreen (placeholder)
+//   /audio-manager → AudioManagerScreen (tải/quản lý audio bài học)
 // ============================================================
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +20,7 @@ import '../../presentation/screens/catalog/lesson_catalog_screen.dart';
 import '../../presentation/screens/home/home_screen.dart';
 import '../../presentation/screens/lesson/lesson_screen.dart';
 import '../../presentation/screens/placement/placement_test_screen.dart';
+import '../../presentation/screens/settings/audio_manager_screen.dart';
 import '../../presentation/screens/settings/settings_screen.dart';
 import '../providers/user_profile_provider.dart';
 
@@ -31,6 +33,7 @@ abstract class AppRoutes {
   static const String catalog = '/lessons';
   static const String aiInterview = '/ai-interview';
   static const String settings = '/settings';
+  static const String audioManager = '/audio-manager';
 }
 
 // ── Router Provider ──
@@ -146,6 +149,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         pageBuilder: (context, state) => CustomTransitionPage(
           key: state.pageKey,
           child: const AIInterviewScreen(),
+          transitionsBuilder: slideUpTransition,
+        ),
+      ),
+
+      // Quản lý audio (tải theo chương / toàn bộ, xoá file đã tải)
+      GoRoute(
+        path: AppRoutes.audioManager,
+        name: 'audio-manager',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          key: state.pageKey,
+          child: const AudioManagerScreen(),
           transitionsBuilder: slideUpTransition,
         ),
       ),
