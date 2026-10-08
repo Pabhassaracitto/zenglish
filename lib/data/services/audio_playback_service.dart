@@ -52,7 +52,7 @@ class AudioPlaybackService {
 
   // ─── Public Play API ───────────────────────────────────────────────────────
 
-  /// Auto-detect: URL vs asset path.
+  /// Auto-detect: URL vs file path vs asset path.
   /// Returns [AudioLoadResult] so the caller can show appropriate UI feedback
   /// WITHOUT crashing. Never rethrows.
   Future<AudioLoadResult> play(String source, {bool isSilentMode = false}) async {
@@ -65,6 +65,9 @@ class AudioPlaybackService {
     // ── 2. Route to correct loader ─────────────────────────────────────────
     if (source.startsWith('http://') || source.startsWith('https://')) {
       return _playFromUrl(source);
+    } else if (source.startsWith('/')) {
+      // Đường dẫn tuyệt đối — file người học đã tải về bộ nhớ app.
+      return _playFromFile(source);
     } else {
       // Strip "asset:///" prefix if present so we always pass a clean path.
       final assetPath = source.startsWith('asset:///')
@@ -74,10 +77,71 @@ class AudioPlaybackService {
     }
   }
 
+  /// Phát lần lượt nhiều nguồn (playlist) — dùng khi bài học có nhiều đoạn
+  /// audio. Một nguồn duy nhất thì hành xử giống hệt [play].
+  Future<AudioLoadResult> playSources(
+    List<String> sources, {
+    bool isSilentMode = false,
+  }) async {
+    if (isSilentMode) {
+      debugPrint('🔇 AudioPlaybackService: silent mode — rejecting playSources()');
+      return AudioLoadResult.silentMode;
+    }
+    if (sources.isEmpty) return AudioLoadResult.noContent;
+    if (sources.length == 1) return play(sources.first);
+
+    try {
+      final key = sources.join('|');
+
+      if (_currentSource == key && isPlaying) {
+        await pause();
+        return AudioLoadResult.success;
+      }
+
+      if (_currentSource != key) {
+        final children = sources.map<AudioSource>(_audioSourceFor).toList();
+        await player.setAudioSource(
+          ConcatenatingAudioSource(children: children),
+        );
+        _currentSource = key;
+      }
+
+      await player.play();
+      return AudioLoadResult.success;
+    } on PlayerException catch (e) {
+      debugPrint('❌ AudioPlaybackService [Playlist] PlayerException: $e');
+      await _safeReset();
+      return sources.any(
+            (s) => s.startsWith('http://') || s.startsWith('https://'),
+          )
+          ? AudioLoadResult.networkError
+          : AudioLoadResult.missingAsset;
+    } catch (e) {
+      debugPrint('❌ AudioPlaybackService [Playlist] unknown error: $e');
+      await _safeReset();
+      return AudioLoadResult.unknown;
+    }
+  }
+
+  /// Chuyển một nguồn (URL / file path / asset) sang [AudioSource] phù hợp.
+  AudioSource _audioSourceFor(String source) {
+    if (source.startsWith('http://') || source.startsWith('https://')) {
+      return AudioSource.uri(Uri.parse(source));
+    }
+    if (source.startsWith('/')) {
+      return AudioSource.file(source);
+    }
+    final assetPath = source.startsWith('asset:///')
+        ? source.replaceFirst('asset:///', '')
+        : source;
+    return AudioSource.asset(assetPath);
+  }
+
   /// Phát phần Input của bài học theo thứ tự ưu tiên đã thống nhất:
   ///
-  ///   1. Bản thu thật (`audio_url`) nếu có — không bao giờ bị TTS thay thế.
-  ///   2. Giọng tổng hợp đọc văn bản tiếng Anh của bài.
+  ///   1. Bản thu/file audio: `audio_url` tường minh → file bundle trong
+  ///      `assets/audio/` → file đã tải về máy → stream Hugging Face.
+  ///   2. Ngoài danh mục: giọng tổng hợp đọc văn bản tiếng Anh của bài.
   ///   3. Không có gì để phát → [AudioLoadResult.noContent].
   ///
   /// Việc chọn nguồn nằm ở [resolveInputAudio] để kiểm thử được độc lập.
@@ -92,9 +156,9 @@ class AudioPlaybackService {
 
     switch (plan.mode) {
       case InputAudioMode.recording:
-        // Bản thu thật luôn được ưu tiên.
+        // Bản thu/file audio luôn được ưu tiên hơn TTS.
         await _stopSpeech();
-        return play(plan.source!, isSilentMode: isSilentMode);
+        return playSources(plan.sources, isSilentMode: isSilentMode);
 
       case InputAudioMode.synthesized:
         // Dừng player file trước để không chồng tiếng.
@@ -194,6 +258,34 @@ class AudioPlaybackService {
       debugPrint('❌ AudioPlaybackService [URL] unknown error: $e');
       await _safeReset();
       return AudioLoadResult.unknown;
+    }
+  }
+
+  Future<AudioLoadResult> _playFromFile(String filePath) async {
+    try {
+      final cacheKey = 'file://$filePath';
+
+      if (_currentSource == cacheKey && isPlaying) {
+        await pause();
+        return AudioLoadResult.success;
+      }
+
+      if (_currentSource != cacheKey) {
+        await player.setFilePath(filePath);
+        _currentSource = cacheKey;
+      }
+
+      await player.play();
+      return AudioLoadResult.success;
+    } on PlayerException catch (e) {
+      debugPrint('❌ AudioPlaybackService [File] PlayerException: $e');
+      await _safeReset();
+      // File đã tải bị thiếu/hỏng — đối xử như missing asset để UI mời tải lại.
+      return AudioLoadResult.missingAsset;
+    } catch (e) {
+      debugPrint('❌ AudioPlaybackService [File] unknown error: $e');
+      await _safeReset();
+      return AudioLoadResult.missingAsset;
     }
   }
 

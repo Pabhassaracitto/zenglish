@@ -53,6 +53,45 @@ class ContentGateTest(unittest.TestCase):
         (self.root / 'assets/data/lessons/A1_CH04_L01.json').unlink()
         self.assertTrue(any('Registry' in e for e in validate(self.root)[1]))
 
+    # ── Danh mục audio Hugging Face ──────────────────────────────────────
+
+    def change_audio_catalog(self, old, new):
+        path = self.root / 'lib/data/constants/audio_catalog.dart'
+        self.assertIn(old, path.read_text())
+        path.write_text(path.read_text().replace(old, new))
+
+    def test_audio_catalog_convention_violation(self):
+        self.change_audio_catalog(
+            "fileName: 'A1_CH01_L01_input_01.mp3'",
+            "fileName: 'wrong_name.mp3'",
+        )
+        errors = validate(self.root)[1]
+        self.assertTrue(any('must follow' in e for e in errors))
+
+    def test_audio_catalog_missing_lesson(self):
+        self.change_audio_catalog(
+            "lessonId: 'A1_CH01_L01'",
+            "lessonId: 'ZZ_CH99_L01'",
+        )
+        errors = validate(self.root)[1]
+        self.assertTrue(any('missing lesson' in e for e in errors))
+
+    def test_audio_catalog_duplicate_file(self):
+        self.change_audio_catalog(
+            "fileName: 'A1_CH02_L01_input_01.mp3'",
+            "fileName: 'A1_CH01_L01_input_01.mp3'",
+        )
+        errors = validate(self.root)[1]
+        self.assertTrue(any('duplicate file' in e for e in errors))
+
+    def test_audio_catalog_zero_estimate(self):
+        self.change_audio_catalog(
+            'estimatedBytes: _estimatedInputClipBytes,',
+            'estimatedBytes: 0,',
+        )
+        errors = validate(self.root)[1]
+        self.assertTrue(any('estimatedBytes' in e for e in errors))
+
 
 if __name__ == '__main__':
     unittest.main()

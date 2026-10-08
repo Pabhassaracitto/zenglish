@@ -1,13 +1,21 @@
 // lib/presentation/screens/lesson/lesson_screen.dart
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:zenglish/core/router/app_router.dart';
 import 'package:zenglish/core/theme/app_theme.dart';
+import 'package:zenglish/data/constants/audio_catalog.dart';
 import 'package:zenglish/data/models/lesson.dart';
 import 'package:zenglish/data/models/lesson_flow.dart';
+import 'package:zenglish/data/services/audio_download_service.dart';
 import 'package:zenglish/data/services/audio_playback_service.dart';
 import 'package:zenglish/data/services/input_audio_resolver.dart';
+import 'package:zenglish/presentation/providers/audio_availability_provider.dart';
+import 'package:zenglish/presentation/providers/audio_download_provider.dart';
 import 'package:zenglish/presentation/providers/home_provider.dart';
 import 'package:zenglish/presentation/providers/lesson_provider.dart';
 import 'package:zenglish/presentation/screens/lesson/stages/pattern_stage.dart';
@@ -26,6 +34,8 @@ class LessonScreen extends ConsumerStatefulWidget {
 }
 
 class _LessonScreenState extends ConsumerState<LessonScreen> {
+  StreamSubscription<PlayerState>? _playerStateSub;
+
   @override
   void initState() {
     super.initState();
@@ -35,10 +45,23 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       ref.read(lessonProvider.notifier).setSilentMode(silentMode);
       ref.read(lessonProvider.notifier).loadLesson(widget.lessonId);
     });
+
+    // Đồng bộ nút Nghe/Dừng với trạng thái player thật: phát xong hoặc lỗi
+    // thì nút tự trở về "Nghe" — không kẹt ở trạng thái cũ như trước.
+    _playerStateSub =
+        AudioPlaybackService.instance.playerStateStream.listen((playerState) {
+      if (!mounted) return;
+      final active = playerState.playing &&
+          (playerState.processingState == ProcessingState.ready ||
+              playerState.processingState == ProcessingState.buffering ||
+              playerState.processingState == ProcessingState.loading);
+      ref.read(lessonProvider.notifier).setAudioPlaying(active);
+    });
   }
 
   @override
   void dispose() {
+    _playerStateSub?.cancel();
     AudioPlaybackService.instance.stop();
     super.dispose();
   }
@@ -64,9 +87,7 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       );
   }
 
-  /// Called by every audio play button in the lesson.
-  ///
-  /// Ưu tiên bản thu thật; nếu bài chưa có bản thu thì đọc bằng giọng tổng hợp.
+  /// Dừng hẳn bản thu/file/TTS (nút "Dừng" — UX chốt ở PR #7).
   Future<void> _stopInputAudio() async {
     await AudioPlaybackService.instance.stop();
     if (mounted) {
@@ -74,6 +95,10 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
     }
   }
 
+  /// Called by every audio play button in the lesson.
+  ///
+  /// Ưu tiên nguồn phát: file local (bundle/đã tải) → stream Hugging Face
+  /// → TTS thiết bị (xem `resolveInputAudio`).
   Future<void> _playInputAudio(InputAudioPlan plan) async {
     final isSilent = ref.read(lessonProvider.select((s) => s.isSilentMode));
 
@@ -85,13 +110,13 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
       return;
     }
 
+    final service = AudioPlaybackService.instance;
+
     // Optimistically mark as playing in UI.
     ref.read(lessonProvider.notifier).setAudioPlaying(true);
 
-    final result = await AudioPlaybackService.instance.playInput(
-      plan,
-      isSilentMode: isSilent,
-    );
+    // Cùng nguồn đã load thì play() phát tiếp/từ đầu, không load lại.
+    final result = await service.playInput(plan);
 
     if (!mounted) return;
 
@@ -106,19 +131,20 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
         break;
 
       case AudioLoadResult.missingAsset:
-        // ← CRITICAL: reset play button + inform user
         ref.read(lessonProvider.notifier).setAudioPlaying(false);
         _showSnackBar(
-          'File audio chưa có trong MVP. Sẽ cập nhật sớm!',
+          plan.origin == InputAudioOrigin.downloadedFile
+              ? 'File audio đã tải bị thiếu. Vào Quản lý audio để tải lại.'
+              : 'File audio chưa có trong app. Sẽ cập nhật sớm!',
           icon: Icons.audio_file,
         );
         break;
 
       case AudioLoadResult.networkError:
         ref.read(lessonProvider.notifier).setAudioPlaying(false);
-        _showSnackBar(
-          'Không thể tải audio. Vui lòng kiểm tra kết nối mạng.',
-          icon: Icons.wifi_off,
+        _showSnackBarWithRetry(
+          'Không có kết nối hoặc không tải được audio.',
+          onRetry: () => _playInputAudio(plan),
         );
         break;
 
@@ -152,6 +178,31 @@ class _LessonScreenState extends ConsumerState<LessonScreen> {
         );
         break;
     }
+  }
+
+  /// Snackbar lỗi mạng kèm nút **Thử lại** — yêu cầu UX khi mất kết nối.
+  void _showSnackBarWithRetry(String message, {required VoidCallback onRetry}) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.wifi_off, color: Colors.white, size: 18),
+              const SizedBox(width: 8),
+              Expanded(child: Text(message)),
+            ],
+          ),
+          action: SnackBarAction(
+            label: 'Thử lại',
+            textColor: AppColors.saffronLight,
+            onPressed: onRetry,
+          ),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
+        ),
+      );
   }
 
   // ─── Continue / Next Stage ────────────────────────────────────────────────
@@ -466,7 +517,7 @@ class _ContinueBar extends StatelessWidget {
 
 // ── Input Stage ──────────────────────────────────────────────────────────────
 
-class _InputStageView extends StatelessWidget {
+class _InputStageView extends ConsumerWidget {
   const _InputStageView({
     required this.lesson,
     required this.state,
@@ -482,14 +533,21 @@ class _InputStageView extends StatelessWidget {
   final LessonNotifier notifier;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final inputPhase = lesson.lessonFlow.input;
     final dialogues = inputPhase.sampleDialogues;
     final idx = state.currentDialogueIndex;
     final hasDialogues = dialogues.isNotEmpty;
 
-    // Nguồn âm thanh: ưu tiên bản thu thật, fallback giọng tổng hợp (TTS).
-    final audioPlan = resolveInputAudio(lesson);
+    // Nguồn âm thanh: local (bundle/đã tải) → Hugging Face → TTS thiết bị.
+    // `revision` tăng sau mỗi lần tải/xoá để lookup tính lại ngay.
+    final revision =
+        ref.watch(audioDownloadProvider.select((s) => s.revision));
+    final availability = ref
+            .watch(audioAvailabilityProvider(revision))
+            .valueOrNull ??
+        LocalAudioLookup.empty;
+    final audioPlan = resolveInputAudio(lesson, localAudio: availability);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -505,42 +563,14 @@ class _InputStageView extends StatelessWidget {
           const SizedBox(height: 16),
 
           // ── Audio Player toàn bài ──────────────────────────────────────
-          if (audioPlan.canPlay) ...[
-            _AudioPlayerBar(
-              isPlaying: state.isAudioPlaying,
-              isSilentMode: state.isSilentMode,
-              onPlay: () => onPlayAudio(audioPlan),
-              onStop: onStopAudio,
-            ),
-            if (audioPlan.isSynthesized) ...[
-              const SizedBox(height: 8),
-              const _SynthesizedVoiceNotice(),
-            ],
-            const SizedBox(height: 16),
-          ] else ...[
-            // Không có bản thu lẫn văn bản tiếng Anh để đọc.
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.amber.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.amber.withOpacity(0.3)),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.info_outline, color: Colors.amber, size: 16),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Chưa có bản thu âm. Bạn vẫn có thể đọc nội dung và hoàn thành bài. / No recording yet. Read the text to continue.',
-                      style: TextStyle(fontSize: 12, color: Colors.amber),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-          ],
+          _LessonAudioSection(
+            lesson: lesson,
+            lessonState: state,
+            plan: audioPlan,
+            onPlay: onPlayAudio,
+            onStop: onStopAudio,
+          ),
+          const SizedBox(height: 16),
 
           if (inputPhase.readingTextEn != null) ...[
             SelectableText(inputPhase.readingTextEn!),
@@ -1161,6 +1191,440 @@ class _AudioPlayerBar extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Toàn bộ khu vực audio của giai đoạn Input: player + nhãn nguồn + nút tải.
+class _LessonAudioSection extends ConsumerWidget {
+  const _LessonAudioSection({
+    required this.lesson,
+    required this.lessonState,
+    required this.plan,
+    required this.onPlay,
+    required this.onStop,
+  });
+
+  final Lesson lesson;
+  final LessonState lessonState;
+  final InputAudioPlan plan;
+  final Future<void> Function(InputAudioPlan) onPlay;
+  final Future<void> Function() onStop;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Không có cả file lẫn văn bản — giữ thông báo amber như cũ.
+    if (plan.mode == InputAudioMode.none) {
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.amber.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.amber.withOpacity(0.3)),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.info_outline, color: Colors.amber, size: 16),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Chưa có bản thu âm. Bạn vẫn có thể đọc nội dung và hoàn thành bài. / No recording yet. Read the text to continue.',
+                style: TextStyle(fontSize: 12, color: Colors.amber),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final downloadState = ref.watch(audioDownloadProvider);
+
+    // Vừa tải xong audio của chính bài này → báo một lần rồi thôi.
+    if (downloadState.lastSuccessLessonId == lesson.lessonId) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(audioDownloadProvider.notifier).clearLastSuccess();
+        final messenger = ScaffoldMessenger.maybeOf(context);
+        messenger
+          ?..hideCurrentSnackBar()
+          ..showSnackBar(
+            const SnackBar(
+              content: Text('✓ Đã tải audio — từ giờ phát ngay từ bộ nhớ máy.'),
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 3),
+            ),
+          );
+      });
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _AudioPlayerBar(
+          isPlaying: lessonState.isAudioPlaying,
+          isSilentMode: lessonState.isSilentMode,
+          onPlay: () => onPlay(plan),
+          onStop: onStop,
+        ),
+
+        if (plan.isSynthesized) ...[
+          const SizedBox(height: 8),
+          const _SynthesizedVoiceNotice(),
+        ],
+
+        if (plan.hasRecording) ...[
+          const SizedBox(height: 8),
+          _AudioOriginRow(plan: plan),
+        ],
+
+        if (plan.needsDownload) ...[
+          const SizedBox(height: 8),
+          _AudioDownloadPanel(lesson: lesson, plan: plan),
+        ],
+      ],
+    );
+  }
+}
+
+/// Dòng nhỏ dưới player: nguồn phát ở đâu + nhãn minh bạch "giọng tổng hợp".
+class _AudioOriginRow extends StatelessWidget {
+  const _AudioOriginRow({required this.plan});
+
+  final InputAudioPlan plan;
+
+  @override
+  Widget build(BuildContext context) {
+    final (icon, caption) = switch (plan.origin) {
+      InputAudioOrigin.bundledAsset => (
+          Icons.check_circle_outline,
+          'Audio có sẵn trong app',
+        ),
+      InputAudioOrigin.downloadedFile => (
+          Icons.check_circle_outline,
+          'Đã lưu trên máy — nghe được offline',
+        ),
+      InputAudioOrigin.remoteUrl => (
+          Icons.cloud_outlined,
+          'Đang nghe trực tuyến — tải về để nghe offline',
+        ),
+      _ => (Icons.info_outline, ''),
+    };
+
+    return Row(
+      children: [
+        Icon(icon, size: 14, color: AppTheme.textMuted),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            caption,
+            style: AppTheme.labelSmall.copyWith(color: AppTheme.textMuted),
+          ),
+        ),
+        if (plan.isAiGenerated) const _AiVoiceChip(),
+      ],
+    );
+  }
+}
+
+/// Nhãn minh bạch: audio do AI/giọng tổng hợp tạo ra (quy định ZEN-010).
+class _AiVoiceChip extends StatelessWidget {
+  const _AiVoiceChip();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: AppTheme.paliColor.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: AppTheme.paliColor.withOpacity(0.35)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.record_voice_over_outlined,
+            size: 12,
+            color: AppTheme.paliColor,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            'Giọng tổng hợp',
+            style: AppTheme.labelSmall.copyWith(
+              color: AppTheme.paliColor,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Khu vực "Tải audio" khi bài học chưa có file local.
+///
+/// Trải nghiệm theo yêu cầu:
+///   * Lần đầu mở bài: lời mời ngắn gọn + dung lượng ước tính + [Tải sau].
+///   * Đã bấm "Tải sau": chỉ còn nút "Tải audio" gọn, không hỏi lại.
+///   * Đang tải: thanh tiến trình + % + nút huỷ.
+///   * Lỗi mạng: thông báo rõ ràng + nút Thử lại.
+class _AudioDownloadPanel extends ConsumerStatefulWidget {
+  const _AudioDownloadPanel({required this.lesson, required this.plan});
+
+  final Lesson lesson;
+  final InputAudioPlan plan;
+
+  @override
+  ConsumerState<_AudioDownloadPanel> createState() =>
+      _AudioDownloadPanelState();
+}
+
+class _AudioDownloadPanelState extends ConsumerState<_AudioDownloadPanel> {
+  bool? _promptDismissed;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDismissed();
+  }
+
+  Future<void> _loadDismissed() async {
+    final dismissed = await AudioPromptStore.instance
+        .isDismissed(widget.lesson.lessonId);
+    if (mounted) setState(() => _promptDismissed = dismissed);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final downloadState = ref.watch(audioDownloadProvider);
+    final lessonId = widget.lesson.lessonId;
+    final notifier = ref.read(audioDownloadProvider.notifier);
+
+    // ── Đang tải bài này: tiến trình + huỷ ────────────────────────────────
+    if (downloadState.activeLessonId == lessonId) {
+      final percent = (downloadState.progress * 100).round();
+      return _DownloadPanelFrame(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppTheme.primary,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Đang tải audio… $percent%',
+                    style: AppTheme.bodyMedium,
+                  ),
+                ),
+                IconButton(
+                  tooltip: 'Huỷ tải',
+                  visualDensity: VisualDensity.compact,
+                  icon: const Icon(Icons.close, size: 18),
+                  onPressed: notifier.cancel,
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: downloadState.progress,
+                minHeight: 5,
+                backgroundColor: AppTheme.divider.withOpacity(0.5),
+                valueColor:
+                    const AlwaysStoppedAnimation<Color>(AppTheme.primary),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              '${formatMb(downloadState.receivedBytes)} / '
+              '${formatMb(downloadState.totalBytes)}',
+              style: AppTheme.labelSmall.copyWith(color: AppTheme.textMuted),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // ── Lỗi khi tải bài này: thông báo + Thử lại ─────────────────────────
+    if (downloadState.errorLessonId == lessonId &&
+        downloadState.errorMessage != null) {
+      return _DownloadPanelFrame(
+        borderColor: AppColors.error.withOpacity(0.35),
+        backgroundColor: AppColors.error.withOpacity(0.06),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(
+                  Icons.wifi_off,
+                  size: 16,
+                  color: AppColors.error,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    downloadState.errorMessage!,
+                    style:
+                        AppTheme.bodyMedium.copyWith(color: AppColors.error),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                FilledButton.tonalIcon(
+                  onPressed: () => notifier.downloadLesson(lessonId),
+                  icon: const Icon(Icons.refresh, size: 16),
+                  label: const Text('Thử lại'),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 8),
+                  ),
+                ),
+                TextButton(
+                  onPressed: notifier.clearError,
+                  child: const Text('Để sau'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    final estimatedLabel =
+        'khoảng ${formatMb(AudioCatalog.estimatedBytesForLesson(lessonId))}';
+
+    // ── Chưa từng hỏi lần nào: lời mời thân thiện + Tải sau ─────────────
+    if (_promptDismissed == false) {
+      return _DownloadPanelFrame(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(
+                  Icons.cloud_download_outlined,
+                  size: 18,
+                  color: AppTheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Tải audio bài này về máy?',
+                    style: AppTheme.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Dung lượng $estimatedLabel. Nghe mượt hơn và học được cả khi '
+              'không có mạng.',
+              style: AppTheme.labelSmall.copyWith(color: AppTheme.textMuted),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                FilledButton.icon(
+                  onPressed: () => notifier.downloadLesson(lessonId),
+                  icon: const Icon(Icons.download, size: 16),
+                  label: const Text('Tải audio'),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 8),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                TextButton(
+                  onPressed: () async {
+                    await AudioPromptStore.instance.markDismissed(lessonId);
+                    if (mounted) setState(() => _promptDismissed = true);
+                  },
+                  child: const Text('Tải sau'),
+                ),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => context.push(AppRoutes.audioManager),
+                  child: const Text('Quản lý'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    }
+
+    // ── Đã bấm "Tải sau" (hoặc chưa load xong prefs): nút gọn ───────────
+    return _DownloadPanelFrame(
+      child: Row(
+        children: [
+          const Icon(
+            Icons.cloud_download_outlined,
+            size: 16,
+            color: AppTheme.textSecondary,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              'Chưa có audio trên máy ($estimatedLabel)',
+              style: AppTheme.labelSmall.copyWith(
+                color: AppTheme.textSecondary,
+              ),
+            ),
+          ),
+          OutlinedButton.icon(
+            onPressed: () => notifier.downloadLesson(lessonId),
+            icon: const Icon(Icons.download, size: 15),
+            label: const Text('Tải audio'),
+            style: OutlinedButton.styleFrom(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Khung nền dùng chung cho các trạng thái của [_AudioDownloadPanel].
+class _DownloadPanelFrame extends StatelessWidget {
+  const _DownloadPanelFrame({
+    required this.child,
+    this.borderColor,
+    this.backgroundColor,
+  });
+
+  final Widget child;
+  final Color? borderColor;
+  final Color? backgroundColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: backgroundColor ?? AppTheme.cardBackground,
+        borderRadius: BorderRadius.circular(AppTheme.radiusMD),
+        border: Border.all(
+          color: borderColor ?? AppTheme.divider,
+        ),
+      ),
+      child: child,
     );
   }
 }

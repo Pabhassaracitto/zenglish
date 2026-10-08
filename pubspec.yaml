@@ -37,6 +37,9 @@ dependencies:
   cloud_firestore: ^6.5.0
   just_audio: ^0.10.5
 
+  # ── Lưu audio tải về máy (đã có sẵn trong lock dạng transitive) ──
+  path_provider: ^2.1.5
+
   # ── Giọng đọc tổng hợp (fallback khi bài chưa có bản thu) ──
   # Dùng engine TTS của hệ điều hành. Có thể thay bằng engine offline
   # đóng gói kèm app (ví dụ Sherpa-onnx) qua SpeechSynthesizer interface.
@@ -65,6 +68,9 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/data/lessons/
+    # Audio bundle kèm app khi build: file nào có ở đây được phát trực tiếp,
+    # không cần tải (xem lib/data/constants/audio_catalog.dart).
+    - assets/audio/
   fonts:
     - family: Merriweather
       fonts:
