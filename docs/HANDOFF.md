@@ -1,6 +1,33 @@
 # ZenGlish — bàn giao cho phiên/agent tiếp theo
 
-Cập nhật: **04/10/2026** (mục 0-bis). Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+Cập nhật: **07/10/2026** (mục 0-ter). Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+
+## 0-ter. ZEN-019 — audio Hugging Face: ưu tiên local, stream + tải về máy — 07/10/2026
+
+**Bối cảnh:** chủ dự án đã dựng file giọng AI cho 8 bài (hướng "file dựng sẵn bằng TTS chất lượng cao" — phân tích trong `docs/CONTENT_AUDIT.md`) và host tại dataset [Beyou8778/zenglish-audio](https://huggingface.co/datasets/Beyou8778/zenglish-audio/tree/main), quy ước đặt tên `<LESSON_ID>_input_<NN>.mp3` (ví dụ `A1_CH01_L01_input_01.mp3`).
+
+**Đã làm (PR nhánh này — gate CI là căn cứ, chưa thử thiết bị):**
+
+- `lib/data/constants/audio_catalog.dart`: danh mục tập trung 8 file + base URL Hugging Face, quy ước tên, dung lượng ước tính (~1,5 MB/file — chỉ để hiển thị).
+- `lib/data/services/input_audio_resolver.dart`: chuỗi ưu tiên mới — (1) `audio_url` tường minh trong lesson JSON (bản thu con người, validator bắt buộc bundle, **không** nhãn AI) → (2) file bundle trong `assets/audio/` → (3) file đã tải về `<documents>/zenglish_audio/` (index `audio_index.json`) → (4) stream URL Hugging Face + mời tải về → (5) bài ngoài danh mục giữ fallback TTS thiết bị. Audio thuộc danh mục luôn gắn nhãn "giọng tổng hợp" (là giọng AI).
+- `lib/data/services/audio_download_service.dart`: tải streaming qua `http` (HEAD lấy dung lượng thật, ghi `.part` rồi đổi tên nên không có file dở dang), kết quả bằng enum không ném lỗi, huỷ giữa chừng, xoá theo bài/tất cả; `AudioPromptStore` nhớ lựa "Tải sau" theo bài để không hỏi lại.
+- `AudioPlaybackService`: thêm phát file tuyệt đối (`setFilePath`) và playlist nhiều đoạn (`ConcatenatingAudioSource`); `lesson_screen` lắng nghe `playerStateStream` nên nút phản ánh trạng thái thật. Giữ UX nút **Nghe/Dừng** của PR #7 (Dừng = stop hẳn).
+- UX bài học: mở bài lần đầu chưa có local → lời mời + dung lượng ước tính + [Tải audio] [Tải sau] [Quản lý]; đang tải → thanh tiến trình + % + huỷ; lỗi mạng → thông báo rõ + Thử lại; tải xong → lần sau phát ngay từ local, không hỏi lại. Không tải vẫn nghe được (stream).
+- Màn hình `/audio-manager` (`AudioManagerScreen`): tải theo **chương** hoặc **toàn bộ**, ước tính dung lượng trước khi tải, tiến trình tổng, xoá từng bài / xoá tất cả (hỏi xác nhận). Không tự động tải gì. Lối vào: mục **"Quản lý audio" trong màn hình Cài đặt** (`/settings` của PR #7, hiện số file + dung lượng đã lưu) và icon tai nghe trên AppBar `/lessons`.
+- Thêm quyền `INTERNET` trong `android/app/src/main/AndroidManifest.xml` (trước đó **thiếu** — bản release không stream/tải được).
+- Validator: `scripts/validate_content.py` kiểm tra danh mục audio (quy ước tên, trùng, thiếu bài, dung lượng ≤ 0) + 4 Python test mới; local 11/11 đạt.
+- Dart tests: viết lại `input_audio_resolver_test.dart` theo chuỗi ưu tiên mới, mới `audio_catalog_test.dart`, `audio_download_service_test.dart` (encode/parse index thuần), cập nhật test nhãn AI của catalog.
+
+**⚠️ Phát hiện quan trọng khi đồng bộ main (07/10):** PR #7 (`69b4663`) khi merge đã **vô tình hoàn tác một phần PR #6 (ZEN-008)** trên main: `resolveNextEntry()` + 3 test của nó biến mất khỏi `catalog_provider.dart`/`catalog_provider_test.dart`, `user_session_service.dart`/`user_profile_provider.dart`/`home_provider.dart`/`lesson_provider.dart` quay về bản trước ZEN-008, và các cập nhật docs 05/10 (ZEN-005 đóng, ZEN-009 duyệt, lockfile) cũng mất. **PR này KHÔNG khôi phục phần đó** (giữ phạm vi audio); thẻ **ZEN-020** mở để khôi phục riêng — bằng chứng: `git diff 5306bbb 69b4663` cho thấy các file trên bị lùi phiên bản.
+
+**Giới hạn / rủi ro của lượt này:**
+
+1. Sandbox không có Flutter SDK và không với tới pub.dev/Hugging Face: `flutter pub get/gen-l10n/analyze/test/build apk` **chưa chạy local** — gate trên PR là căn cứ.
+2. Khai báo dependency trực tiếp `path_provider: ^2.1.5` (lock đã có 2.1.5 dạng transitive qua Firebase): `flutter pub get` trên CI chuyển thành `direct main` → cảnh báo `pubspec.lock lệch` (không chặn merge; xử lý cùng ZEN-002 trên máy có SDK).
+3. **Chưa đối chiếu được danh sách file thật trên dataset** (mạng sandbox chặn Hugging Face): danh mục khai báo 1 file/bài theo quy ước `_input_01`. Nếu dataset thiếu file nào, app báo "chưa có trên máy chủ" và không crash; nếu có thêm đoạn (`_input_02`…) chỉ cần bổ sung entry vào `AudioCatalog.files` — luồng phát đã hỗ trợ playlist nhiều đoạn. Việc cần làm: mở dataset, khớp tên file, cập nhật danh mục + ước tính dung lượng.
+4. Dung lượng ước tính 1,5 MB/file là con số hiển thị; khi tải thật dùng Content-Length từ HEAD.
+
+**Điểm tiếp tục:** (1) lấy kết quả gate của PR và sửa nếu analyze/test lỗi; (2) làm ZEN-020 (khôi phục phần PR #6 bị PR #7 hoàn tác) — lấy lại từ lịch sử `5306bbb`; (3) khớp danh mục audio với dataset thật (mục 3 ở trên); (4) nghiệm thu trên thiết bị: tải 1 bài → máy bay → nghe offline; nghe stream không tải; huỷ tải; xoá và tải lại; màn Quản lý audio trong Cài đặt; (5) nếu muốn bundle audio vào APK: đặt file vào `assets/audio/` **đúng tên trong danh mục** — app tự ưu tiên bundle và ẩn nút tải, không cần sửa code.
 
 ## 0-bis. Thư viện bài học + TTS fallback — 04/10/2026, sau khi PR #4 merge
 
