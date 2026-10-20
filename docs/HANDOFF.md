@@ -37,7 +37,7 @@ Cập nhật: **07/10/2026** (mục 0-ter). Đọc cùng [Kanban](KANBAN.md), [p
 
 **Đã sửa (PR workflow riêng):** điều kiện job `deploy` đổi thành `github.event_name != 'pull_request' && github.ref == 'refs/heads/main'`. Hành vi mới: push `main` và `workflow_dispatch` trên `main` deploy như cũ; push `arena/**` vẫn build kiểm chứng nhưng deploy hiện **skipped** (run xanh); PR giữ nguyên (build + `pr-preview-note`, không deploy). Không đổi trigger, pin Flutter hay bước build nào khác.
 
-**Kiểm chứng cần lấy trên PR:** run `Deploy Web to GitHub Pages` sự kiện `push` trên chính nhánh PR phải kết luận `success` với job deploy `skipped`. Lưu ý: `Quality checks` trên PR này vẫn có thể đỏ ở bước Analyze do 4 lỗi `contentLength` **có từ trước trên main** — phần sửa đó nằm ở PR #10, không thuộc phạm vi PR workflow này; nên merge PR #10 trước rồi mới merge PR này (nếu thứ tự ngược lại, ghi rõ lý do đỏ không liên quan diff `web.yml`).
+**Kiểm chứng (PR #11, đã lấy):** run `Deploy Web to GitHub Pages` sự kiện `push` `39484153467` kết luận `success` — *Build Flutter Web* pass 1m33s, *Deploy to GitHub Pages* **skipped** (trước sửa: fail 2s vì bị environment từ chối); run sự kiện `pull_request` `39484254372` cũng `success` với deploy skipped. Deploy từ `main` không đổi hành vi (điều kiện chỉ chặn ref khác `main`). Lưu ý: `Quality checks` trên PR này vẫn có thể đỏ ở bước Analyze do 4 lỗi `contentLength` **có từ trước trên main** — phần sửa đó nằm ở PR #10, không thuộc phạm vi PR workflow này; nên merge PR #10 trước rồi mới merge PR này (nếu thứ tự ngược lại, ghi rõ lý do đỏ không liên quan diff `web.yml`).
 
 ## 0-bis. Thư viện bài học + TTS fallback — 04/10/2026, sau khi PR #4 merge
 
