@@ -5,6 +5,7 @@
 // tải. Theo yêu cầu UX: KHÔNG tự động tải hàng loạt; tải từng bài do màn
 // hình bài học đảm nhiệm.
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,6 +22,53 @@ class AudioManagerScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (kIsWeb) {
+      return Scaffold(
+        backgroundColor: AppTheme.surface,
+        appBar: AppBar(
+          title: const Text('Quản lý audio'),
+          backgroundColor: AppTheme.cardBackground,
+          foregroundColor: AppTheme.textPrimary,
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primary.withOpacity(0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.cloud_outlined,
+                      size: 32, color: AppTheme.primary),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Trên web, audio được phát trực tuyến',
+                  style: AppTheme.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Bản web không lưu file audio trên máy — mọi bài học được stream '
+                  'trực tiếp từ Hugging Face khi bạn bấm Nghe. Cài app Android để nghe offline.',
+                  style: AppTheme.bodyMedium.copyWith(
+                    color: AppTheme.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     final catalogAsync = ref.watch(lessonCatalogProvider);
     final downloadState = ref.watch(audioDownloadProvider);
     final revision = downloadState.revision;

@@ -1,0 +1,108 @@
+name: Deploy Web to GitHub Pages
+
+# Web build + Pages deploy cho ZenGlish.
+# GitHub Pages đã bật build_type: workflow trên repo (Settings → Pages).
+# Workflow này chịu trách nhiệm build Flutter web và deploy.
+
+on:
+  push:
+    branches:
+      - main
+      - 'arena/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Quyền tối thiểu để deploy Pages (OIDC)
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Chỉ một deploy cùng lúc; PR cũ bị hủy, deploy main không bị hủy giữa chừng.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # Pin Flutter phải khớp README và quality.yml (env.FLUTTER_VERSION_DEFAULT).
+  FLUTTER_VERSION: '3.44.0'
+
+jobs:
+  build:
+    name: Build Flutter Web
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Show Flutter version
+        run: flutter --version
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Generate localizations
+        run: flutter gen-l10n
+
+      - name: Analyze (non-blocking info)
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings || true
+
+      - name: Build Web (release)
+        run: |
+          flutter build web --release --base-href /zenglish/
+          # SPA fallback: GitHub Pages chỉ có file tĩnh, cần 404.html = index.html
+          cp build/web/index.html build/web/404.html
+          # Tắt Jekyll để giữ file bắt đầu bằng _
+          touch build/web/.nojekyll
+          ls -lh build/web/ | head -n 40
+          echo "=== index.html base href ==="
+          grep -o '<base href[^>]*>' build/web/index.html || true
+          echo "=== 404.html exists ==="
+          ls -lh build/web/404.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    name: Deploy to GitHub Pages
+    # Chỉ deploy khi push vào main/arena hoặc manual; PR chỉ build không deploy.
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Summary cho PR (không deploy)
+  pr-preview-note:
+    name: PR build note
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: PR Web Build Summary
+        run: |
+          echo "### 🌐 Web build OK" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Flutter: \`${{ env.FLUTTER_VERSION }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Base href: \`/zenglish/\` (cho https://pabhassaracitto.github.io/zenglish/)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Artifact: Pages artifact đã upload (chỉ deploy khi merge vào main)." >> "$GITHUB_STEP_SUMMARY"
+          echo "- Để xem preview local: \`flutter build web --release --base-href /zenglish/\` rồi serve \`build/web\`." >> "$GITHUB_STEP_SUMMARY"
