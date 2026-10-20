@@ -77,8 +77,11 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    # Chỉ deploy khi push vào main/arena hoặc manual; PR chỉ build không deploy.
-    if: github.event_name != 'pull_request'
+    # Chỉ deploy từ main (push hoặc chạy tay trên main). Nhánh arena/** chỉ
+    # build kiểm chứng: environment github-pages có protection rule chỉ cho
+    # main deploy, nên deploy từ nhánh khác bị từ chối ("not allowed to
+    # deploy to github-pages"). PR cũng chỉ build, không deploy.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
