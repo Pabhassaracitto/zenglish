@@ -101,6 +101,14 @@ ngày và phạm vi duyệt. Agent **không** tự quyết định việc này �
 (ZEN-010), chất lượng phát âm Pāḷi khi đọc bằng máy, và chính sách mở khoá bài
 học. Các điểm dưới đây giữ nguyên để tham chiếu khi nội dung được sửa tiếp.
 
+**Cập nhật 20/10/2026:** PR #7 (`69b4663`) đã vô tình hoàn tác cờ duyệt này
+trên main (4 file JSON quay về `needs_review=true`, cùng đợt mất mát ghi ở
+ZEN-020) trong khi mục này vẫn còn, nên tài liệu và dữ liệu đã lệch nhau một
+thời gian. Ngày 20/10/2026 chủ dự án **xác nhận duyệt lại** 4 bài; cờ được đặt
+lại `false` và `needs_review_note` ghi quyết định gốc 05/10, lần xác nhận lại
+và nguồn nhập TASK_002–005. Bài `A1_CH05_L01` vốn không có cờ (mặc định
+`false`). Phạm vi **chưa** được duyệt nêu ở trên không thay đổi.
+
 ## Hạng mục chờ người phụ trách nội dung duyệt (danh sách gốc, đã duyệt ngày 05/10 với 4 bài A1)
 
 - Mức độ A1 của câu kể quá khứ, email và mẫu diễn đạt kinh nghiệm thiền.

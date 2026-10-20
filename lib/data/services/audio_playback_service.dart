@@ -100,9 +100,9 @@ class AudioPlaybackService {
 
       if (_currentSource != key) {
         final children = sources.map<AudioSource>(_audioSourceFor).toList();
-        await player.setAudioSource(
-          ConcatenatingAudioSource(children: children),
-        );
+        // ConcatenatingAudioSource đã deprecated ở just_audio 0.10.x —
+        // dùng setAudioSources như analyzer gợi ý.
+        await player.setAudioSources(children);
         _currentSource = key;
       }
 

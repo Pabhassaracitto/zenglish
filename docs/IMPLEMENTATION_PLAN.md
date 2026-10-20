@@ -25,7 +25,7 @@ Sau merge, không yêu cầu agent mới đọc chat hay tìm nhánh cũ. AGENTS
 ## Phạm vi beta
 
 - Android là nền tảng nghiệm thu đầu tiên; Việt–Anh là cặp ngôn ngữ ưu tiên.
-- Tám bài JSON beta; bốn bài A1 mới nhập từ TASK còn chờ duyệt chuyên môn.
+- Tám bài JSON beta; nội dung bài đọc của bốn bài A1 mới nhập từ TASK đã được chủ dự án duyệt (ZEN-009: 05/10/2026, xác nhận lại 20/10/2026 sau khi PR #7 hoàn tác nhầm cờ duyệt); giọng đọc/quyền bản thu vẫn ở ZEN-010.
 - Lưu tiến độ trên thiết bị; phản hồi luyện tập cục bộ, không tuyên bố AI online hay đánh giá chứng đắc.
 - Chưa làm cloud sync, thanh toán, desktop hoặc phát hành công khai trong sprint ổn định.
 

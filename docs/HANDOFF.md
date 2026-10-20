@@ -1,6 +1,24 @@
 # ZenGlish — bàn giao cho phiên/agent tiếp theo
 
-Cập nhật: **07/10/2026** (mục 0-ter). Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+Cập nhật: **20/10/2026** (mục 0-quater). Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+
+## 0-quater. Sửa gate đỏ trên main + khôi phục duyệt 4 bài A1 — 20/10/2026
+
+**Bối cảnh:** PR #9 đã merge vào main (`8ca2044`) — mang theo refactor audio thành facade `audio_download_service.dart` + `src/audio_download_service_io.dart`/`_web.dart` — nhưng `Quality checks` trên main **đỏ ở bước Analyze** (run [`39463829825`](https://github.com/Pabhassaracitto/zenglish/actions/runs/39463829825), job `Flutter analyze + tests` fail, APK bị skip). Phiên trước đã chốt nguyên nhân và tạo 2 patch nhưng hết quyền push (PR #8 đã đóng); file patch nằm ở workspace của phiên cũ **không còn trong checkout sạch**, nên bản sửa được viết lại trực tiếp từ mô tả bàn giao và đối chiếu đúng vị trí trên main hiện tại. Cùng lượt, chủ dự án xác nhận duyệt 4 bài A1 đang ở trạng thái chưa duyệt (trong 5 bài A1) → chuyển chính thức.
+
+**Đã làm (PR nhánh này — gate CI là căn cứ, chưa thử thiết bị):**
+
+- Đồng bộ `origin/main` vào nhánh làm việc (merge `25f5dc2`). Bốn conflict là do nhánh chứa commit trùng nội dung với main (ZEN-019); main là superset (thêm refactor web của PR #9) nên lấy bản main cho cả 4 file — cây sau merge giống hệt `origin/main`.
+- **Sửa 4 lỗi analyze (bắt buộc):** trong http 1.x (lock: 1.6.0), `Response.contentLength`/`StreamedResponse.contentLength` là `int?` (null khi server không gửi `Content-Length`, ví dụ chunked). `lib/data/services/src/audio_download_service_io.dart` gán biến cục bộ `headLength`/`responseLength` rồi mới kiểm tra `!= null && > 0`. Không đổi hành vi: khi không có Content-Length vẫn giữ ước tính `estimatedBytes` để báo tiến trình.
+- **Dọn deprecated (tuỳ chọn, đã áp):** `lib/data/services/audio_playback_service.dart` thay `player.setAudioSource(ConcatenatingAudioSource(...))` bằng `player.setAudioSources(children)` theo gợi ý của analyzer. Đã đối chiếu chữ ký trên đúng tag `just_audio-v0.10.5` (phiên bản khóa trong `pubspec.lock`): `setAudioSources(List<AudioSource>, {...})` tồn tại và `ConcatenatingAudioSource` mang `@Deprecated('Use AudioPlayer.setAudioSources instead')`.
+- **ZEN-009 — chuyển 4 bài A1 thành chính thức:** `needs_review=false` trong `A1_CH01_L01`…`A1_CH04_L01`. Quyết định gốc của chủ dự án ngày 05/10/2026 (commit `45f35d6`) đã bị PR #7 (`69b4663`) hoàn tác nhầm trên main trong khi mục duyệt ở `CONTENT_AUDIT.md` vẫn còn — dữ liệu và tài liệu lệch nhau; ngày 20/10/2026 chủ dự án xác nhận duyệt lại. `needs_review_note` mới ghi cả hai ngày duyệt và giữ nguồn nhập TASK_002–005. Bài `A1_CH05_L01` không có trường này (model mặc định `false`, `lesson.dart:139`) nên không sửa — cả 5 bài A1 nay đều không còn nhãn "chờ duyệt".
+- Đồng bộ tài liệu theo hai thay đổi trên: KANBAN (ZEN-009 → Done; bổ sung bằng chứng cho ZEN-007/019/020), CONTENT_AUDIT (ghi chú hoàn tác + khôi phục), README, IMPLEMENTATION_PLAN, BETA_ACCEPTANCE.
+
+**Bằng chứng kiểm tra:** local — `python3 scripts/validate_content.py` → PASS 8 lessons; `python3 -m unittest discover -s scripts -p 'test_*.py'` → 11/11 đạt; `git diff --check` sạch; parse JSON xác nhận cả 8 bài `needs_review=false`/mặc định false. Trên [PR #10](https://github.com/Pabhassaracitto/zenglish/pull/10): `Quality checks` run [`39473022655`](https://github.com/Pabhassaracitto/zenglish/actions/runs/39473022655) **xanh toàn bộ** — `Flutter analyze + tests` pass (1m14s; 4 lỗi `contentLength` đã hết, khác với run đỏ `39463829825` trên main), `Android debug APK (ARM64)` pass; `Build Flutter Web` (run `39473022663`) cũng pass (`Deploy to GitHub Pages` skipping là đúng thiết kế trên PR). Sandbox **không có Flutter SDK** nên các lệnh `flutter …` không chạy local — run CI trên là căn cứ. Chưa nghiệm thu thiết bị; chưa kiểm tra gate trên commit merge ở main.
+
+**Lưu ý Linear:** đã kiểm tra ngày 20/10 — workspace Linear được kết nối chỉ có team `UIU` và `IN4` (dự án khác), không có team/issue ZenGlish. Theo `AGENTS.md`, Kanban trong repo là nguồn sự thật nên không tạo issue Linear cạnh tranh; nếu chủ dự án muốn theo dõi ZenGlish trên Linear thì cần tạo team/project riêng trước.
+
+**Điểm tiếp tục:** (1) merge PR #10 (gate đã xanh — chờ chủ repository review) → kiểm tra `Quality checks` trên chính commit merge ở main; (2) phần còn lại của **ZEN-020** (khôi phục nguồn tiến độ ZEN-008 bị PR #7 hoàn tác — PR này chỉ khôi phục phần cờ duyệt ZEN-009); (3) ZEN-019: khớp `AudioCatalog` với danh sách file thật trên dataset + nghiệm thu thiết bị (tải 1 bài → máy bay → nghe offline); (4) xác nhận trên UI rằng 4 bài A1 không còn nhãn "chờ duyệt".
 
 ## 0-ter. ZEN-019 — audio Hugging Face: ưu tiên local, stream + tải về máy — 07/10/2026
 

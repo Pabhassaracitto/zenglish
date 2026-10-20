@@ -54,8 +54,9 @@ thành một thẻ Kanban kèm bước tái hiện; thẻ chỉ đóng khi đã 
 ## Những điều **đã biết**, không cần báo là lỗi
 
 - Chưa có bản thu giọng người: tất cả 8 bài đọc bằng TTS máy (ZEN-010).
-- 4 bài A1 (CH01–CH04) còn cờ `needs_review` — bản nháp chờ người phụ trách nội
-  dung duyệt (ZEN-009), không phải giáo trình đã được nghiệm thu.
+- Nội dung bài đọc của 4 bài A1 (CH01–CH04) đã được chủ dự án duyệt (ZEN-009)
+  nên không còn nhãn "chờ duyệt" — nhưng các bài học vẫn chưa nghiệm thu trên
+  thiết bị; nếu nhãn chờ duyệt xuất hiện lại ở các bài này thì hãy báo lỗi.
 - Không có đồng bộ đám mây, không có tài khoản, không có AI trực tuyến.
 - Bản debug nặng (~55 MB) và chậm hơn bản release.
 
