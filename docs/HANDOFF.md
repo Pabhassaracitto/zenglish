@@ -29,6 +29,16 @@ Cập nhật: **07/10/2026** (mục 0-ter). Đọc cùng [Kanban](KANBAN.md), [p
 
 **Điểm tiếp tục:** (1) lấy kết quả gate của PR và sửa nếu analyze/test lỗi; (2) làm ZEN-020 (khôi phục phần PR #6 bị PR #7 hoàn tác) — lấy lại từ lịch sử `5306bbb`; (3) khớp danh mục audio với dataset thật (mục 3 ở trên); (4) nghiệm thu trên thiết bị: tải 1 bài → máy bay → nghe offline; nghe stream không tải; huỷ tải; xoá và tải lại; màn Quản lý audio trong Cài đặt; (5) nếu muốn bundle audio vào APK: đặt file vào `assets/audio/` **đúng tên trong danh mục** — app tự ưu tiên bundle và ẩn nút tải, không cần sửa code.
 
+## Bổ sung 21/10/2026 — sửa điều kiện deploy GitHub Pages (`web.yml`)
+
+**Triệu chứng:** mỗi lần push lên nhánh `arena/**`, workflow `Deploy Web to GitHub Pages` đỏ ở job deploy với lỗi `Branch "arena/…" is not allowed to deploy to github-pages due to environment protection rules` (ví dụ run `39474104673`: *Build Flutter Web* pass, *Deploy* fail trong 2s).
+
+**Nguyên nhân:** `web.yml` trigger cả trên push `arena/**` và job `deploy` chỉ loại trừ sự kiện `pull_request`, nên push nhánh phụ cũng cố deploy; trong khi environment `github-pages` có protection rule (Deployment branches) chỉ cho `main` deploy. Đây là cấu hình an toàn đúng phía GitHub — không nên nới rule cho `arena/**`, vì như vậy mỗi push nhánh dở dang sẽ ghi đè trang Pages công khai.
+
+**Đã sửa (PR workflow riêng):** điều kiện job `deploy` đổi thành `github.event_name != 'pull_request' && github.ref == 'refs/heads/main'`. Hành vi mới: push `main` và `workflow_dispatch` trên `main` deploy như cũ; push `arena/**` vẫn build kiểm chứng nhưng deploy hiện **skipped** (run xanh); PR giữ nguyên (build + `pr-preview-note`, không deploy). Không đổi trigger, pin Flutter hay bước build nào khác.
+
+**Kiểm chứng cần lấy trên PR:** run `Deploy Web to GitHub Pages` sự kiện `push` trên chính nhánh PR phải kết luận `success` với job deploy `skipped`. Lưu ý: `Quality checks` trên PR này vẫn có thể đỏ ở bước Analyze do 4 lỗi `contentLength` **có từ trước trên main** — phần sửa đó nằm ở PR #10, không thuộc phạm vi PR workflow này; nên merge PR #10 trước rồi mới merge PR này (nếu thứ tự ngược lại, ghi rõ lý do đỏ không liên quan diff `web.yml`).
+
 ## 0-bis. Thư viện bài học + TTS fallback — 04/10/2026, sau khi PR #4 merge
 
 **Bối cảnh:** PR #4 đã MERGED (04/10 17:41 UTC); `main` ở `8680240`; Flutter pin **3.44.0** đã được chứng minh đạt. Nhánh phiên này được đồng bộ bằng `git reset --hard origin/main` (nhánh chưa có commit riêng; `c3c5b25` đã nằm trong lịch sử squash của main nên `git rebase origin/main` báo conflict giả — không dùng rebase trong tình huống này).
