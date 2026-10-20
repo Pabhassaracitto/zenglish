@@ -19,7 +19,7 @@ Các tài liệu và code phải được merge vào main trước khi xóa nhá
 ## Hướng triển khai hiện tại
 
 **Offline-first, beta nội bộ Android; ưu tiên kiểm định Việt–Anh.**
-Tám bài beta (bốn bài A1 mới nhập còn chờ duyệt) được tải từ `assets/data/lessons/`, hồ sơ và tiến độ lưu trên thiết bị.
+Tám bài beta (nội dung bài đọc của bốn bài A1 mới nhập đã được chủ dự án duyệt — ZEN-009) được tải từ `assets/data/lessons/`, hồ sơ và tiến độ lưu trên thiết bị.
 Phản hồi luyện tập sử dụng bộ phân tích cục bộ, không phải đánh giá chứng đắc.
 AI từ xa bị vô hiệu hóa, kể cả khi truyền `OPENAI_API_KEY` qua build define.
 Chưa phát hành lên Play Store/App Store; chưa có đồng bộ tài khoản.
