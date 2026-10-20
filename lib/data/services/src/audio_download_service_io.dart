@@ -159,8 +159,11 @@ class AudioDownloadService {
       try {
         final head = await _client.head(uri);
         if (head.statusCode == 404) return DownloadOutcome.notFound;
-        if (head.statusCode == 200 && head.contentLength > 0) {
-          totalBytes = head.contentLength;
+        // http 1.x: contentLength là int? (null khi server không gửi
+        // Content-Length, ví dụ chunked) — phải kiểm tra null trước.
+        final headLength = head.contentLength;
+        if (head.statusCode == 200 && headLength != null && headLength > 0) {
+          totalBytes = headLength;
         }
       } catch (_) {
         // Server có thể từ chối HEAD — vẫn thử GET, lỗi mạng thật sẽ lộ ở đó.
@@ -177,8 +180,9 @@ class AudioDownloadService {
         await response.stream.drain();
         return DownloadOutcome.networkError;
       }
-      if (response.contentLength > 0) {
-        totalBytes = response.contentLength;
+      final responseLength = response.contentLength;
+      if (responseLength != null && responseLength > 0) {
+        totalBytes = responseLength;
       }
 
       final dir = await _audioDir();
