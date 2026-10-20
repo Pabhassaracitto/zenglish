@@ -1,46 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
+  <!-- Base href for GitHub Pages: replaced by flutter build --base-href -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  <!-- iOS meta tags & icons -->
+  <!-- SEO / Social -->
+  <title>ZenGlish — English for Wisdom &amp; Meditation</title>
+  <meta name="description" content="ZenGlish — Ứng dụng học tiếng Anh trong bối cảnh Phật giáo Theravāda, trí tuệ và thiền tập. Offline-first, 8 bài học, hỗ trợ Việt–Anh, audio &amp; TTS.">
+  <meta name="keywords" content="ZenGlish, học tiếng Anh, Phật giáo, Theravada, thiền, meditation, Pali, CEFR, Flutter">
+  <meta name="author" content="ZenGlish">
+  <meta name="theme-color" content="#5C3D2E">
+  <link rel="canonical" href="https://pabhassaracitto.github.io/zenglish/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://pabhassaracitto.github.io/zenglish/">
+  <meta property="og:title" content="ZenGlish — English for Wisdom &amp; Meditation">
+  <meta property="og:description" content="Học tiếng Anh trong bối cảnh Theravāda. 8 bài học offline-first, hỗ trợ Việt–Anh, audio &amp; giọng tổng hợp.">
+  <meta property="og:image" content="icons/Icon-512.png">
+  <meta property="og:locale" content="vi_VN">
+  <meta property="og:locale:alternate" content="en_US">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ZenGlish — English for Wisdom &amp; Meditation">
+  <meta name="twitter:description" content="Học tiếng Anh trong bối cảnh Theravāda — offline-first, 8 bài học, Việt–Anh.">
+  <meta name="twitter:image" content="icons/Icon-512.png">
+
+  <!-- PWA / iOS -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="zenglish">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="ZenGlish">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png">
 
-  <title>zenglish</title>
+  <!-- Manifest -->
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Splash / loading screen — màu kem ZenGlish */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #FAF7F2;
+      font-family: 'Merriweather', serif;
+    }
+    #loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      gap: 16px;
+      color: #5C3D2E;
+      transition: opacity 0.35s ease;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+    .logo {
+      width: 72px; height: 72px;
+      border-radius: 20px;
+      background: #5C4A32;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+    }
+    .app-name {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      color: #2C1A0E;
+      text-align: center;
+      max-width: 260px;
+      line-height: 1.5;
+    }
+    .spinner {
+      width: 22px; height: 22px;
+      border: 2px solid #DDD0C0;
+      border-top-color: #B8860B;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin-top: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .hint {
+      font-size: 11px;
+      color: #AA9E8F;
+      margin-top: 4px;
+    }
+  </style>
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
+  <!-- Loading indicator — sẽ được Flutter thay thế khi sẵn sàng -->
+  <div id="loading" aria-live="polite" aria-busy="true">
+    <div class="logo" aria-hidden="true">☸️</div>
+    <div class="app-name">ZenGlish<br>English for Wisdom &amp; Meditation</div>
+    <div class="spinner" role="progressbar" aria-label="Đang tải"></div>
+    <div class="hint">Đang khởi động…</div>
+  </div>
 
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+  <script>
+    // Ẩn splash khi Flutter first frame đã render
+    window.addEventListener('flutter-first-frame', function () {
+      var el = document.getElementById('loading');
+      if (el) {
+        el.classList.add('hidden');
+        setTimeout(function(){ el.remove(); }, 400);
+      }
+    });
+    // Fallback: nếu 15s chưa có first-frame thì vẫn ẩn spinner (tránh kẹt)
+    setTimeout(function(){
+      var el = document.getElementById('loading');
+      if (el && !el.classList.contains('hidden')) {
+        var hint = el.querySelector('.hint');
+        if (hint) hint.textContent = 'Vẫn đang tải… vui lòng kiểm tra kết nối';
+      }
+    }, 15000);
+  </script>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

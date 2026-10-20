@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -1395,6 +1396,31 @@ class _AudioDownloadPanelState extends ConsumerState<_AudioDownloadPanel> {
 
   @override
   Widget build(BuildContext context) {
+    // Web không hỗ trợ lưu file — audio được stream trực tiếp.
+    if (kIsWeb) {
+      return _DownloadPanelFrame(
+        child: Row(
+          children: [
+            const Icon(
+              Icons.cloud_outlined,
+              size: 16,
+              color: AppTheme.textSecondary,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Trên web, audio được phát trực tuyến — không cần tải. '
+                'Cài app Android để nghe offline.',
+                style: AppTheme.labelSmall.copyWith(
+                  color: AppTheme.textSecondary,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     final downloadState = ref.watch(audioDownloadProvider);
     final lessonId = widget.lesson.lessonId;
     final notifier = ref.read(audioDownloadProvider.notifier);
