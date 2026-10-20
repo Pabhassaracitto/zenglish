@@ -1,23 +1,29 @@
 {
-    "name": "zenglish",
-    "short_name": "zenglish",
+    "name": "ZenGlish — English for Wisdom & Meditation",
+    "short_name": "ZenGlish",
+    "description": "Học tiếng Anh trong bối cảnh Phật giáo Theravāda — offline-first, 8 bài học, hỗ trợ Việt–Anh.",
     "start_url": ".",
+    "scope": ".",
     "display": "standalone",
-    "background_color": "#FFFFFF",
-    "theme_color": "#FFFFFF",
-    "description": "A new Flutter project.",
+    "display_override": ["standalone", "window-controls-overlay"],
+    "background_color": "#FAF7F2",
+    "theme_color": "#5C3D2E",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "lang": "vi",
+    "categories": ["education", "lifestyle"],
     "icons": [
         {
             "src": "icons/Icon-192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "icons/Icon-512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "icons/Icon-maskable-192.png",
@@ -30,6 +36,18 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Bài học",
+            "url": "./#/lessons",
+            "description": "Mở thư viện bài học"
+        },
+        {
+            "name": "Cài đặt",
+            "url": "./#/settings",
+            "description": "Cài đặt & quản lý audio"
         }
     ]
 }
