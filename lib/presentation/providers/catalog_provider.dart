@@ -18,15 +18,25 @@ class CatalogEntry {
     required this.lesson,
     required this.status,
     required this.missingPrerequisites,
+    this.nextPrerequisite,
   });
 
   final Lesson lesson;
   final LessonProgressStatus status;
 
-  /// Các bài tiên quyết chưa hoàn thành (hiển thị để gợi ý, **không chặn**
-  /// người học mở bài — chính sách mở khoá chưa được nghiệm thu, xem
-  /// docs/CONTENT_AUDIT.md).
+  /// Các bài tiên quyết chưa hoàn thành (chỉ dùng cho logic/test, **không
+  /// chặn** người học mở bài — chính sách mở khoá chưa được nghiệm thu, xem
+  /// docs/CONTENT_AUDIT.md). UI không hiển thị danh sách mã bài này nữa;
+  /// xem [nextPrerequisite].
   final List<String> missingPrerequisites;
+
+  /// Bài tiên quyết chưa hoàn thành **đầu tiên** theo thứ tự học — tức bài
+  /// người học nên làm kế tiếp. UI gợi ý bằng tên bài này thay vì liệt kê
+  /// mã của mọi bài còn thiếu (audit 22/10/2026: mã như `A1_CH01_L01`
+  /// không có ý nghĩa với người học và làm thẻ bài đầy chữ; thứ tự danh
+  /// sách đã tự nó là lộ trình gợi ý). `null` khi không thiếu bài nào
+  /// hoặc mã tiên quyết không tra được trong thư viện.
+  final Lesson? nextPrerequisite;
 
   bool get isCompleted => status == LessonProgressStatus.completed;
   bool get isInProgress => status == LessonProgressStatus.inProgress;
@@ -74,6 +84,8 @@ LessonCatalog buildCatalog(List<Lesson> lessons, UserProfile? profile) {
       return a.lessonId.compareTo(b.lessonId);
     });
 
+  final byId = {for (final lesson in sorted) lesson.lessonId: lesson};
+
   final entries = sorted.map((lesson) {
     final LessonProgressStatus status;
     if (completed.contains(lesson.lessonId)) {
@@ -88,10 +100,18 @@ LessonCatalog buildCatalog(List<Lesson> lessons, UserProfile? profile) {
         .where((id) => !completed.contains(id))
         .toList();
 
+    // Bài nên học kế tiếp = bài tiên quyết còn thiếu đầu tiên tra được.
+    Lesson? nextPrerequisite;
+    for (final id in missing) {
+      nextPrerequisite = byId[id];
+      if (nextPrerequisite != null) break;
+    }
+
     return CatalogEntry(
       lesson: lesson,
       status: status,
       missingPrerequisites: missing,
+      nextPrerequisite: nextPrerequisite,
     );
   }).toList();
 

@@ -93,6 +93,31 @@ void main() {
     }
   });
 
+  test('nextPrerequisite là bài thiếu đầu tiên theo thứ tự học (kèm tên bài)',
+      () async {
+    final lessons = await _loadAll();
+
+    final fresh = buildCatalog(lessons, null);
+    final ch02Fresh = fresh.entries
+        .firstWhere((e) => e.lesson.lessonId == 'A1_CH02_L01');
+    expect(ch02Fresh.nextPrerequisite?.lessonId, 'A1_CH01_L01');
+    expect(ch02Fresh.nextPrerequisite?.titleVi, isNotEmpty);
+
+    final catalog = buildCatalog(
+      lessons,
+      _profile(completed: const ['A1_CH01_L01']),
+    );
+    final ch02 = catalog.entries
+        .firstWhere((e) => e.lesson.lessonId == 'A1_CH02_L01');
+    final ch03 = catalog.entries
+        .firstWhere((e) => e.lesson.lessonId == 'A1_CH03_L01');
+    // Đã xong bài tiên quyết duy nhất → không còn gợi ý.
+    expect(ch02.nextPrerequisite, isNull);
+    // CH03 thiếu CH02 (CH01 đã xong) → gợi ý đúng bài kế tiếp, không phải
+    // danh sách mã.
+    expect(ch03.nextPrerequisite?.lessonId, 'A1_CH02_L01');
+  });
+
   test('audio giọng AI (file Hugging Face/TTS) được đánh dấu minh bạch',
       () async {
     final lessons = await _loadAll();

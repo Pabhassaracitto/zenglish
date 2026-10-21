@@ -222,7 +222,7 @@ class _LessonTile extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '${lesson.lessonId} · ${lesson.vocabulary.length} từ vựng',
+                        '${lesson.vocabulary.length} từ vựng',
                         style: AppTheme.labelSmall.copyWith(
                           color: AppTheme.textMuted,
                         ),
@@ -239,7 +239,7 @@ class _LessonTile extends StatelessWidget {
             ),
             if (entry.needsReview ||
                 entry.usesAiVoice ||
-                entry.hasMissingPrerequisites) ...[
+                entry.nextPrerequisite != null) ...[
               const SizedBox(height: AppTheme.spaceSM),
               Wrap(
                 spacing: AppTheme.spaceXS,
@@ -257,10 +257,12 @@ class _LessonTile extends StatelessWidget {
                       icon: Icons.record_voice_over_outlined,
                       color: AppTheme.paliColor,
                     ),
-                  if (entry.hasMissingPrerequisites)
+                  // Chỉ nêu tên bài nên học kế tiếp — không liệt kê mã của
+                  // mọi bài còn thiếu (audit 22/10/2026).
+                  if (entry.nextPrerequisite != null)
                     _Badge(
                       label:
-                          'Nên học trước: ${entry.missingPrerequisites.join(', ')}',
+                          'Nên học trước: ${entry.nextPrerequisite!.titleVi}',
                       icon: Icons.schema_outlined,
                       color: AppTheme.textSecondary,
                     ),
