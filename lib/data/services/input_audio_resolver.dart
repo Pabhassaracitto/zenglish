@@ -2,6 +2,7 @@
 
 import '../constants/audio_catalog.dart';
 import '../models/lesson.dart';
+import '../models/lesson_flow.dart';
 
 /// Nguồn âm thanh được chọn cho phần Input của một bài học.
 enum InputAudioMode {
@@ -113,24 +114,31 @@ class InputAudioPlan {
   String get playbackKey => sources.join('|');
 }
 
-/// Quy tắc ưu tiên (mở rộng 07/10/2026 — audio Hugging Face):
+/// Quy tắc ưu tiên (mở rộng 07/10/2026 — audio Hugging Face; bổ sung
+/// 22/10/2026 — phát theo từng hội thoại):
 ///
 /// 1. `lesson_flow.input.audio_url` có giá trị → dùng **bản thu/file được gán
 ///    tường minh** trong lesson JSON (validator bắt buộc là file bundle).
-///    Bản thu thật luôn thắng danh mục audio AI.
+///    Bản thu thật luôn thắng danh mục audio AI. Đây là audio toàn phần
+///    Input nên [dialogueIndex] không ảnh hưởng trường hợp này.
 /// 2. Bài có file trong [AudioCatalog] (host trên Hugging Face):
-///    a. File đã bundle trong `assets/audio/` khi build → phát từ asset.
-///    b. File đã được người học tải về máy → phát từ file local.
-///    c. Chưa có local → stream URL Hugging Face + mời tải về.
+///    a. Số file khớp số hội thoại mẫu → plan chỉ chứa file của hội thoại
+///       đang xem (file thứ i ↔ hội thoại thứ i). File được chọn có local
+///       (bundle/đã tải) thì phát local, chưa có thì stream file đó; nút
+///       tải vẫn tải **toàn bộ** file của bài.
+///    b. Số file không khớp số hội thoại (phòng thủ) → giữ hành vi cũ:
+///       chỉ phát local khi đủ mọi file, không thì stream cả playlist.
 ///    Audio trong danh mục là giọng AI nên [InputAudioPlan.isAiGenerated]
 ///    luôn true (UI giữ nhãn "giọng tổng hợp").
-/// 3. Bài ngoài danh mục → đọc bằng **giọng tổng hợp** của thiết bị nếu có
-///    văn bản (`reading_text_en` / `sample_dialogues`), nhãn rõ ràng trên UI.
+/// 3. Bài ngoài danh mục → đọc bằng **giọng tổng hợp** của thiết bị; bài có
+///    hội thoại thì chỉ đọc hội thoại đang xem, bài đọc thì đọc
+///    `reading_text_en`. Nhãn rõ ràng trên UI.
 /// 4. Không có gì → UI hướng dẫn người học tự đọc, không chặn tiến độ.
 InputAudioPlan resolveInputAudio(
   Lesson lesson, {
   String language = 'en-US',
   LocalAudioLookup? localAudio,
+  int dialogueIndex = 0,
 }) {
   final lookup = localAudio ?? LocalAudioLookup.empty;
   final input = lesson.lessonFlow.input;
@@ -155,7 +163,40 @@ InputAudioPlan resolveInputAudio(
   // ── 2. Danh mục audio AI trên Hugging Face ────────────────────────────────
   final files = AudioCatalog.filesForLesson(lesson.lessonId);
   if (files.isNotEmpty) {
-    // Ưu tiên local: chỉ phát local khi **tất cả** file của bài đã có trên
+    // 2a. Số file khớp số hội thoại → phát đúng hội thoại đang xem.
+    // Validator ép bất biến này (số file == số đoạn Input) nên đây là đường
+    // chính; nhánh 2b chỉ là phòng thủ khi dữ liệu lệch.
+    final dialogues = input.sampleDialogues;
+    if (dialogues.isNotEmpty && files.length == dialogues.length) {
+      final safeIndex = dialogueIndex.clamp(0, files.length - 1).toInt();
+      final selected = files[safeIndex];
+      final bundled = lookup.bundled[selected.fileName];
+      final downloaded = lookup.downloaded[selected.fileName];
+
+      if (bundled != null || downloaded != null) {
+        return InputAudioPlan(
+          mode: InputAudioMode.recording,
+          sources: [bundled ?? downloaded!],
+          origin: bundled != null
+              ? InputAudioOrigin.bundledAsset
+              : InputAudioOrigin.downloadedFile,
+          isAiGenerated: true,
+          language: language,
+        );
+      }
+
+      return InputAudioPlan(
+        mode: InputAudioMode.recording,
+        sources: [selected.remoteUrl],
+        origin: InputAudioOrigin.remoteUrl,
+        // Tải về vẫn tải trọn bài để lần sau mọi hội thoại đều offline.
+        remoteFiles: files,
+        isAiGenerated: true,
+        language: language,
+      );
+    }
+
+    // 2b. Phòng thủ: chỉ phát local khi **tất cả** file của bài đã có trên
     // máy, tránh playlist nửa local nửa remote.
     final localSources = <String>[];
     var allLocal = true;
@@ -194,7 +235,13 @@ InputAudioPlan resolveInputAudio(
   }
 
   // ── 3. Ngoài danh mục → TTS thiết bị / không có gì ────────────────────────
-  final text = buildInputSpeechText(lesson);
+  // Bài có hội thoại: chỉ đọc hội thoại đang xem, khớp với đường file ở mục 2.
+  final dialogues = input.sampleDialogues;
+  final text = dialogues.isNotEmpty
+      ? buildDialogueSpeechText(
+          dialogues[dialogueIndex.clamp(0, dialogues.length - 1).toInt()],
+        )
+      : buildInputSpeechText(lesson);
   if (text.isEmpty) {
     return const InputAudioPlan(mode: InputAudioMode.none);
   }
@@ -220,14 +267,19 @@ String buildInputSpeechText(Lesson lesson) {
     return reading;
   }
 
-  final lines = <String>[];
-  for (final dialogue in input.sampleDialogues) {
-    for (final line in dialogue.lines) {
-      final cleaned = _stripSpeakerLabel(line).trim();
-      if (cleaned.isNotEmpty) lines.add(cleaned);
-    }
-  }
+  return input.sampleDialogues
+      .map(buildDialogueSpeechText)
+      .where((t) => t.isNotEmpty)
+      .join('\n');
+}
 
+/// Văn bản đọc của **một** hội thoại mẫu (đã bỏ nhãn người nói).
+String buildDialogueSpeechText(SampleDialogue dialogue) {
+  final lines = <String>[];
+  for (final line in dialogue.lines) {
+    final cleaned = _stripSpeakerLabel(line).trim();
+    if (cleaned.isNotEmpty) lines.add(cleaned);
+  }
   return lines.join('\n');
 }
 

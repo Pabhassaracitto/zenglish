@@ -542,13 +542,23 @@ class _InputStageView extends ConsumerWidget {
 
     // Nguồn âm thanh: local (bundle/đã tải) → Hugging Face → TTS thiết bị.
     // `revision` tăng sau mỗi lần tải/xoá để lookup tính lại ngay.
+    // Audio đi theo hội thoại đang xem (hội thoại i ↔ file _input_0i).
     final revision =
         ref.watch(audioDownloadProvider.select((s) => s.revision));
     final availability = ref
             .watch(audioAvailabilityProvider(revision))
             .valueOrNull ??
         LocalAudioLookup.empty;
-    final audioPlan = resolveInputAudio(lesson, localAudio: availability);
+    final audioPlan = resolveInputAudio(
+      lesson,
+      localAudio: availability,
+      dialogueIndex: idx,
+    );
+    final audioTitle = dialogues.length > 1
+        ? 'Audio — Hội thoại ${idx + 1}/${dialogues.length}'
+        : (inputPhase.readingTextEn != null
+            ? 'Audio — Bài đọc'
+            : 'Audio bài học');
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -563,11 +573,12 @@ class _InputStageView extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
 
-          // ── Audio Player toàn bài ──────────────────────────────────────
+          // ── Audio Player (theo hội thoại đang xem) ─────────────────────
           _LessonAudioSection(
             lesson: lesson,
             lessonState: state,
             plan: audioPlan,
+            title: audioTitle,
             onPlay: onPlayAudio,
             onStop: onStopAudio,
           ),
@@ -602,19 +613,30 @@ class _InputStageView extends ConsumerWidget {
 
             const SizedBox(height: 12),
 
-            // Navigation giữa các dialogue
+            // Navigation giữa các dialogue — chuyển hội thoại thì dừng hẳn
+            // audio của hội thoại cũ (trước đây chỉ reset cờ UI, tiếng vẫn
+            // phát tiếp trong khi nút đã về "Nghe").
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton.outlined(
-                  onPressed: idx > 0 ? notifier.previousDialogue : null,
+                  onPressed: idx > 0
+                      ? () {
+                          unawaited(onStopAudio());
+                          notifier.previousDialogue();
+                        }
+                      : null,
                   icon: const Icon(Icons.navigate_before),
                   tooltip: 'Hội thoại trước',
                 ),
                 const SizedBox(width: 16),
                 IconButton.outlined(
-                  onPressed:
-                      idx < dialogues.length - 1 ? notifier.nextDialogue : null,
+                  onPressed: idx < dialogues.length - 1
+                      ? () {
+                          unawaited(onStopAudio());
+                          notifier.nextDialogue();
+                        }
+                      : null,
                   icon: const Icon(Icons.navigate_next),
                   tooltip: 'Hội thoại tiếp theo',
                 ),
@@ -1147,12 +1169,15 @@ class _SynthesizedVoiceNotice extends StatelessWidget {
 
 class _AudioPlayerBar extends StatelessWidget {
   const _AudioPlayerBar({
+    required this.title,
     required this.isPlaying,
     required this.isSilentMode,
     required this.onPlay,
     required this.onStop,
   });
 
+  /// Nhãn đoạn audio sẽ phát (vd "Audio — Hội thoại 2/2").
+  final String title;
   final bool isPlaying;
   final bool isSilentMode;
   final VoidCallback onPlay;
@@ -1171,10 +1196,10 @@ class _AudioPlayerBar extends StatelessWidget {
         children: [
           Icon(Icons.music_note, color: AppTheme.primary, size: 20),
           const SizedBox(width: 12),
-          const Expanded(
+          Expanded(
             child: Text(
-              'Audio bài học',
-              style: TextStyle(fontWeight: FontWeight.w500),
+              title,
+              style: const TextStyle(fontWeight: FontWeight.w500),
             ),
           ),
           FilledButton.tonalIcon(
@@ -1202,6 +1227,7 @@ class _LessonAudioSection extends ConsumerWidget {
     required this.lesson,
     required this.lessonState,
     required this.plan,
+    required this.title,
     required this.onPlay,
     required this.onStop,
   });
@@ -1209,6 +1235,9 @@ class _LessonAudioSection extends ConsumerWidget {
   final Lesson lesson;
   final LessonState lessonState;
   final InputAudioPlan plan;
+
+  /// Nhãn đoạn audio tương ứng nội dung đang xem (hội thoại/bài đọc).
+  final String title;
   final Future<void> Function(InputAudioPlan) onPlay;
   final Future<void> Function() onStop;
 
@@ -1261,6 +1290,7 @@ class _LessonAudioSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _AudioPlayerBar(
+          title: title,
           isPlaying: lessonState.isAudioPlaying,
           isSilentMode: lessonState.isSilentMode,
           onPlay: () => onPlay(plan),

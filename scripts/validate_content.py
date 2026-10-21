@@ -82,7 +82,12 @@ def validate_audio_catalog(root, catalog):
     """Kiểm tra danh mục audio Hugging Face (lib/data/constants/audio_catalog.dart).
 
     Quy ước: mỗi entry khai báo lessonId, fileName, estimatedBytes;
-    fileName phải đúng dạng `<LESSON_ID>_input_NN.mp3` và trỏ về bài có thật.
+    fileName phải đúng dạng `<LESSON_ID>_input_NN.mp3` (NN = thứ tự hội
+    thoại) hoặc `<LESSON_ID>_input_reading.mp3` (bài chỉ có bài đọc), trỏ
+    về bài có thật. Mỗi bài trong danh mục phải có số file bằng đúng số
+    đoạn Input (số hội thoại mẫu, hoặc 1 với bài đọc) và hậu tố NN phải
+    liên tục 01..N theo thứ tự khai báo — resolver ánh xạ file thứ i với
+    hội thoại thứ i nên lệch số lượng/thứ tự là lỗi phát sai audio.
     """
     errors = []
     audio_dart = root / 'lib/data/constants/audio_catalog.dart'
@@ -95,6 +100,8 @@ def validate_audio_catalog(root, catalog):
         audio_dart.read_text(),
     )
     seen_files = set()
+    suffix_pattern = re.compile(r'_input_(\d{2}|reading)\.mp3$')
+    suffixes_by_lesson = {}
     for lesson_id, file_name, estimated in entries:
         if file_name in seen_files:
             errors.append(f'audio catalog: duplicate file {file_name}')
@@ -103,12 +110,43 @@ def validate_audio_catalog(root, catalog):
             errors.append(
                 f'audio catalog: {file_name} references missing lesson {lesson_id}'
             )
-        if not re.fullmatch(rf'{re.escape(lesson_id)}_input_\d{{2}}\.mp3', file_name):
+            continue
+        match = re.fullmatch(
+            rf'{re.escape(lesson_id)}_input_(?:\d{{2}}|reading)\.mp3', file_name
+        )
+        if not match:
             errors.append(
                 f'audio catalog: {file_name} must follow <LESSON_ID>_input_NN.mp3'
+                ' or <LESSON_ID>_input_reading.mp3'
             )
+            continue
+        suffixes_by_lesson.setdefault(lesson_id, []).append(
+            suffix_pattern.search(file_name).group(1)
+        )
         if estimated.isdigit() and int(estimated) <= 0:
             errors.append(f'audio catalog: {file_name} estimatedBytes must be positive')
+    for lesson_id, suffixes in suffixes_by_lesson.items():
+        dialogues = catalog[lesson_id]['lesson_flow']['input'].get(
+            'sample_dialogues'
+        ) or []
+        expected_count = len(dialogues) if dialogues else 1
+        if len(suffixes) != expected_count:
+            errors.append(
+                f'audio catalog: {lesson_id} has {len(suffixes)} audio files '
+                f'but {expected_count} input segments'
+            )
+            continue
+        if 'reading' in suffixes:
+            if dialogues or suffixes != ['reading']:
+                errors.append(
+                    f'audio catalog: {lesson_id} uses _input_reading but is not'
+                    ' a single reading-text lesson'
+                )
+        elif [int(s) for s in suffixes] != list(range(1, len(suffixes) + 1)):
+            errors.append(
+                f'audio catalog: {lesson_id} file suffixes must be sequential'
+                f' 01..0{len(suffixes)}, got {suffixes}'
+            )
     return errors
 
 

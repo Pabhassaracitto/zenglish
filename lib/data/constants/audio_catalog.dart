@@ -4,8 +4,18 @@
 // "file dựng sẵn bằng TTS chất lượng cao" — ZEN-010, docs/CONTENT_AUDIT.md).
 //
 // Toàn bộ file được host tại dataset Hugging Face `Beyou8778/zenglish-audio`.
-// Quy ước đặt tên: `<LESSON_ID>_input_<NN>.mp3`
-//   ví dụ: A1_CH01_L01_input_01.mp3
+// Quy ước đặt tên:
+//   * Bài có hội thoại mẫu: `<LESSON_ID>_input_<NN>.mp3`, NN là số thứ tự
+//     của hội thoại trong bài (hội thoại 1 → _01, hội thoại 2 → _02…).
+//     ví dụ: A1_CH02_L01_input_02.mp3 = audio của hội thoại 2.
+//   * Bài chỉ có bài đọc (không hội thoại): `<LESSON_ID>_input_reading.mp3`.
+//     ví dụ: A1_CH04_L01_input_reading.mp3.
+//
+// Danh sách [AudioCatalog.files] (11 file) đã khớp với bộ file thật do chủ
+// dự án sản xuất — nguồn đối chiếu: manifest trong `.gitignore` tại commit
+// e4c074b (22/10/2026). Thứ tự khai báo trong từng bài PHẢI giữ đúng thứ tự
+// hội thoại vì resolver ánh xạ file thứ i ↔ hội thoại thứ i; validator
+// (`scripts/validate_content.py`) kiểm tra số file == số đoạn Input.
 //
 // Quy tắc runtime (xem `input_audio_resolver.dart`):
 //   1. File bundle trong `assets/audio/` khi build          → phát trực tiếp.
@@ -71,19 +81,30 @@ abstract final class AudioCatalog {
       estimatedBytes: _estimatedInputClipBytes,
     ),
     RemoteAudioFile(
+      lessonId: 'A1_CH02_L01',
+      fileName: 'A1_CH02_L01_input_02.mp3',
+      estimatedBytes: _estimatedInputClipBytes,
+    ),
+    RemoteAudioFile(
       lessonId: 'A1_CH03_L01',
       fileName: 'A1_CH03_L01_input_01.mp3',
       estimatedBytes: _estimatedInputClipBytes,
     ),
+    // CH04 không có hội thoại — audio của bài đọc email.
     RemoteAudioFile(
       lessonId: 'A1_CH04_L01',
-      fileName: 'A1_CH04_L01_input_01.mp3',
+      fileName: 'A1_CH04_L01_input_reading.mp3',
       estimatedBytes: _estimatedInputClipBytes,
     ),
     // ── Chapter 05 (A1) ───────────────────────────────────────
     RemoteAudioFile(
       lessonId: 'A1_CH05_L01',
       fileName: 'A1_CH05_L01_input_01.mp3',
+      estimatedBytes: _estimatedInputClipBytes,
+    ),
+    RemoteAudioFile(
+      lessonId: 'A1_CH05_L01',
+      fileName: 'A1_CH05_L01_input_02.mp3',
       estimatedBytes: _estimatedInputClipBytes,
     ),
     // ── Chapter 06 (A2) ───────────────────────────────────────
@@ -96,6 +117,11 @@ abstract final class AudioCatalog {
     RemoteAudioFile(
       lessonId: 'A2_CH07_L01',
       fileName: 'A2_CH07_L01_input_01.mp3',
+      estimatedBytes: _estimatedInputClipBytes,
+    ),
+    RemoteAudioFile(
+      lessonId: 'A2_CH07_L01',
+      fileName: 'A2_CH07_L01_input_02.mp3',
       estimatedBytes: _estimatedInputClipBytes,
     ),
     // ── Chapter 12 (B1) ───────────────────────────────────────
@@ -131,10 +157,12 @@ abstract final class AudioCatalog {
       files.any((f) => f.fileName == fileName);
 
   /// Regex quy ước đặt tên — validator Python kiểm tra cùng quy tắc này.
+  /// Hậu tố `_NN` cho từng hội thoại, `_reading` cho bài chỉ có bài đọc.
   static final RegExp fileNamePattern =
-      RegExp(r'^([A-C][12]_CH\d+_L\d+)_input_\d{2}\.mp3$');
+      RegExp(r'^([A-C][12]_CH\d+_L\d+)_input_(\d{2}|reading)\.mp3$');
 
-  /// true nếu [fileName] tuân thủ quy ước `<LESSON_ID>_input_<NN>.mp3`.
+  /// true nếu [fileName] tuân thủ quy ước `<LESSON_ID>_input_<NN>.mp3`
+  /// (hoặc `<LESSON_ID>_input_reading.mp3` cho bài đọc).
   static bool followsFileNameConvention(String lessonId, String fileName) {
     final match = fileNamePattern.firstMatch(fileName);
     return match != null && match.group(1) == lessonId;

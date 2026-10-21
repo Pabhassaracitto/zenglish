@@ -136,4 +136,108 @@ void main() {
       expect(line.trim(), isNotEmpty);
     }
   });
+
+  test('số file audio khớp số đoạn Input của từng bài', () async {
+    for (final path in LessonAssetRegistry.allPaths) {
+      final lesson = await _load(path);
+      final dialogues = lesson.lessonFlow.input.sampleDialogues;
+      final expected = dialogues.isNotEmpty ? dialogues.length : 1;
+      expect(
+        AudioCatalog.filesForLesson(lesson.lessonId).length,
+        expected,
+        reason: lesson.lessonId,
+      );
+    }
+  });
+
+  test('plan phát đúng file của hội thoại đang xem (hội thoại 2/2)', () async {
+    Lesson? twoDialogues;
+    for (final path in LessonAssetRegistry.allPaths) {
+      final lesson = await _load(path);
+      if (lesson.lessonFlow.input.sampleDialogues.length == 2) {
+        twoDialogues = lesson;
+        break;
+      }
+    }
+    expect(twoDialogues, isNotNull,
+        reason: 'cần ít nhất một bài có 2 hội thoại mẫu');
+    final lesson = twoDialogues!;
+
+    final first = resolveInputAudio(lesson, dialogueIndex: 0);
+    final second = resolveInputAudio(lesson, dialogueIndex: 1);
+
+    expect(first.sources, hasLength(1));
+    expect(first.sources.single, endsWith('_input_01.mp3'));
+    expect(second.sources, hasLength(1));
+    expect(second.sources.single, endsWith('_input_02.mp3'));
+    // Nút tải vẫn tải trọn bài (cả hai file).
+    expect(second.remoteFiles, hasLength(2));
+  });
+
+  test('hội thoại 2 dùng file đã tải riêng của nó, không cần đủ cả bài',
+      () async {
+    Lesson? found;
+    for (final path in LessonAssetRegistry.allPaths) {
+      final lesson = await _load(path);
+      if (lesson.lessonFlow.input.sampleDialogues.length == 2) {
+        found = lesson;
+        break;
+      }
+    }
+    final lesson = found!;
+    final secondFile =
+        AudioCatalog.filesForLesson(lesson.lessonId)[1].fileName;
+    final lookup = LocalAudioLookup(
+      downloaded: {secondFile: '/data/app/zenglish_audio/$secondFile'},
+    );
+
+    final plan = resolveInputAudio(
+      lesson,
+      localAudio: lookup,
+      dialogueIndex: 1,
+    );
+
+    expect(plan.origin, InputAudioOrigin.downloadedFile);
+    expect(plan.sources, ['/data/app/zenglish_audio/$secondFile']);
+    expect(plan.needsDownload, isFalse);
+  });
+
+  test('bài đọc CH04 dùng file _input_reading', () async {
+    Lesson? reading;
+    for (final path in LessonAssetRegistry.allPaths) {
+      final lesson = await _load(path);
+      if (lesson.lessonFlow.input.sampleDialogues.isEmpty) {
+        reading = lesson;
+        break;
+      }
+    }
+    expect(reading, isNotNull);
+    final plan = resolveInputAudio(reading!);
+    expect(plan.sources.single, endsWith('_input_reading.mp3'));
+  });
+
+  test('TTS ngoài danh mục chỉ đọc hội thoại đang xem', () async {
+    Lesson? found;
+    for (final path in LessonAssetRegistry.allPaths) {
+      final lesson = await _load(path);
+      if (lesson.lessonFlow.input.sampleDialogues.length == 2) {
+        found = lesson;
+        break;
+      }
+    }
+    final base = found!;
+    final renamed = Lesson.fromJson({
+      ...base.toJson(),
+      'lesson_id': 'C2_CH99_L01',
+    });
+
+    final plan = resolveInputAudio(renamed, dialogueIndex: 1);
+
+    expect(plan.mode, InputAudioMode.synthesized);
+    expect(
+      plan.text,
+      buildDialogueSpeechText(base.lessonFlow.input.sampleDialogues[1]),
+    );
+    expect(plan.text, isNot(buildInputSpeechText(base)));
+  });
 }
