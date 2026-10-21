@@ -1,6 +1,29 @@
 # ZenGlish — bàn giao cho phiên/agent tiếp theo
 
-Cập nhật: **20/10/2026** (mục 0-quater). Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+Cập nhật: **22/10/2026** (mục 0-quinquies). Đọc cùng [Kanban](KANBAN.md), [plan](IMPLEMENTATION_PLAN.md) và [content audit](CONTENT_AUDIT.md).
+
+## 0-quinquies. Audit A1: audio theo từng hội thoại + bỏ mã bài khỏi gợi ý tiên quyết (ZEN-021) — 22/10/2026
+
+**Bối cảnh:** PR #10 và #11 đã merge (`b453957`, `8db77a1`); chủ dự án thêm commit `e4c074b` (manifest 11 file audio thật trong `.gitignore`, bump version) rồi audit trên bản chạy và báo 3 điểm: (1) bài **Đăng Ký Khóa Thiền** (A1_CH04) báo không tải được audio; (2) bài có 2 hội thoại thì hội thoại 2/2 không phát; (3) thư viện hiện gợi ý "Nên học trước: A1_CH01_L01…" bằng mã bài — khó hiểu với người học và làm thẻ bài đầy chữ.
+
+**Nguyên nhân (đã xác minh bằng mã nguồn):**
+
+- `AudioCatalog` vẫn khai 8 file `_input_01` (giả định từ 07/10, chưa khớp dataset thật), trong khi bộ file thật có **11 file**: 3 bài 2 hội thoại (A1 CH02/CH05, A2 CH07) có thêm `_input_02`, và CH04 (bài đọc email, không hội thoại) mang tên `A1_CH04_L01_input_reading.mp3`. CH04 vì vậy tra bundle trượt và stream trúng URL không tồn tại → snackbar lỗi mạng. Hội thoại 2 không có file nào trong plan.
+- Kể cả khi đủ file, UI cũ chỉ có một plan toàn bài: đứng ở thẻ hội thoại 2/2 bấm Nghe vẫn phát từ hội thoại 1; chuyển hội thoại chỉ reset cờ `isAudioPlaying` mà **không dừng player thật** nên tiếng cũ phát tiếp sau lưng nút "Nghe".
+- Badge tiên quyết nối toàn bộ mã bài còn thiếu (`missingPrerequisites.join(', ')`) và thẻ bài còn in mã bài ở dòng phụ — thông tin dành cho nhà phát triển, không phải người học.
+
+**Đã làm (PR nhánh này — gate CI là căn cứ, chưa thử thiết bị):**
+
+- `audio_catalog.dart`: khớp đủ 11 file; quy ước hậu tố `_NN` theo thứ tự hội thoại + `_reading` cho bài đọc (mở rộng `fileNamePattern`). Thứ tự khai báo = thứ tự hội thoại.
+- `validate_content.py`: cùng quy ước tên + bất biến mới — số file mỗi bài == số đoạn Input, hậu tố liên tục `01..N`, `_reading` chỉ cho bài đọc đơn; thêm 2 Python test (13/13 đạt local).
+- `input_audio_resolver.dart`: `resolveInputAudio(..., dialogueIndex)` — plan chứa đúng file của hội thoại đang xem (local của riêng file đó cũng được dùng); TTS fallback chỉ đọc hội thoại đang xem (`buildDialogueSpeechText`). `remoteFiles` vẫn là toàn bài nên nút tải không đổi hành vi.
+- `lesson_screen.dart`: plan theo `state.currentDialogueIndex`; nhãn player hiện "Audio — Hội thoại x/n" / "Audio — Bài đọc"; bấm chuyển hội thoại thì `stop()` thật rồi mới đổi chỉ số.
+- Thư viện (`catalog_provider` + `lesson_catalog_screen`): badge đổi thành **"Nên học trước: <tên bài tiếng Việt>"** của bài thiếu đầu tiên (`CatalogEntry.nextPrerequisite`) — đúng một bước kế tiếp hành động được; bỏ mã bài khỏi dòng phụ của thẻ. Thứ tự danh sách vẫn là lộ trình; gợi ý chỉ còn là nhắc nhẹ, không chặn mở bài (chính sách mở khoá giữ nguyên).
+- Dart tests mới: số file == số đoạn Input mọi bài; plan hội thoại 2 → `_input_02`; file đã tải riêng của hội thoại 2 được dùng; CH04 → `_input_reading`; TTS chỉ đọc hội thoại đang xem; `nextPrerequisite` đúng bài/tên.
+
+**Giả định chưa đối chiếu được:** tên file trên dataset Hugging Face trùng manifest `e4c074b` (sandbox không với tới huggingface.co, như các lượt trước). Nếu dataset lệch tên, đổi tên trên dataset theo danh mục là đủ. Người dùng đã tải `_input_01` từ trước: hội thoại 1 phát offline ngay, hội thoại 2 stream + panel mời tải bổ sung trọn bài.
+
+**Điểm tiếp tục:** (1) chờ gate PR xanh → merge → kiểm tra gate trên main; (2) nghiệm thu thiết bị 3 điểm audit: CH04 nghe được bài đọc, hội thoại 2/2 của CH02 phát đúng đoạn, thư viện không còn mã bài; (3) các việc cũ: ZEN-020 (nguồn tiến độ), khớp danh mục/dung lượng thật với dataset (ZEN-019/010).
 
 ## 0-quater. Sửa gate đỏ trên main + khôi phục duyệt 4 bài A1 — 20/10/2026
 

@@ -118,6 +118,25 @@ và nguồn nhập TASK_002–005. Bài `A1_CH05_L01` vốn không có cờ (m�
 - Độ phù hợp phản hồi cục bộ cho bài giao tiếp/đăng ký: bộ phân tích hiện thiên về trình pháp.
 - Tính nhất quán giữa bài đề xuất sau placement và thứ tự học/fast-track. Sửa mã bài không đồng nghĩa đã nghiệm thu chính sách mở khóa.
 
+## Khớp danh mục audio với bộ file thật — 22/10/2026 (ZEN-021)
+
+Chủ dự án đã sản xuất **11 file** giọng tổng hợp cho phần Input (manifest
+ghi trong `.gitignore` tại commit `e4c074b`): mỗi hội thoại mẫu một file
+`_input_01`, `_input_02`…; riêng bài đọc email CH04 là
+`A1_CH04_L01_input_reading.mp3`. Trước lượt này `AudioCatalog` chỉ khai 1
+file `_input_01` cho mỗi bài nên (a) bài CH04 báo không tải được audio vì
+sai tên file, và (b) hội thoại 2 của các bài 2 hội thoại (A1 CH02, A1 CH05,
+A2 CH07) không có audio. Nay danh mục đã khớp 11 file; quy ước đặt tên mở
+rộng thêm hậu tố `_reading`; validator ép số file == số đoạn Input và hậu
+tố liên tục `01..N` để không tái diễn. App phát đúng file của hội thoại
+đang xem; tải về vẫn tải trọn bài.
+
+**Giả định cần đối chiếu khi có mạng:** tên file trên dataset Hugging Face
+trùng với manifest trên (cùng bộ file chủ dự án sản xuất). Nếu dataset dùng
+tên khác, đổi tên trên dataset theo danh mục — không sửa code. Chất lượng
+giọng/phát âm Pāḷi và ToS phân phối lại vẫn thuộc ZEN-010, chưa duyệt ở
+lượt này.
+
 ## Kiểm tra đã chạy
 
 - `python3 scripts/validate_content.py`: đạt, 8 bài; registry, nội dung tối thiểu, prerequisite, mã routing và tham chiếu audio.
