@@ -23,7 +23,9 @@ Cập nhật: **22/10/2026** (mục 0-quinquies). Đọc cùng [Kanban](KANBAN.m
 
 **Giả định chưa đối chiếu được:** tên file trên dataset Hugging Face trùng manifest `e4c074b` (sandbox không với tới huggingface.co, như các lượt trước). Nếu dataset lệch tên, đổi tên trên dataset theo danh mục là đủ. Người dùng đã tải `_input_01` từ trước: hội thoại 1 phát offline ngay, hội thoại 2 stream + panel mời tải bổ sung trọn bài.
 
-**Điểm tiếp tục:** (1) chờ gate PR xanh → merge → kiểm tra gate trên main; (2) nghiệm thu thiết bị 3 điểm audit: CH04 nghe được bài đọc, hội thoại 2/2 của CH02 phát đúng đoạn, thư viện không còn mã bài; (3) các việc cũ: ZEN-020 (nguồn tiến độ), khớp danh mục/dung lượng thật với dataset (ZEN-019/010).
+**Bằng chứng CI:** trên [PR #12](https://github.com/Pabhassaracitto/zenglish/pull/12), `Quality checks` run [`39668576053`](https://github.com/Pabhassaracitto/zenglish/actions/runs/39668576053) **xanh toàn bộ ngay lượt đầu** (validator+Python 13 test, Flutter analyze+tests 1m9s — gồm các Dart test mới của ZEN-021, APK ARM64); run web `39668575952` cũng success (deploy skipped trên PR). Sandbox không có Flutter SDK nên run CI trên là căn cứ; chưa nghiệm thu thiết bị.
+
+**Điểm tiếp tục:** (1) merge PR #12 (gate đã xanh — chờ chủ repository review) → kiểm tra gate trên main; (2) nghiệm thu thiết bị 3 điểm audit: CH04 nghe được bài đọc, hội thoại 2/2 của CH02 phát đúng đoạn, thư viện không còn mã bài; (3) các việc cũ: ZEN-020 (nguồn tiến độ), khớp danh mục/dung lượng thật với dataset (ZEN-019/010).
 
 ## 0-quater. Sửa gate đỏ trên main + khôi phục duyệt 4 bài A1 — 20/10/2026
 
