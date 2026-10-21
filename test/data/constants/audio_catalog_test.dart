@@ -13,7 +13,8 @@ void main() {
     }
   });
 
-  test('tên file đúng quy ước <LESSON_ID>_input_NN.mp3 và không trùng', () {
+  test('tên file đúng quy ước <LESSON_ID>_input_NN/reading.mp3 và không trùng',
+      () {
     final seen = <String>{};
     for (final file in AudioCatalog.files) {
       expect(
@@ -28,6 +29,24 @@ void main() {
           '${AudioCatalog.huggingFaceBaseUrl}${file.fileName}');
       expect(file.bundledAssetPath, 'assets/audio/${file.fileName}');
     }
+  });
+
+  test('quy ước tên chấp nhận hậu tố reading, bác hậu tố lạ', () {
+    expect(
+      AudioCatalog.followsFileNameConvention(
+          'A1_CH04_L01', 'A1_CH04_L01_input_reading.mp3'),
+      isTrue,
+    );
+    expect(
+      AudioCatalog.followsFileNameConvention(
+          'A1_CH04_L01', 'A1_CH04_L01_input_1.mp3'),
+      isFalse,
+    );
+    expect(
+      AudioCatalog.followsFileNameConvention(
+          'A1_CH01_L01', 'A1_CH02_L01_input_01.mp3'),
+      isFalse,
+    );
   });
 
   test('isCatalogFileName phân biệt file danh mục AI với bản thu ngoài', () {

@@ -92,6 +92,23 @@ class ContentGateTest(unittest.TestCase):
         errors = validate(self.root)[1]
         self.assertTrue(any('estimatedBytes' in e for e in errors))
 
+    def test_audio_catalog_file_count_must_match_dialogues(self):
+        # Gán file hội thoại 2 của CH02 sang CH01 (chỉ có 1 hội thoại):
+        # CH01 thừa file, CH02 thiếu file so với số đoạn Input.
+        self.change_audio_catalog(
+            "lessonId: 'A1_CH02_L01',\n"
+            "      fileName: 'A1_CH02_L01_input_02.mp3'",
+            "lessonId: 'A1_CH01_L01',\n"
+            "      fileName: 'A1_CH01_L01_input_02.mp3'",
+        )
+        errors = validate(self.root)[1]
+        self.assertTrue(any('input segments' in e for e in errors))
+
+    def test_audio_catalog_reading_suffix_allowed(self):
+        # Baseline phải đạt: A1_CH04 dùng _input_reading hợp lệ.
+        errors = validate(self.root)[1]
+        self.assertFalse(any('A1_CH04_L01_input_reading' in e for e in errors))
+
 
 if __name__ == '__main__':
     unittest.main()
