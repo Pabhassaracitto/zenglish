@@ -335,7 +335,17 @@ google_sign_in_config.dart
 flutter_logs_full.txt
 # Generated from ARB by flutter gen-l10n
 lib/l10n/generated/
-
 # Python content-validation caches
 __pycache__/
 *.py[cod]
+assets/audio/A1_CH01_L01_input_01.mp3
+assets/audio/A1_CH02_L01_input_01.mp3
+assets/audio/A1_CH02_L01_input_02.mp3
+assets/audio/A1_CH03_L01_input_01.mp3
+assets/audio/A1_CH04_L01_input_reading.mp3
+assets/audio/A1_CH05_L01_input_01.mp3
+assets/audio/A1_CH05_L01_input_02.mp3
+assets/audio/A2_CH06_L01_input_01.mp3
+assets/audio/A2_CH07_L01_input_01.mp3
+assets/audio/A2_CH07_L01_input_02.mp3
+assets/audio/B1_CH12_L01_input_01.mp3
